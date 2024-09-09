@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webcam Stream with Screenshot</title>
+    <title>Webcam Stream with Screenshot and Naming</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -64,7 +64,7 @@
         <video id="webcam" autoplay playsinline></video>
         <div id="status">Accessing your webcam...</div>
         <button id="capture-btn">Capture Screenshot</button>
-        <a id="download-link" download="webcam_capture.jpeg">Download Screenshot</a>
+        <a id="download-link">Download Screenshot</a>
     </div>
 
     <!-- Hidden Canvas for Screenshot Capture -->
@@ -100,8 +100,15 @@
             // Convert the canvas content to a JPEG data URL
             const imageDataUrl = canvas.toDataURL('image/jpeg');
 
+            // Prompt the user for a filename, with a default value
+            const filename = prompt("Enter a name for your screenshot:", "you are a masterpiece");
+
+            // If the user provides a name, use it. Otherwise, use the default.
+            const fileNameToUse = filename ? filename : "you are a masterpiece";
+
             // Create a download link for the image
             downloadLink.href = imageDataUrl;
+            downloadLink.download = `${fileNameToUse}.jpeg`; // Set the filename dynamically
             downloadLink.style.display = 'block'; // Show the download link
             downloadLink.click(); // Automatically click the link to trigger the download
         }
