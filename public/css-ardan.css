@@ -1,0 +1,15 @@
+body{
+    background-color: #1d1e20;
+    color: whitesmoke;
+    font-family: verdana;
+    text-align: center;
+    position: relative;
+    text-decoration: none;
+}
+
+a{
+    border: 2px, inset, whitesmoke;
+    border-radius: 10px;
+    margin: 20px;
+    padding: 10px;
+}
