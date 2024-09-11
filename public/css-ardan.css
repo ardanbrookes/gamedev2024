@@ -6,10 +6,3 @@ body{
     position: relative;
     text-decoration: none;
 }
-
-a{
-    border: 2px, inset, whitesmoke;
-    border-radius: 10px;
-    margin: 20px;
-    padding: 10px;
-}
