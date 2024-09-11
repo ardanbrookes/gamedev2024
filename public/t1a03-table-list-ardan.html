@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <style>
+        body{
+            text-align: left;
+        }
+        a{
+        border: 2px, inset, whitesmoke;
+        border-radius: 10px;
+        margin: 20px;
+        padding: 10px;
+        color: rgb(204, 204, 255);
+        }
+    </style>
     <title>Simple 2x2 Table</title>
     <link rel="stylesheet" type="text/css" href="css-ardan.css">
 </head>
@@ -16,5 +28,70 @@
             <td>Row 2, Column 2</td>
         </tr>
     </table>
+    <br><br>
+    <table align="center" border="1">
+        <tr>
+            <th style="width: 50px;">#</th>
+            <th>Animal</th>
+            <th>Image</th>
+            <th>Link</th>
+        </tr>
+        <tr>
+            <td style="width: 50px;">1</td>
+            <td>Zebra</td>
+            <td><img width="300" height="300" src="https://media.gettyimages.com/id/950438070/photo/zebra.jpg?s=612x612&w=gi&k=20&c=cG2qQgW3y6rfOENuOshSrBtW-Q5v0jcR-aTNi0bJank="></img></td>
+            <td><a href="https://en.wikipedia.org/wiki/Zebra">Zebra on wikipedia</a></td>
+        </tr>
+        <tr>
+            <td style="width: 50px;">2</td>
+            <td>Alligator</td>
+            <td><img width="300" height="300" src="https://www.junglepixiebelize.com/uploads/1/8/8/2/18824358/crocodile-square_orig.jpg"></img></td>
+            <td><a href="https://en.wikipedia.org/wiki/Alligator">Alligator on wikipedia</a></td>
+        </tr>
+        <tr>
+            <td style="width: 50px;">3</td>
+            <td>Seagull</td>
+            <td><img width="300" height="300" src="https://th.bing.com/th/id/R.816a0c5bcc6995ef1bcc4fc2e22b3878?rik=d9YIIlqmcThwzg&pid=ImgRaw&r=0"></img></td>
+            <td><a href="https://en.wikipedia.org/wiki/Gull">Gull on wikipedia</a></td>
+        </tr>
+    </table>
+    <ol> Ordered list of numbers
+        <li> <a href="https://en.wikipedia.org/wiki/1">1</a>
+        <li> <a href="https://en.wikipedia.org/wiki/2">2</a>
+        <li> <a href="https://en.wikipedia.org/wiki/3">3</a>
+        <li> <a href="https://en.wikipedia.org/wiki/4">4</a>
+        <li> <a href="https://en.wikipedia.org/wiki/5">5</a>
+    </ol>
+        
+    <ul> unordered list of countries (in scandinavia)
+        <li> <a href="https://en.wikipedia.org/wiki/Norway">norway</a>
+        <li> <a href="https://en.wikipedia.org/wiki/Finland">finland</a>
+        <li> <a href="https://en.wikipedia.org/wiki/Sweden">sweden</a>
+        <li> <a href="https://en.wikipedia.org/wiki/Iceland">iceland</a>
+        <li> <a href="https://en.wikipedia.org/wiki/Denmark">denmark</a>
+    </ul>
+        
+    <ul> Nested lists
+        <li> unordered list in a list
+            <ul>
+            <li>2
+            <li>1
+            <li>3
+    </ul>
+        <ui> ordered list in a list
+            <ol>
+                <li>1
+                <li>2
+                <li>3
+            </ol>
+                <ui> unordered list nested twice
+                    <ul>
+                    <ul>
+                    <li>2
+                    <li>3
+                    <li>1
+                </ul>
+            </ol>
+        </ul>
 </body>
 </html>
