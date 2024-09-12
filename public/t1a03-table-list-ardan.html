@@ -19,12 +19,18 @@
             margin: 0;
             color: rgb(204, 204, 255);
         }
+        /* Align lists to the left */
+        ol, ul {
+            text-align: left;
+        }
     </style>
     <title>Simple 2x2 Table</title>
     <link rel="stylesheet" type="text/css" href="css-ardan.css">
 </head>
 <body>
     <h1 align="center">t1a03 table list ardan</h1>
+    
+    <!-- First table -->
     <table align="center" border="1">
         <tr>
             <td>Row 1, Column 1</td>
@@ -35,7 +41,10 @@
             <td>Row 2, Column 2</td>
         </tr>
     </table>
+
     <br><br>
+
+    <!-- Second table -->
     <table align="center" border="1">
         <tr>
             <th style="width: 50px;">#</th>
@@ -62,43 +71,49 @@
             <td><a href="https://en.wikipedia.org/wiki/Gull">Gull on wikipedia</a></td>
         </tr>
     </table>
-    <ol> Ordered list of numbers
-        <li> <a href="https://en.wikipedia.org/wiki/1">1</a>
-        <li> <a href="https://en.wikipedia.org/wiki/2">2</a>
-        <li> <a href="https://en.wikipedia.org/wiki/3">3</a>
-        <li> <a href="https://en.wikipedia.org/wiki/4">4</a>
-        <li> <a href="https://en.wikipedia.org/wiki/5">5</a>
+
+<p align="left">Ordered list of numbers</p>
+    <ol>
+        <li><a href="https://en.wikipedia.org/wiki/1">1</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/2">2</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/3">3</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/4">4</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/5">5</a></li>
     </ol>
-        
-    <ul> unordered list of countries (in scandinavia)
-        <li> <a href="https://en.wikipedia.org/wiki/Norway">norway</a>
-        <li> <a href="https://en.wikipedia.org/wiki/Finland">finland</a>
-        <li> <a href="https://en.wikipedia.org/wiki/Sweden">sweden</a>
-        <li> <a href="https://en.wikipedia.org/wiki/Iceland">iceland</a>
-        <li> <a href="https://en.wikipedia.org/wiki/Denmark">denmark</a>
+
+<p align="left">Unordered list of countries I would most want to live in</p>
+    <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Canada">Canada</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Switzerland">Switzerland</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Norway">Norway</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Sweeden">Sweeden</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Denmark">Denmark</a></li>
     </ul>
-        
-    <ul> Nested lists
-        <li> unordered list in a list
+
+    <ul>
+        <li>Unordered list in a list
             <ul>
-            <li>2
-            <li>1
-            <li>3
-    </ul>
-        <ui> ordered list in a list
+                <li>2</li>
+                <li>1</li>
+                <li>3</li>
+            </ul>
+        </li>
+        <li>Ordered list in a list
             <ol>
-                <li>1
-                <li>2
-                <li>3
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
             </ol>
-                <ui> unordered list nested twice
-                    <ul>
-                    <ul>
-                    <li>2
-                    <li>3
-                    <li>1
+        </li>
+        <li>Unordered list nested twice
+            <ul>
+                <ul>
+                    <li>2</li>
+                    <li>3</li>
+                    <li>1</li>
                 </ul>
             </ul>
-        </ol>
+        </li>
+    </ul>
 </body>
 </html>
