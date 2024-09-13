@@ -29,7 +29,7 @@
     <h1 align="center">t1a02 proper ardan</h1>
 
     <!-- Webcam Box -->
-    <div id="webcam">Live ellis reaction
+    <div id="webcam">
         <video id="video" autoplay></video>
     </div>
 
@@ -40,10 +40,13 @@
         // Access the webcam and stream the video feed
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function(stream) {
+                // Set the source of the video element to the webcam stream
                 video.srcObject = stream;
             })
             .catch(function(err) {
-                console.error("Error accessing webcam: " + err);
+                // Handle errors
+                console.error("Error accessing webcam: ", err.name, err.message);
+                alert("Could not access webcam: " + err.message);
             });
     </script>
 </body>
