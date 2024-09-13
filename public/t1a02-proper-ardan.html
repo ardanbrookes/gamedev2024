@@ -1,16 +1,50 @@
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="author" content="ardan">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex">
-<style>
-    
-</style>
-<link rel="stylesheet" type="text/css" href="css-ardan.css">
+    <meta charset="UTF-8">
+    <meta name="author" content="ardan">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <style>
+        /* Styling for the webcam box */
+        #webcam {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: 300px;
+            height: 200px;
+            background-color: black;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+        }
 
+        video {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="css-ardan.css">
 </head>
 <body>
     <h1 align="center">t1a02 proper ardan</h1>
+
+    <!-- Webcam Box -->
+    <div id="webcam">Live ellis reaction
+        <video id="video" autoplay></video>
+    </div>
+
+    <script>
+        // Get access to the video element
+        const video = document.getElementById('video');
+
+        // Access the webcam and stream the video feed
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                video.srcObject = stream;
+            })
+            .catch(function(err) {
+                console.error("Error accessing webcam: " + err);
+            });
+    </script>
 </body>
 </html>

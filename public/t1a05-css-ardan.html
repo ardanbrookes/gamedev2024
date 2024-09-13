@@ -1,0 +1,74 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css-ardan.css">
+        <style>
+            /* Style for the second bold element */
+            #colorful-text {
+                color: yellow;
+                background-color: blue;
+                padding: 5px;
+            }
+            /* Input and label styling */
+            .color-input {
+                margin: 10px 0;
+            }
+            /* Centering the input boxes */
+            .input-container {
+                text-align: center;
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 align="center">t1a04 css ardan</h1>
+        <p>this is <b style="font-family: 'Times New Roman', Times, serif; font-size: x-large;">bold.</b></p>
+        <p>this is <i style="font-family: 'Times New Roman', Times, serif; font-size: x-large;">italic.</i></p>
+        <p>this is <b id="colorful-text" style="border: 3px groove whitesmoke;">yellow with a blue background.</b></p>
+
+        <!-- Container to center the inputs -->
+        <div class="input-container">
+            <label for="text-color">Text Color:</label>
+            <input type="color" id="text-color" class="color-input"><br>
+            
+            <label for="bg-color">Background Color:</label>
+            <input type="color" id="bg-color" class="color-input">
+        </div>
+        
+        <script>
+            // Get the second bold element
+            const colorfulText = document.getElementById('colorful-text');
+            const textColorInput = document.getElementById('text-color');
+            const bgColorInput = document.getElementById('bg-color');
+
+            // Function to update colors and text content
+            function updateColors() {
+                const textColor = textColorInput.value;
+                const bgColor = bgColorInput.value;
+
+                colorfulText.style.color = textColor;
+                colorfulText.style.backgroundColor = bgColor;
+
+                // Update the text to describe the new colors
+                colorfulText.textContent = `${textColor} text with a ${bgColor} background.`;
+            }
+
+            // Event listeners for input changes
+            textColorInput.addEventListener('input', updateColors);
+            bgColorInput.addEventListener('input', updateColors);
+        </script>
+
+        In my linked css file<br>
+        <textarea style="background-image: url('sky.jfif'); background-size:100% 100%; width:250px; height:150px;">
+body{
+    background-color: #1d1e20;
+    color: whitesmoke;
+    font-family: verdana;
+    text-align: center;
+    position: relative;
+    text-decoration: none;
+}
+        </textarea>
+
+    </body>
+</html>
+

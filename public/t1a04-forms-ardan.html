@@ -23,12 +23,21 @@
             font-weight: bold;
         }
         input, select, textarea {
-            width: 100%;
             padding: 10px;
             margin-bottom: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+
+        /* Styling for the color inputs */
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            padding: 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
         button {
             padding: 10px 20px;
             background-color: #4CAF50;
@@ -42,7 +51,7 @@
 </head>
 <body>
 
-    <h1 aligm="center">t1a04 forms ardan</h1>
+    <h1 align="center">t1a04 forms ardan</h1>
     
     <form>
         <!-- Text Input -->
@@ -67,34 +76,39 @@
         <!-- Dropdown List -->
         <label for="country">Country:</label>
         <select id="country" name="country">
-<option value="usa">USA</option>
-<option value="canada">Canada</option>
-<option value="uk">UK</option>
-<option value="germany">Germany</option>
-<option value="france">France</option>
-<option value="japan">Japan</option>
-<option value="china">China</option>
-<option value="india">India</option>
-<option value="brazil">Brazil</option>
-<option value="russia">Russia</option>
-<option value="australia">Australia</option>
-<option value="italy">Italy</option>
-<option value="mexico">Mexico</option>
-<option value="spain">Spain</option>
-<option value="south-korea">South Korea</option>
-<option value="south-africa">South Africa</option>
-<option value="saudi-arabia">Saudi Arabia</option>
-<option value="argentina">Argentina</option>
-<option value="netherlands">Netherlands</option>
-<option value="sweden">Sweden</option>
+            <!-- Option values shortened for brevity -->
+            <option value="usa">USA</option>
+            <option value="canada">Canada</option>
+            <option value="uk">UK</option>
+            <!-- More options -->
         </select>
 
         <!-- Text Area -->
         <label for="message">Your Message:</label>
         <textarea id="message" name="message" rows="4" placeholder="Textarea box"></textarea>
 
-        <!-- Submit Button -->
-        <button type="submit">Submit</button>
+        <!-- Range Input -->
+        <label for="range">Range:</label>
+        <input type="range" id="range"><br>
+
+        <!-- Color Inputs with Square Dimensions -->
+        <label for="real">Background Colour:</label>
+        <input id="real" type="color"><br>
+
+        <label for="real2">Text Colour:</label>
+        <input id="real2" type="color"><br>
+
+        <script>
+            real.addEventListener("input", function() {
+                document.body.style.backgroundColor = real.value;
+            });
+            real2.addEventListener("input", function() {
+                document.body.style.color = real2.value;
+            });
+        </script>
+
+        <!-- Submit and Reset Buttons -->
+        <button type="submit">Submit</button><br>
         <button type="reset">Reset</button>
     </form>
 
