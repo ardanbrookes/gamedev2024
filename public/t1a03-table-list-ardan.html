@@ -4,24 +4,73 @@
     <style>
         body {
             text-align: left;
+            font-family: Arial, sans-serif;
         }
+
         a {
             border: 2px inset whitesmoke;
             border-radius: 10px;
             margin: 20px;
             padding: 10px;
             color: rgb(204, 204, 255);
+            text-decoration: none;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+
+        a:hover {
+            background-color: rgb(204, 204, 255);
+            color: #000;
+        }
+
         /* Removing the border for <a> tags inside lists */
         ol a, ul a {
             border: none;
             padding: 0;
             margin: 0;
             color: rgb(204, 204, 255);
+            text-decoration: underline;
+            font-weight: bold;
         }
+
         /* Align lists to the left */
         ol, ul {
             text-align: left;
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        /* Styling for ordered lists */
+        ol {
+            margin: 10px 0;
+        }
+
+        /* Styling for unordered lists */
+        ul {
+            list-style-type: disc;
+            margin: 10px 0;
+        }
+
+        /* Styling for nested lists */
+        ul ul, ol ol, ul ol, ol ul {
+            list-style-type: circle;
+            margin-left: 20px;
+            padding-left: 20px;
+        }
+
+        /* Adding some spacing between list items */
+        li {
+            margin-bottom: 5px;
+        }
+
+        /* Custom styling for nested lists */
+        ul ul {
+            list-style-type: square;
+        }
+
+        /* Ensuring nested unordered lists are clearly visible */
+        ul ul ul {
+            list-style-type: square;
+            margin-left: 40px;
         }
     </style>
     <title>Simple 2x2 Table</title>
@@ -72,7 +121,7 @@
         </tr>
     </table>
 
-<p align="left">Ordered list of numbers</p>
+    <p align="left">Ordered list of numbers</p>
     <ol>
         <li><a href="https://en.wikipedia.org/wiki/1">1</a></li>
         <li><a href="https://en.wikipedia.org/wiki/2">2</a></li>
@@ -81,7 +130,7 @@
         <li><a href="https://en.wikipedia.org/wiki/5">5</a></li>
     </ol>
 
-<p align="left">Unordered list of countries I would most want to live in</p>
+    <p align="left">Unordered list of countries I would most want to live in</p>
     <ul>
         <li><a href="https://en.wikipedia.org/wiki/Canada">Canada</a></li>
         <li><a href="https://en.wikipedia.org/wiki/Switzerland">Switzerland</a></li>
