@@ -1,0 +1,76 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css-ardan.css">
+    </head>
+    <body>
+        <h1 align="center">t1a06 in out ardan</h1>
+
+        <!-- Checkboxes for unlocking the inputs -->
+        <h2 align="center">The combination is 10101</h2>
+        <div id="checkboxes">
+            <input type="checkbox" id="checkbox1"> Checkbox 1<br>
+            <input type="checkbox" id="checkbox2"> Checkbox 2<br>
+            <input type="checkbox" id="checkbox3"> Checkbox 3<br>
+            <input type="checkbox" id="checkbox4"> Checkbox 4<br>
+            <input type="checkbox" id="checkbox5"> Checkbox 5<br>
+            <input type="button" value="Unlock Page" onclick="checkCombination()">
+        </div>
+
+        <!-- Error message div (hidden initially) -->
+        <div id="errorMessage" style="color:red; display:none;">
+            incorrect combination
+        </div>
+
+        <!-- Input fields for name and age, hidden initially -->
+        <div id="inputSection" style="display:none;">
+            <br>
+            <!-- First input for name -->
+            Input Name:<input type="text" id="myFirstName" value="Ardan">
+            <input type="button" value="Show Name" onclick="{
+                document.getElementById('myDiv01').style.display = 'block';
+                document.getElementById('myDiv01').innerHTML = 'Your name is ' +
+                document.getElementById('myFirstName').value;
+            }">
+            <br>
+
+            <!-- Second input for age -->
+            Input Age:<input type="number" id="myAge" value="25">
+            <input type="button" value="Show Age" onclick="{
+                document.getElementById('myDiv02').style.display = 'block';
+                document.getElementById('myDiv02').innerHTML = 'You are ' +
+                document.getElementById('myAge').value + ' years old.';
+            }">
+        </div>
+
+        <!-- Divs to display output, hidden initially -->
+        <div id="myDiv01" style="display:none;">...</div>
+        <div id="myDiv02" style="display:none;">...</div>
+
+        <script>
+            function checkCombination() {
+                // Get the checkbox states
+                var checkbox1 = document.getElementById("checkbox1").checked;
+                var checkbox2 = document.getElementById("checkbox2").checked;
+                var checkbox3 = document.getElementById("checkbox3").checked;
+                var checkbox4 = document.getElementById("checkbox4").checked;
+                var checkbox5 = document.getElementById("checkbox5").checked;
+
+                // The correct combination is 10101 (checkbox 1, 3, and 5 checked)
+                if (checkbox1 && !checkbox2 && checkbox3 && !checkbox4 && checkbox5) {
+                    document.getElementById("inputSection").style.display = "block";
+                    document.getElementById("errorMessage").style.display = "none";  // Hide error message
+                } else {
+                    document.getElementById("errorMessage").style.display = "block";  // Show error message
+                    document.getElementById("inputSection").style.display = "none";   // Hide input section
+
+                    // Reset all checkboxes
+                    document.getElementById("checkbox1").checked = false;
+                    document.getElementById("checkbox2").checked = false;
+                    document.getElementById("checkbox3").checked = false;
+                    document.getElementById("checkbox4").checked = false;
+                    document.getElementById("checkbox5").checked = false;
+                }
+            }
+        </script>
+    </body>
+</html>
