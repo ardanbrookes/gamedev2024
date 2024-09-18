@@ -46,6 +46,15 @@
         <div id="myDiv01" style="display:none;">...</div>
         <div id="myDiv02" style="display:none;">...</div>
 
+        <!-- New Button and Output for Age-Related Privileges -->
+        <div id="privilegeSection" style="display:none;">
+            <br>
+            <input type="button" value="What You Can Do" onclick="{
+                displayPrivileges(document.getElementById('myAge').value)
+            }">
+            <div id="privilegesOutput" style="display:none;"></div>
+        </div>
+
         <script>
             function checkCombination() {
                 // Get the checkbox states
@@ -59,9 +68,11 @@
                 if (checkbox1 && !checkbox2 && checkbox3 && !checkbox4 && checkbox5) {
                     document.getElementById("inputSection").style.display = "block";
                     document.getElementById("errorMessage").style.display = "none";  // Hide error message
+                    document.getElementById("privilegeSection").style.display = "block";
                 } else {
                     document.getElementById("errorMessage").style.display = "block";  // Show error message
                     document.getElementById("inputSection").style.display = "none";   // Hide input section
+                    document.getElementById("privilegeSection").style.display = "none";   // Hide privilege section
 
                     // Reset all checkboxes
                     document.getElementById("checkbox1").checked = false;
@@ -70,6 +81,31 @@
                     document.getElementById("checkbox4").checked = false;
                     document.getElementById("checkbox5").checked = false;
                 }
+            }
+
+            // Function to display what privileges the user has based on age
+            function displayPrivileges(age) {
+                var privileges = '';
+                age = parseInt(age);
+
+                if (age >= 16) {
+                    privileges += 'You can get a learner\'s driving license (L) in British Columbia.<br>';
+                }
+                if (age >= 19) {
+                    privileges += 'You can legally drink alcohol and purchase tobacco in British Columbia.<br>';
+                }
+                if (age >= 18) {
+                    privileges += 'You can vote in federal and provincial elections.<br>';
+                }
+                if (age >= 15 && age < 18) {
+                    privileges += 'You can work limited hours under supervision.<br>';
+                }
+                if (age < 16) {
+                    privileges += 'You cannot get a driver\'s license or vote.<br>';
+                }
+
+                document.getElementById('privilegesOutput').innerHTML = privileges;
+                document.getElementById('privilegesOutput').style.display = 'block';
             }
         </script>
     </body>

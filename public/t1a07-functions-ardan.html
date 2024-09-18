@@ -1,0 +1,89 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css-ardan.css">
+    </head>
+    <body>
+        <h1 align="center">t1a07 functions ardan</h1>
+
+        <script>
+            function myVar(myIn){
+                return document.getElementById(myIn);
+            }
+
+            // Function to display the full name
+            function showFullName() {
+                let firstName = myVar('myFirstName').value;
+                let lastName = myVar('myLastName').value;
+                
+                myVar('myDiv01').innerHTML = 'Your full name is ' + firstName + ' ' + lastName;
+            }
+
+            // Calculator function to perform the selected operation
+            function calculate() {
+                let num1 = parseFloat(myVar('number1').value);
+                let num2 = parseFloat(myVar('number2').value);
+                let operation = myVar('operationSelect').value;
+                let result;
+
+                // Perform the operation
+                switch (operation) {
+                    case 'add':
+                        result = num1 + num2;
+                        break;
+                    case 'subtract':
+                        result = num1 - num2;
+                        break;
+                    case 'multiply':
+                        result = num1 * num2;
+                        break;
+                    case 'divide':
+                        result = num1 / num2;
+                        break;
+                    default:
+                        result = 'Invalid operation';
+                }
+
+                // Display the result
+                myVar('resultDiv').innerHTML = 'The result is: ' + result;
+            }
+
+            // Update displayed value next to the range slider
+            function updateSliderValue(sliderId, displayId) {
+                let sliderValue = myVar(sliderId).value;
+                myVar(displayId).innerHTML = sliderValue;
+            }
+        </script>
+
+        <!-- Input fields for first and last name -->
+        First Name: <input type="text" id="myFirstName" value="ardan"><br>
+        Last Name: <input type="text" id="myLastName" value="code"><br>
+
+        <!-- Button to show full name -->
+        <input type="button" value="Show Full Name" onclick="showFullName()">
+        
+        <!-- Div to display the full name -->
+        <div id="myDiv01">...</div>
+
+        <!-- Range input for number 1 -->
+        Number 1: 
+        <input type="range" id="number1" min="0" max="1000" value="500" oninput="updateSliderValue('number1', 'sliderValue1'); calculate()">
+        <span id="sliderValue1">50</span><br>
+
+        <!-- Range input for number 2 -->
+        Number 2: 
+        <input type="range" id="number2" min="0" max="1000" value="500" oninput="updateSliderValue('number2', 'sliderValue2'); calculate()">
+        <span id="sliderValue2">50</span><br>
+
+        <!-- Dropdown to select an operation -->
+        Select Operation: 
+        <select id="operationSelect" oninput="updateSliderValue('number2', 'sliderValue2'); calculate()">
+            <option value="add">Addition</option>
+            <option value="subtract">Subtraction</option>
+            <option value="multiply">Multiplication</option>
+            <option value="divide">Division</option>
+        </select><br>
+        
+        <!-- Div to display the calculation result -->
+        <div id="resultDiv">...</div>
+    </body>
+</html>
