@@ -47,26 +47,38 @@ string
         </pre>
 
         <script>
-            // Function to fetch temperature from an online API (OpenWeatherMap)
+            // Function to fetch temperature from an online API (OpenWeatherMap) with error display
             async function getTemperature() {
-                const apiKey = 'c5e57f33bdbc2c6e9a417205c0b34202'; // Replace with your actual API key from OpenWeatherMap
+                const apiKey = 'c5e57f33bdbc2c6e9a417205c0b34202'; // Your API key
                 const city = 'Vancouver'; // You can change this to any city
                 const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
                 
+                console.log("Fetching temperature data...");
+                console.log("API URL: ", url);
+                
                 try {
                     const response = await fetch(url);
+
+                    // Log response status
+                    if (!response.ok) {
+                        throw new Error(`Error: Unable to fetch temperature data. Status: ${response.status}`);
+                    }
+
                     const data = await response.json();
+                    console.log("API response data: ", data);
+
                     const temperature = data.main.temp; // Get the temperature in Celsius
+                    console.log("Extracted temperature: ", temperature);
                     
                     document.getElementById('temperatureDisplay').innerHTML = 
                         `The current temperature in ${city} is: ${temperature}°C`;
                 } catch (error) {
+                    // Display error message instead of temperature
                     document.getElementById('temperatureDisplay').innerHTML = 
-                        'Error fetching the temperature. Please try again.';
+                        `Error fetching the temperature: ${error.message}`;
                     console.error('Error fetching temperature:', error);
                 }
             }
         </script>
     </body>
 </html>
-
