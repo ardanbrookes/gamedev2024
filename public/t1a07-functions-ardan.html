@@ -1,12 +1,24 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="css-ardan.css">
+        <style>
+            /* CSS to handle the fade-out effect */
+            .fade-out {
+                opacity: 0;
+                transition: opacity 0.5s ease-out;
+            }
+
+            .fade-in {
+                opacity: 1;
+                transition: opacity 0.5s ease-in;
+            }
+        </style>
     </head>
     <body>
         <h1 align="center">t1a07 functions ardan</h1>
 
         <script>
-            function myVar(myIn){
+            function myVar(myIn) {
                 return document.getElementById(myIn);
             }
 
@@ -52,6 +64,39 @@
                 let sliderValue = myVar(sliderId).value;
                 myVar(displayId).innerHTML = sliderValue;
             }
+
+            // Add a new task to the list
+            function addTask() {
+                let taskInput = myVar('taskInput').value;
+                if (taskInput.trim() !== '') {
+                    let taskList = myVar('taskList');
+
+                    let listItem = document.createElement('li');
+                    listItem.classList.add('fade-in');
+                    
+                    // Create the checkbox
+                    let checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.onclick = function () {
+                        if (checkbox.checked) {
+                            listItem.classList.add('fade-out');
+                            setTimeout(function () {
+                                listItem.style.display = 'none'; // Remove from view
+                            }, 500); // Wait for the fade-out transition to complete
+                        } else {
+                            listItem.classList.remove('fade-out');
+                            listItem.style.display = 'block'; // Show the task again if unchecked
+                        }
+                    };
+
+                    // Add the checkbox and task text to the list item
+                    listItem.appendChild(checkbox);
+                    listItem.appendChild(document.createTextNode(' ' + taskInput));
+
+                    taskList.appendChild(listItem);
+                    myVar('taskInput').value = ''; // Clear input field
+                }
+            }
         </script>
 
         <!-- Input fields for first and last name -->
@@ -67,12 +112,12 @@
         <!-- Range input for number 1 -->
         Number 1: 
         <input type="range" id="number1" min="0" max="1000" value="500" oninput="updateSliderValue('number1', 'sliderValue1'); calculate()">
-        <span id="sliderValue1">50</span><br>
+        <span id="sliderValue1">500</span><br>
 
         <!-- Range input for number 2 -->
         Number 2: 
         <input type="range" id="number2" min="0" max="1000" value="500" oninput="updateSliderValue('number2', 'sliderValue2'); calculate()">
-        <span id="sliderValue2">50</span><br>
+        <span id="sliderValue2">500</span><br>
 
         <!-- Dropdown to select an operation -->
         Select Operation: 
@@ -85,5 +130,17 @@
         
         <!-- Div to display the calculation result -->
         <div id="resultDiv">...</div>
+
+        <hr>
+
+        <!-- Task input and button to add new task -->
+        Task: <input type="text" id="taskInput">
+        <button onclick="addTask()">Add Task</button>
+
+        <!-- Task list -->
+        <ul id="taskList">
+            <!-- Tasks will be dynamically added here -->
+        </ul>
+
     </body>
 </html>

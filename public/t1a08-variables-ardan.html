@@ -1,0 +1,72 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css-ardan.css">
+    </head>
+    <body>
+        <h1 align="center">t1a08 variables ardan</h1>
+
+        <h2 align="center">Link to w3schools variables <a href="https://www.w3schools.com/js/js_variables.asp">here</a></h2>
+
+        <div id="inputSection">
+            Input 1: <input type="text" id="myIn01" value="5"><br>
+            Input 2: <input type="text" id="myIn02" value="7"><br>
+            <input type="button" value="Add" onclick="{
+                let myX = document.getElementById('myIn01').value;
+                let myY = document.getElementById('myIn02').value;
+                let myTotal = myX + myY;
+                document.getElementById('myDiv01').innerHTML = 'Your answer is ' + myTotal;
+            }">
+            <br>
+            <input type="button" value="Add and fix" onclick="{
+                let myX = parseFloat(document.getElementById('myIn01').value);
+                let myY = parseFloat(document.getElementById('myIn02').value);
+                let myTotal = myX + myY;
+                document.getElementById('myDiv01').innerHTML = 'Your answer is ' + myTotal;
+            }">
+        </div>
+
+        <div id="myDiv01">...</div>
+
+        <br><br>
+
+        <!-- Temperature Example -->
+        <button id="showTemperature" onclick="getTemperature()">Get Current Temperature</button>
+        <div id="temperatureDisplay">The current temperature is: ...</div>
+
+        <br><br>
+
+        Other programming languages use defined variables
+        <pre>
+boolean
+int8 or byte
+int
+double
+float
+char
+string
+        </pre>
+
+        <script>
+            // Function to fetch temperature from an online API (OpenWeatherMap)
+            async function getTemperature() {
+                const apiKey = 'c5e57f33bdbc2c6e9a417205c0b34202'; // Replace with your actual API key from OpenWeatherMap
+                const city = 'Vancouver'; // You can change this to any city
+                const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+                
+                try {
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    const temperature = data.main.temp; // Get the temperature in Celsius
+                    
+                    document.getElementById('temperatureDisplay').innerHTML = 
+                        `The current temperature in ${city} is: ${temperature}°C`;
+                } catch (error) {
+                    document.getElementById('temperatureDisplay').innerHTML = 
+                        'Error fetching the temperature. Please try again.';
+                    console.error('Error fetching temperature:', error);
+                }
+            }
+        </script>
+    </body>
+</html>
+
