@@ -1,0 +1,147 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css-ardan.css">
+    </head>
+    <body>
+        <h1 align="center">t1a09 decisions if ardan</h1>
+        
+        <!-- Name Input and Button Section -->
+        Name: <input type="text" id="myText01" value="ardan"><br>
+        <input type="button" value="Submit" onclick="{
+            let myName = document.getElementById('myText01').value;
+            if (myName.toLowerCase() === 'ardan') {
+                document.getElementById('myDiv01').innerText = 'Hi Ardan';
+            }
+        }">
+        <input type="button" value="Submit else" onclick="{
+            let myName = document.getElementById('myText01').value;
+            if (myName.toLowerCase() === 'ardan') {
+                document.getElementById('myDiv01').innerText = 'Hi Ardan';
+            } else {
+                document.getElementById('myDiv01').innerText = 'Name is not ardan';
+            }
+        }">
+        <div id="myDiv01">...</div><br>
+
+        <!-- Number Input and Check Button -->
+        Number: <input type="number" id="myNumber01" value="14"><br>
+        <input type="button" value="Check Number" onclick="{
+            let num = parseInt(document.getElementById('myNumber01').value);
+
+            // Check if the number is even
+            if (num % 2 === 0) {
+                document.getElementById('evenDiv').innerText = 'Yes';
+            } else {
+                document.getElementById('evenDiv').innerText = 'No';
+            }
+
+
+            // Check if the number is prime
+            function isPrime(n) {
+                if (n <= 1) return false;
+                if (n === 2) return true;
+                for (let i = 2; i <= Math.sqrt(n); i++) {
+                    if (n % i === 0) return false;
+                }
+                return true;
+            }
+
+            if (isPrime(num)) {
+                document.getElementById('primeDiv').innerText = 'Yes';
+            } else {
+                document.getElementById('primeDiv').innerText = 'No';
+            }
+
+            // Check if the number is a perfect square
+            if (Number.isInteger(Math.sqrt(num))) {
+                document.getElementById('squareDiv').innerText = 'Yes';
+            } else {
+                document.getElementById('squareDiv').innerText = 'No';
+            }
+
+            // Check if a number is a perfect square
+            function isPerfectSquare(x) {
+                const s = Math.sqrt(x);
+                return s * s === x;
+            }
+
+            function isPerfectSquare(x) {
+                const s = Math.sqrt(x);
+                return s * s === x;
+            }
+
+            // Check if the number is Fibonacci
+            function isFibonacci(n) {
+                return isPerfectSquare(5 * n * n + 4) || isPerfectSquare(5 * n * n - 4);
+            }
+
+            // Assuming 'num' is defined and holds the number you want to check
+            if (isFibonacci(num)) {
+                document.getElementById('fibonacciDiv').innerText = 'Yes';
+            } else {
+                document.getElementById('fibonacciDiv').innerText = 'No';
+            }
+        }">
+
+        <!-- Separate Divs for Each Number Property -->
+        <div>Is Even: <span id="evenDiv">...</span></div>
+        <div>Is Prime: <span id="primeDiv">...</span></div>
+        <div>Is Perfect Square: <span id="squareDiv">...</span></div>
+        <div>Is Fibonacci: <span id="fibonacciDiv">...</span></div>
+
+        <input type="button" value="Is the weather nice in Vancouver" onclick="{
+            
+        }">
+
+        <script>
+// Function to fetch temperature and weather conditions from OpenWeatherMap
+async function getWeather() {
+    const apiKey = 'c5e57f33bdbc2c6e9a417205c0b34202'; // Your API key
+    const city = 'Vancouver'; // You can change this to any city
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+
+    console.log("Fetching weather data...");
+    console.log("API URL: ", url);
+
+    try {
+        const response = await fetch(url);
+
+        // Log response status
+        if (!response.ok) {
+            throw new Error(`Error: Unable to fetch weather data. Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("API response data: ", data);
+
+        const temperature = data.main.temp; // Get the temperature in Celsius
+        const weatherConditions = data.weather[0].description; // Get weather description
+        const isRaining = data.rain && data.rain['1h'] > 0; // Check if it rained in the last hour
+        const isCloudy = data.clouds.all > 50; // Check if cloudiness is over 50%
+
+        console.log("Extracted temperature: ", temperature);
+        console.log("Weather conditions: ", weatherConditions);
+
+        document.getElementById('temperatureDisplay').innerHTML = 
+            `The current temperature in ${city} is: ${temperature}°C. Conditions: ${weatherConditions}.`;
+
+        if (isRaining) {
+            document.getElementById('weatherDisplay').innerHTML = 
+                `It's currently raining in ${city}.`;
+        } else if (isCloudy) {
+            document.getElementById('weatherDisplay').innerHTML = 
+                `It's currently cloudy in ${city}.`;
+        } else {
+            document.getElementById('weatherDisplay').innerHTML = 
+                `The weather is clear in ${city}.`;
+        }
+    } catch (error) {
+        // Display error message instead of weather info
+        document.getElementById('temperatureDisplay').innerHTML = 
+            `Error fetching the weather: ${error.message}`;
+        console.error('Error fetching weather:', error);
+    }
+}
+        </script>
+    </body>
+</html>
