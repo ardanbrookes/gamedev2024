@@ -26,16 +26,15 @@
         <!-- Number Input and Check Button -->
         Number: <input type="number" id="myNumber01" value="14"><br>
         <input type="button" value="Check Number" onclick="{
-            let num = parseInt(document.getElementById('myNumber01').value);
-
-            // Check if the number is even
-            if (num % 2 === 0) {
+            let num = parseFloat(document.getElementById('myNumber01').value);
+        
+            // Check if the number is even (only check if it's an integer)
+            if (Number.isInteger(num) && num % 2 === 0) {
                 document.getElementById('evenDiv').innerText = 'Yes';
             } else {
                 document.getElementById('evenDiv').innerText = 'No';
             }
-
-
+        
             // Check if the number is prime
             function isPrime(n) {
                 if (n <= 1) return false;
@@ -45,103 +44,146 @@
                 }
                 return true;
             }
-
+        
             if (isPrime(num)) {
                 document.getElementById('primeDiv').innerText = 'Yes';
             } else {
                 document.getElementById('primeDiv').innerText = 'No';
             }
-
+        
             // Check if the number is a perfect square
             if (Number.isInteger(Math.sqrt(num))) {
                 document.getElementById('squareDiv').innerText = 'Yes';
             } else {
                 document.getElementById('squareDiv').innerText = 'No';
             }
-
-            // Check if a number is a perfect square
+        
+            // Correct Fibonacci check
             function isPerfectSquare(x) {
-                const s = Math.sqrt(x);
-                return s * s === x;
+                return Number.isInteger(Math.sqrt(x)); // Ensure it's a whole number
             }
-
-            function isPerfectSquare(x) {
-                const s = Math.sqrt(x);
-                return s * s === x;
-            }
-
+        
             // Check if the number is Fibonacci
             function isFibonacci(n) {
                 return isPerfectSquare(5 * n * n + 4) || isPerfectSquare(5 * n * n - 4);
             }
-
-            // Assuming 'num' is defined and holds the number you want to check
+        
             if (isFibonacci(num)) {
                 document.getElementById('fibonacciDiv').innerText = 'Yes';
             } else {
                 document.getElementById('fibonacciDiv').innerText = 'No';
             }
         }">
-
+        
         <!-- Separate Divs for Each Number Property -->
         <div>Is Even: <span id="evenDiv">...</span></div>
         <div>Is Prime: <span id="primeDiv">...</span></div>
         <div>Is Perfect Square: <span id="squareDiv">...</span></div>
         <div>Is Fibonacci: <span id="fibonacciDiv">...</span></div>
-
-        <input type="button" value="Is the weather nice in Vancouver" onclick="{
-            
-        }">
-
+        <br>
+        
+        
+        <input type="button" value="Is the weather nice in Vancouver" onclick="getWeather()">
+        <div>
+            Temperature: <span id="temperatureDiv">...</span>
+        </div>
+        <div>
+            Conditions: <span id="conditionsDiv">...</span>
+        </div>
+        <div>
+            Is the weather nice in Vancouver: <span id="weatherDiv">...</span>
+        </div>
+        
         <script>
-// Function to fetch temperature and weather conditions from OpenWeatherMap
-async function getWeather() {
-    const apiKey = 'c5e57f33bdbc2c6e9a417205c0b34202'; // Your API key
-    const city = 'Vancouver'; // You can change this to any city
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+        // Function to fetch temperature and weather conditions from OpenWeatherMap
+        async function getWeather() {
+            const apiKey = 'c5e57f33bdbc2c6e9a417205c0b34202'; // Your API key
+            const city = 'Vancouver'; // You can change this to any city
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+        
+            console.log("Fetching weather data...");
+            console.log("API URL: ", url);
+        
+            try {
+                const response = await fetch(url);
+        
+                // Log response status
+                if (!response.ok) {
+                    throw new Error(`Unable to fetch weather data. Status: ${response.status}`);
+                }
+        
+                const data = await response.json();
+                console.log("API response data: ", data);
+        
+                const temperature = data.main.temp; // Get the temperature in Celsius
+                const weatherConditions = data.weather[0].main; // Get weather condition (main, e.g., Clear, Clouds)
+                const windSpeed = data.wind.speed * 3.6; // Convert from m/s to km/h
+        
+                let isRaining = false;
+                let isCloudyOrSunny = false;
+                let isTemperatureHot = true;
+                let isTemperatureCold = true;
+                let isWindNice = false;
+                let reasons = []; // To store reasons why the weather is not nice
+        
+                // Apply conditions via if statements
+                if (data.rain && data.rain['1h'] > 0) {
+                    isRaining = true;
+                    reasons.push("It is raining.");
+                }
+        
+                if (weatherConditions === 'Clouds' || weatherConditions === 'Clear') {
+                    isCloudyOrSunny = true;
+                } else {
+                    reasons.push("It is not clear or cloudy.");
+                }
+        
+                if (temperature <= 25) {
+                    isTemperatureHot = false;
+                } else {
+                    reasons.push(`The temperature is too hot.`);
+                }
 
-    console.log("Fetching weather data...");
-    console.log("API URL: ", url);
-
-    try {
-        const response = await fetch(url);
-
-        // Log response status
-        if (!response.ok) {
-            throw new Error(`Error: Unable to fetch weather data. Status: ${response.status}`);
+                if (temperature >= 15) {
+                    isTemperaturecold = false;
+                } else {
+                    reasons.push(`The temperature is too cold.`);
+                }
+        
+                if (windSpeed < 25) {
+                    isWindNice = true;
+                } else {
+                    reasons.push(`The wind speed is higher than 25 kph (Current: ${windSpeed.toFixed(1)} kph).`);
+                }
+        
+                console.log("Extracted temperature: ", temperature);
+                console.log("Weather conditions: ", weatherConditions);
+                console.log("Wind speed (kph): ", windSpeed);
+                console.log("Raining: ", isRaining);
+                console.log("Cloudy or Sunny: ", isCloudyOrSunny);
+                console.log("Temperature hot: ", isTemperatureHot);
+                console.log("Temperature cold: ", isTemperatureCold);
+                console.log("Wind nice: ", isWindNice);
+        
+                // Update temperature and conditions display
+                document.getElementById('temperatureDiv').innerHTML = `${temperature}°C`;
+                document.getElementById('conditionsDiv').innerHTML = `${weatherConditions}`;
+        
+                // Determine if the weather is nice
+                if (!isTemperatureHot && !isTemperatureCold && isCloudyOrSunny && isWindNice && !isRaining) {
+                    document.getElementById('weatherDiv').innerHTML = "The weather is nice.";
+                } else {
+                    let reasonText = reasons.length > 0 ? reasons.join(" ") : "No specific reasons available.";
+                    document.getElementById('weatherDiv').innerHTML = `No, ${reasonText}`;
+                }
+        
+            } catch (error) {
+                // Display error message instead of weather info
+                document.getElementById('temperatureDiv').innerHTML = `Error fetching the weather: ${error.message}`;
+                console.error('Error fetching weather:', error);
+            }
         }
-
-        const data = await response.json();
-        console.log("API response data: ", data);
-
-        const temperature = data.main.temp; // Get the temperature in Celsius
-        const weatherConditions = data.weather[0].description; // Get weather description
-        const isRaining = data.rain && data.rain['1h'] > 0; // Check if it rained in the last hour
-        const isCloudy = data.clouds.all > 50; // Check if cloudiness is over 50%
-
-        console.log("Extracted temperature: ", temperature);
-        console.log("Weather conditions: ", weatherConditions);
-
-        document.getElementById('temperatureDisplay').innerHTML = 
-            `The current temperature in ${city} is: ${temperature}°C. Conditions: ${weatherConditions}.`;
-
-        if (isRaining) {
-            document.getElementById('weatherDisplay').innerHTML = 
-                `It's currently raining in ${city}.`;
-        } else if (isCloudy) {
-            document.getElementById('weatherDisplay').innerHTML = 
-                `It's currently cloudy in ${city}.`;
-        } else {
-            document.getElementById('weatherDisplay').innerHTML = 
-                `The weather is clear in ${city}.`;
-        }
-    } catch (error) {
-        // Display error message instead of weather info
-        document.getElementById('temperatureDisplay').innerHTML = 
-            `Error fetching the weather: ${error.message}`;
-        console.error('Error fetching weather:', error);
-    }
-}
         </script>
+        
     </body>
 </html>
