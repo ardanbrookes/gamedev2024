@@ -82,108 +82,134 @@
         <div>Is Fibonacci: <span id="fibonacciDiv">...</span></div>
         <br>
         
-        
-        <input type="button" value="Is the weather nice in Vancouver" onclick="getWeather()">
-        <div>
-            Temperature: <span id="temperatureDiv">...</span>
-        </div>
-        <div>
-            Conditions: <span id="conditionsDiv">...</span>
-        </div>
-        <div>
-            Is the weather nice in Vancouver: <span id="weatherDiv">...</span>
-        </div>
-        
-        <script>
-        // Function to fetch temperature and weather conditions from OpenWeatherMap
-        async function getWeather() {
-            const apiKey = 'c5e57f33bdbc2c6e9a417205c0b34202'; // Your API key
-            const city = 'Vancouver'; // You can change this to any city
-            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
-        
-            console.log("Fetching weather data...");
-            console.log("API URL: ", url);
-        
-            try {
-                const response = await fetch(url);
-        
-                // Log response status
-                if (!response.ok) {
-                    throw new Error(`Unable to fetch weather data. Status: ${response.status}`);
-                }
-        
-                const data = await response.json();
-                console.log("API response data: ", data);
-        
-                const temperature = data.main.temp; // Get the temperature in Celsius
-                const weatherConditions = data.weather[0].main; // Get weather condition (main, e.g., Clear, Clouds)
-                const windSpeed = data.wind.speed * 3.6; // Convert from m/s to km/h
-        
-                let isRaining = false;
-                let isCloudyOrSunny = false;
-                let isTemperatureHot = true;
-                let isTemperatureCold = true;
-                let isWindNice = false;
-                let reasons = []; // To store reasons why the weather is not nice
-        
-                // Apply conditions via if statements
-                if (data.rain && data.rain['1h'] > 0) {
-                    isRaining = true;
-                    reasons.push("It is raining.");
-                }
-        
-                if (weatherConditions === 'Clouds' || weatherConditions === 'Clear') {
-                    isCloudyOrSunny = true;
-                } else {
-                    reasons.push("It is not clear or cloudy.");
-                }
-        
-                if (temperature <= 25) {
-                    isTemperatureHot = false;
-                } else {
-                    reasons.push(`The temperature is too hot.`);
-                }
 
-                if (temperature >= 15) {
-                    isTemperaturecold = false;
-                } else {
-                    reasons.push(`The temperature is too cold.`);
-                }
-        
-                if (windSpeed < 25) {
-                    isWindNice = true;
-                } else {
-                    reasons.push(`The wind speed is higher than 25 kph (Current: ${windSpeed.toFixed(1)} kph).`);
-                }
-        
-                console.log("Extracted temperature: ", temperature);
-                console.log("Weather conditions: ", weatherConditions);
-                console.log("Wind speed (kph): ", windSpeed);
-                console.log("Raining: ", isRaining);
-                console.log("Cloudy or Sunny: ", isCloudyOrSunny);
-                console.log("Temperature hot: ", isTemperatureHot);
-                console.log("Temperature cold: ", isTemperatureCold);
-                console.log("Wind nice: ", isWindNice);
-        
-                // Update temperature and conditions display
-                document.getElementById('temperatureDiv').innerHTML = `${temperature}°C`;
-                document.getElementById('conditionsDiv').innerHTML = `${weatherConditions}`;
-        
-                // Determine if the weather is nice
-                if (!isTemperatureHot && !isTemperatureCold && isCloudyOrSunny && isWindNice && !isRaining) {
-                    document.getElementById('weatherDiv').innerHTML = "The weather is nice.";
-                } else {
-                    let reasonText = reasons.length > 0 ? reasons.join(" ") : "No specific reasons available.";
-                    document.getElementById('weatherDiv').innerHTML = `No, ${reasonText}`;
-                }
-        
-            } catch (error) {
-                // Display error message instead of weather info
-                document.getElementById('temperatureDiv').innerHTML = `Error fetching the weather: ${error.message}`;
-                console.error('Error fetching weather:', error);
+    <!-- Button to check weather -->
+    <input type="button" value="Is the weather nice in" onclick="getWeather()">
+    <select id="citySelect" onchange="updateCity()">
+        <option value="Vancouver">Vancouver</option>
+        <option value="Toronto">Toronto</option>
+        <option value="New York">New York</option>
+        <option value="London">London</option>
+        <option value="Tokyo">Tokyo</option>
+        <option value="Mission, CA">Mission</option>
+        <option value="Thanh pho Ho Chi Minh, VN">Ho Chi Minh</option>
+        <option value="Perth">Perth</option>
+        <option value="Yakutsk">Yakutsk</option>
+        <option value="Lagos">Lagos</option>
+        <option value="Mumbai">Mumbai</option>
+    </select>
+    
+    <div>
+        Temperature: <span id="temperatureDiv">...</span>
+    </div>
+    <div>
+        Conditions: <span id="conditionsDiv">...</span>
+    </div>
+    <div>
+        Wind speed: <span id="windSpeedDiv">...</span>
+    </div>
+    <div>
+        Is the weather nice in <span id="cityNameDiv">Vancouver</span>: <span id="weatherDiv">...</span>
+    </div>
+
+    <script>
+    let cityName = 'Vancouver'; // Default city
+
+    // Function to update the city based on selection
+    function updateCity() {
+        const selectElement = document.getElementById('citySelect');
+        cityName = selectElement.value;
+        document.getElementById('cityNameDiv').innerText = cityName; // Update city name in the UI
+    }
+
+    // Function to fetch temperature and weather conditions from OpenWeatherMap
+    async function getWeather() {
+        const apiKey = 'c5e57f33bdbc2c6e9a417205c0b34202'; // Your API key
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${apiKey}`;
+
+        console.log("Fetching weather data for city:", cityName);
+        console.log("API URL: ", url);
+
+        try {
+            const response = await fetch(url);
+
+            // Log response status
+            if (!response.ok) {
+                throw new Error(`Unable to fetch weather data. Status: ${response.status}`);
             }
+
+            const data = await response.json();
+            console.log("API response data: ", data);
+
+            const temperature = data.main.temp; // Get the temperature in Celsius
+            const weatherConditions = data.weather[0].main; // Get weather condition (main, e.g., Clear, Clouds)
+            const windSpeed = data.wind.speed * 3.6; // Convert from m/s to km/h
+
+            let isRaining = false;
+            let isCloudyOrSunny = false;
+            let isTemperatureHot = true;
+            let isTemperatureCold = true;
+            let isWindNice = false;
+            let reasons = []; // To store reasons why the weather is not nice
+
+            // Check weather conditions
+            if (weatherConditions === 'Rain') {
+                isRaining = true;
+            }
+
+            if (weatherConditions === 'Clouds' || weatherConditions === 'Clear') {
+                isCloudyOrSunny = true;
+            }
+
+            // Temperature conditions
+            if (temperature <= 25) {
+                isTemperatureHot = false;
+            } else {
+                reasons.push(`The temperature is too hot.`);
+            }
+
+            if (temperature >= 15) {
+                isTemperatureCold = false;
+            } else {
+                reasons.push(`The temperature is too cold.`);
+            }
+
+            // Wind condition
+            if (windSpeed < 25) {
+                isWindNice = true;
+            } else {
+                reasons.push(`It's too windy.`);
+            }
+
+            console.log("Extracted temperature: ", temperature);
+            console.log("Weather conditions: ", weatherConditions);
+            console.log("Wind speed (kph): ", windSpeed);
+            console.log("Raining: ", isRaining);
+            console.log("Cloudy or Sunny: ", isCloudyOrSunny);
+            console.log("Temperature hot: ", isTemperatureHot);
+            console.log("Temperature cold: ", isTemperatureCold);
+            console.log("Wind nice: ", isWindNice);
+
+            // Update temperature and conditions display
+            document.getElementById('temperatureDiv').innerHTML = `${temperature}°C`;
+            document.getElementById('conditionsDiv').innerHTML = `${weatherConditions}`;
+            document.getElementById('windSpeedDiv').innerHTML = `${windSpeed} km/h`;
+
+            // Determine if the weather is nice
+            if (!isTemperatureHot && !isTemperatureCold && isCloudyOrSunny && isWindNice && !isRaining) {
+                document.getElementById('weatherDiv').innerHTML = "The weather is nice.";
+            } else {
+                // If the weather isn't nice, display current condition without extra details
+                let reasonText = reasons.length > 0 ? reasons.join(" ") : `${weatherConditions}`;
+                document.getElementById('weatherDiv').innerHTML = `No, ${reasonText}`;
+            }
+
+        } catch (error) {
+            // Display error message instead of weather info
+            document.getElementById('temperatureDiv').innerHTML = `Error fetching the weather: ${error.message}`;
+            console.error('Error fetching weather:', error);
         }
-        </script>
-        
+    }
+    </script>
     </body>
 </html>
