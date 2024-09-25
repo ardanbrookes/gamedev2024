@@ -1,8 +1,111 @@
-<h2 align="center">t1a10 loops ardan</h2>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css-ardan.css">
+    </head>
+    <body>
+        <h2 align="center">t1a10 loops ardan</h2>
 
-<a href="https://www.w3schools.com/js/js_loop_for.asp">W3schools loops</a>
-<pre>
+        <a href="https://www.w3schools.com/js/js_loop_for.asp">W3schools loops</a>
+        <pre>
+        
+        </pre>
+        
+        <h4>Example working code</h4>
+        
+        Max loops: <input id="myNum01" type="number" value="4"><br>
+        Red loop number: <input id="myNum02" type="number" value="2"><br>
+        
+        <input type="button" value="Basic For Loop with Decisions" onclick="
+            document.getElementById('myDiv01').innerHTML = '';
+            let myTemp = '';
+        
+            let myMax = parseInt(document.getElementById('myNum01').value);
+            let myRedLoop = parseInt(document.getElementById('myNum02').value);
+        
+            for (let myLoop = 1; myLoop <= myMax; myLoop++) {
+                if (myLoop * 2 > myMax) {
+                    myTemp += 'cool ';
+                }
+                
+                // Correctly comparing myLoop to myRedLoop
+                if (myLoop === myRedLoop) {
+                    myTemp += '<span style=\'color:red;\'>loop number: ' + myLoop + '</span><br>';
+                } else {
+                    myTemp += 'loop number: ' + myLoop + '<br>';
+                }
+            }
+            document.getElementById('myDiv01').innerHTML = myTemp;
+        ">
+        
+        <div id="myDiv01">...</div>
 
-</pre>
+        <h4>Collatz Conjecture Loop</h4>
+        <textarea>The Collatz conjecture is one of the most famous unsolved problems in mathematics. The conjecture asks whether repeating two simple arithmetic operations <b>(For even numbers, divide by 2. For odd Numbers, Multuply by 3 and add 1)</b> will eventually transform every positive integer into 1</textarea><br>
 
-<h4>Example working code</h4>
+        Start Number: <input id="myNum04" type="number" value="10"><br>
+        
+        <input type="button" value="Run Collatz Conjecture" onclick="
+            document.getElementById('myCollatzDiv').innerHTML = '';
+            let myCollatzTemp = '';
+        
+            let myCollatzMax = parseInt(document.getElementById('myNum01').value);
+            let  = parseInt(document.getElementById('myNum02').value);
+        
+            for (let myLoop = 1; myLoop <= myMax; myLoop++) {
+                if (myLoop * 2 > myMax) {
+                    myTemp += 'cool ';
+                }
+                
+                // Correctly comparing myLoop to myRedLoop
+                if (myLoop === myRedLoop) {
+                    myTemp += '<span style=\'color:red;\'>loop number: ' + myLoop + '</span><br>';
+                } else {
+                    myTemp += 'loop number: ' + myLoop + '<br>';
+                }
+            }
+            document.getElementById('myCollatzDiv').innerHTML = myTemp;
+        ">
+        
+        <div id="myCollatzDiv">...</div>
+
+<div id='multiplicationDiv'></div>
+
+<h4>Even and Odd Numbers</h4>
+
+Max number: <input id="maxNum" type="number" value="10"><br>
+
+<input type="button" value="Show Even and Odd Numbers" onclick="
+    document.getElementById('evenOddDiv').innerHTML = '';
+    let maxNum = parseInt(document.getElementById('maxNum').value);
+    let result = '';
+
+    for (let i = 1; i <= maxNum; i++) {
+        if (i % 2 === 0) {
+            result += i + ' is Even<br>';
+        } else {
+            result += i + ' is Odd<br>';
+        }
+    }
+    document.getElementById('evenOddDiv').innerHTML = result;
+">
+
+<div id="evenOddDiv"></div>
+
+<h4>Factorial Calculator</h4>
+
+Number: <input id="factNum" type="number" value="5"><br>
+
+<input type="button" value="Calculate Factorial" onclick="
+    document.getElementById('factorialDiv').innerHTML = '';
+    let number = parseInt(document.getElementById('factNum').value);
+    let factorial = 1;
+
+    for (let i = 1; i <= number; i++) {
+        factorial *= i;
+    }
+    document.getElementById('factorialDiv').innerHTML = 'Factorial of ' + number + ' is ' + factorial;
+">
+
+<div id="factorialDiv"></div>
+    </body>
+</html>
