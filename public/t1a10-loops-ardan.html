@@ -39,32 +39,26 @@
         
         <div id="myDiv01">...</div>
 
-        <h4>Collatz Conjecture Loop</h4>
-        <textarea>The Collatz conjecture is one of the most famous unsolved problems in mathematics. The conjecture asks whether repeating two simple arithmetic operations <b>(For even numbers, divide by 2. For odd Numbers, Multuply by 3 and add 1)</b> will eventually transform every positive integer into 1</textarea><br>
+        <h4>Collatz Conjecture Loop (done without chatgpt)</h4>
+        <textarea rows="8" cols="50">The Collatz conjecture is one of the most famous unsolved problems in mathematics. The conjecture states that when repeating two simple arithmetic operations (For even numbers, divide by 2. For odd Numbers, multiply by 3 and add 1) every number will eventually turn into 1</textarea><br>
 
         Start Number: <input id="myNum04" type="number" value="10"><br>
         
         <input type="button" value="Run Collatz Conjecture" onclick="
-            document.getElementById('myCollatzDiv').innerHTML = '';
-            let myCollatzTemp = '';
+        document.getElementById('myCollatzDiv').innerHTML = '';
+        let myNum04 = parseInt(document.getElementById('myNum04').value);
+        let myCollatzOutput = myNum04;
         
-            let myCollatzMax = parseInt(document.getElementById('myNum01').value);
-            let  = parseInt(document.getElementById('myNum02').value);
-        
-            for (let myLoop = 1; myLoop <= myMax; myLoop++) {
-                if (myLoop * 2 > myMax) {
-                    myTemp += 'cool ';
-                }
-                
-                // Correctly comparing myLoop to myRedLoop
-                if (myLoop === myRedLoop) {
-                    myTemp += '<span style=\'color:red;\'>loop number: ' + myLoop + '</span><br>';
-                } else {
-                    myTemp += 'loop number: ' + myLoop + '<br>';
-                }
+        while (myNum04 > 1) {
+            if (myNum04 % 2 == 0) {
+                myNum04 = myNum04 / 2;
+            } else {
+                myNum04 = (myNum04 * 3) + 1;
             }
-            document.getElementById('myCollatzDiv').innerHTML = myTemp;
-        ">
+            myCollatzOutput += ', ' + myNum04;
+        }
+        document.getElementById('myCollatzDiv').innerHTML = myCollatzOutput;
+    ">
         
         <div id="myCollatzDiv">...</div>
 

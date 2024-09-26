@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css-ardan.css">
+    </head>
+    <body>
+        <h1 align="center">t1a11 arrays ardan</h1>
+
+        <script>
+            let myMax = 6
+            let myArray = new Array(myMax)
+        </script>
+
+        Input: <input type="text" id="myFirstName" value="fred">
+
+        <input type="button" value="Set Array" onclick="{
+            myArray[0] = 'ardan'
+            myArray[1] = 'gurp'
+            myArray[2] = 'cameron'
+
+            document.getElementById('mydiv01').innerHTML = 'You set the array'
+        }">
+        <input type="button" value="Show Array" onclick="{
+            document.getElementById('myDiv01').innerHTML = ''
+            for (myLoop=0; myLoop < 3; myLoop++){
+                document.getElementById('myDiv01').innerHTML += 'myArray[' + myLoop + '] = ' +
+                    myArray[myLoop] + '<br>'
+            }
+        }"><br>
+    </body>
+</html>
