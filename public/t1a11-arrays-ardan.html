@@ -11,15 +11,24 @@
         let myArray = new Array(myMax);
     </script>
 
-    Input: <input type="text" id="myFirstName" value="fred"><br>
-
     <input type="button" value="Set Array" onclick="{
         myArray[0] = 'ardan';
         myArray[1] = 'gurp';
         myArray[2] = 'cameron';
         document.getElementById('myDiv01').innerHTML = 'You set the array';
     }">
-    
+
+    Set array by number:<br>
+    Number: <select id="arrayNumber">
+            <option value="1">myArray[1]</option>
+            <option value="2">myArray[2]</option>
+            <option value="3">myArray[3]</option>
+        </select>
+    Value: <input type="text" id="myValue01" value="fred"><br>
+    <input type="button" value="Set array number" onclick="{
+        myArray[parseInt(document.getElementById(arrayNumber).value)] = document.getElementById(myValue01).value;
+    }">
+
     <input type="button" value="Show Array" onclick="{
         document.getElementById('myDiv01').innerHTML = '';
         for (let myLoop = 0; myLoop < 3; myLoop++) {
