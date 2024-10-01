@@ -11,23 +11,32 @@
         let myArray = new Array(myMax);
     </script>
 
-    <input type="button" value="Set Array" onclick="{
+    <input type="button" value="Set array to defaults" onclick="{
         myArray[0] = 'ardan';
         myArray[1] = 'gurp';
         myArray[2] = 'cameron';
         document.getElementById('myDiv01').innerHTML = 'You set the array';
-    }">
+    }"><br><br>
 
     Set array by number:<br>
     Number: <select id="arrayNumber">
+            <option value="0">myArray[0]</option> <!-- Fixed: value 0 was missing -->
             <option value="1">myArray[1]</option>
             <option value="2">myArray[2]</option>
-            <option value="3">myArray[3]</option>
-        </select>
+        </select><br>
     Value: <input type="text" id="myValue01" value="fred"><br>
     <input type="button" value="Set array number" onclick="{
-        myArray[parseInt(document.getElementById(arrayNumber).value)] = document.getElementById(myValue01).value;
+        myArray[parseInt(document.getElementById('arrayNumber').value)] = document.getElementById('myValue01').value;
+    }"><br><br>
+
+    <input type="button" value="Add cool to array" onclick="{
+        myArray[parseInt(document.getElementById('arrayNumber').value)] =+ 'cool';
     }">
+        Number: <select id="arrayNumber2">
+            <option value="0">myArray[0]</option> <!-- Fixed: value 0 was missing -->
+            <option value="1">myArray[1]</option>
+            <option value="2">myArray[2]</option>
+        </select><br><br>
 
     <input type="button" value="Show Array" onclick="{
         document.getElementById('myDiv01').innerHTML = '';
