@@ -7,44 +7,75 @@
     <h1 align="center">t1a11 arrays ardan</h1>
 
     <script>
-        let myMax = 6;
-        let myArray = new Array(myMax);
+        let myArray = [];  // Initialize as an empty array
+        let selectArrayNumber;  // Declare variables for select boxes
+        let selectArrayNumber2;
+
+        function updateSelectBoxes() {
+            // Clear both select boxes
+            selectArrayNumber.innerHTML = '';
+            selectArrayNumber2.innerHTML = '';
+
+            // Rebuild options for both select boxes
+            for (let i = 0; i < myArray.length; i++) {
+                let option1 = document.createElement('option');
+                let option2 = document.createElement('option');
+                option1.value = i;
+                option2.value = i;
+                option1.text = `myArray[${i}]`;
+                option2.text = `myArray[${i}]`;
+                selectArrayNumber.appendChild(option1);
+                selectArrayNumber2.appendChild(option2);
+            }
+        }
+
+        // Initialize the select boxes after the DOM is fully loaded
+        window.onload = function() {
+            selectArrayNumber = document.getElementById('arrayNumber');
+            selectArrayNumber2 = document.getElementById('arrayNumber2');
+            updateSelectBoxes();  // Call the function to populate select boxes
+        };
     </script>
 
     <input type="button" value="Set array to defaults" onclick="{
-        myArray[0] = 'ardan';
-        myArray[1] = 'gurp';
-        myArray[2] = 'cameron';
+        myArray = ['ardan', 'gurp', 'cameron'];  // Set default values
+        updateSelectBoxes();
         document.getElementById('myDiv01').innerHTML = 'You set the array';
     }"><br><br>
 
     Set array by number:<br>
-    Number: <select id="arrayNumber">
-            <option value="0">myArray[0]</option> <!-- Fixed: value 0 was missing -->
-            <option value="1">myArray[1]</option>
-            <option value="2">myArray[2]</option>
-        </select><br>
+    Number: <select id="arrayNumber"></select><br>
     Value: <input type="text" id="myValue01" value="fred"><br>
     <input type="button" value="Set array number" onclick="{
         myArray[parseInt(document.getElementById('arrayNumber').value)] = document.getElementById('myValue01').value;
     }"><br><br>
 
     <input type="button" value="Add cool to array" onclick="{
-        myArray[parseInt(document.getElementById('arrayNumber2').value)] = myArray[parseInt(document.getElementById('arrayNumber2').value)] + ' cool';
+        myArray[parseInt(document.getElementById('arrayNumber2').value)] += ' cool';
+        updateSelectBoxes();  // Update select boxes after modifying the array
     }">
-        Number: <select id="arrayNumber2">
-            <option value="0">myArray[0]</option> <!-- Fixed: value 0 was missing -->
-            <option value="1">myArray[1]</option>
-            <option value="2">myArray[2]</option>
-        </select><br><br>
+    Number: <select id="arrayNumber2"></select><br><br>
+
+    <!-- New Section: Add new item to the array -->
+    Add new item to the array:<br>
+    Value: <input type="text" id="newItemValue" value="Fred"><br>
+    <input type="button" value="Add new item" onclick="{
+        let newValue = document.getElementById('newItemValue').value;
+        if (newValue !== '') {
+            myArray.push(newValue);  // Add new item to the array
+            updateSelectBoxes();  // Update the select boxes with the new array item
+            document.getElementById('myDiv01').innerHTML = 'Added new item: ' + newValue;
+        }
+    }"><br><br>
 
     <input type="button" value="Show Array" onclick="{
         document.getElementById('myDiv01').innerHTML = '';
-        for (let myLoop = 0; myLoop < 3; myLoop++) {
+        for (let myLoop = 0; myLoop < myArray.length; myLoop++) {
             document.getElementById('myDiv01').innerHTML += 'myArray[' + myLoop + '] = ' + myArray[myLoop] + '<br>';
         }
     }"><br>
 
     <div id="myDiv01"></div> <!-- Added this div to display output -->
+    
 </body>
 </html>
