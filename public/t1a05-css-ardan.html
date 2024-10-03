@@ -17,6 +17,31 @@
                 text-align: center;
                 margin-top: 20px;
             }
+            body {
+                background-image: url('borzoi-overview.jpg');
+                background-size: 100% 100%;
+                color: black;
+                text-shadow: 0px 0px 5px rgb(252, 236, 10);
+            }
+            table {
+                width: 500px;
+                border: 10px solid red;
+            }
+            td {
+                border: 5px solid purple;
+                padding: 20px;
+            }
+            th {
+                border: 5px solid orange;
+                padding: 20px;
+                background-color: blue;
+            }
+            tr:nth-child(even){
+                background-color: yellow;
+            }
+            tr:nth-child(odd){
+                background-color: limegreen;
+            }
         </style>
     </head>
     <body>
@@ -28,10 +53,10 @@
 
         <!-- Container to center the inputs -->
         <div class="input-container">
-            <label for="text-color">Text Color:</label>
+            <label for="text-color">Text Color Changer:</label>
             <input type="color" id="text-color" class="color-input"><br>
             
-            <label for="bg-color">Background Color:</label>
+            <label for="bg-color">Background Color Changer:</label>
             <input type="color" id="bg-color" class="color-input">
         </div>
         
@@ -69,9 +94,40 @@ body{
     text-decoration: none;
 }
         </textarea>
-        <br><br>
-        <img src="banana-car.jpg" width=300 style="border-radius: 200px; box-shadow: 10px 10px 20px white ;"><br>
+        <br>Picture with round borders and purple box shadow<br>
+        <img src="banana-car.jpg" width=300 style="border-radius: 200px; box-shadow: 10px 10px 20px rgb(63, 10, 253) ;"><br>
         
+        <table align="center">
+            <tr>
+                <th>table headers are blue background orange border</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td></td>
+                <td>table data has purple border</td>
+            </tr>
+            <tr>
+                <td>nth-child(even) has green background</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>nth-child(odd) has yellow background</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        </table><br>
+        all text has yellow shadow to stand out
     </body>
 </html>
 
