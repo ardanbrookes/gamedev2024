@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic JSON Fetcher</title>
+    <link rel="stylesheet" type="text/css" href="css-ardan.css">
+</head>
+<body>
+    <h1 align="center">t1a13 json ardan</h1>
+
+    <script>
+        // Function to show the selected value (for reference)
+        function myShowJSON(myIn) {
+            document.getElementById('myDiv01').innerHTML = `Sent: ${myIn} `;
+        }
+
+        // Dynamic fetch based on selected API
+        async function fetchData() {
+            // Get the selected URL from the dropdown
+            const apiUrl = document.getElementById('mySelect01').value;
+
+            try {
+                const response = await fetch(apiUrl);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Display the JSON response in a formatted way
+                const myJson = JSON.stringify(data, null, 2);
+                document.getElementById('myDiv01').innerHTML = `<pre>${myJson}</pre>`;
+
+            } catch (error) {
+                // Display error in case of failure
+                document.getElementById('myDiv01').innerHTML = `<p>Error fetching data: ${error.message}</p>`;
+            }
+        }
+    </script>
+
+    <!-- Static textarea -->
+    <textarea rows="20" cols="70">
+1. **JavaScript Objects**:
+- Used in JavaScript to store data as key-value pairs.
+- Keys can be unquoted, values can be any type (including functions).
+
+Example:
+let person = {
+  name: "Alice",
+  age: 30,
+  greet: function() { return "Hello!"; }
+};
+
+2. **JSON (JavaScript Object Notation)**:
+- A text format used to transmit/store data.
+- Keys must be in double quotes, values can’t include functions.
+
+Example:
+{
+  "name": "Alice",
+  "age": 30
+}
+
+**Conversion**:
+- Object to JSON: JSON.stringify(object)
+- JSON to Object: JSON.parse(jsonString)
+    </textarea><br>
+
+    <!-- Text input field -->
+    <input type="text" id="myText01" value="https://randomfox.ca/floof/">
+
+    <!-- Dropdown menu with various API URLs -->
+    <select id="mySelect01" onchange="myShowJSON(this.value)">
+        <option value="https://randomfox.ca/floof/">randomfox</option>
+        <option value="https://dog.ceo/api/breeds/image/random">dog ceo</option>
+        <option value="https://opentdb.com/api.php?amount=1">opentdb</option>
+        <option value="https://api.adviceslip.com/advice">adviceslip</option>
+        <option value="http://numbersapi.com/random/trivia?json">numbersapi</option>
+        <option value="https://api.funtranslations.com/translate/yoda.json?text=Hello%20world">funtranslations</option>
+    </select><br>
+
+    <!-- Button to trigger the fetch and display the JSON -->
+    <input type="button" value="show JSON" onclick="fetchData()"><br>
+
+    <!-- Div to show the fetched JSON -->
+    <div id="myDiv01">...</div>
+</body>
+</html>

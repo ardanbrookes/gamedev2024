@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch and Display JSON Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+        .data-container {
+            margin-top: 20px;
+        }
+        .data-item {
+            background-color: #f1f1f1;
+            margin: 5px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Data from External Source</h1>
+    <button id="fetchDataBtn">Fetch Data</button>
+    <div id="dataContainer" class="data-container"></div>
+
+    <script>
+        // URL of the external JSON data (replace with your URL)
+        const dataUrl = 'https://jsonplaceholder.typicode.com/posts';
+
+        document.getElementById('fetchDataBtn').addEventListener('click', fetchData);
+
+        function fetchData() {
+            fetch(dataUrl)
+                .then(response => response.json())  // Parse the JSON from the response
+                .then(data => displayData(data))    // Call displayData with the fetched data
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function displayData(data) {
+            const dataContainer = document.getElementById('dataContainer');
+            dataContainer.innerHTML = '';  // Clear previous data
+
+            // Loop through the data and create HTML elements for each item
+            data.forEach(item => {
+                const dataDiv = document.createElement('div');
+                dataDiv.classList.add('data-item');
+                dataDiv.innerHTML = `<h3>${item.title}</h3><p>${item.body}</p>`;
+                dataContainer.appendChild(dataDiv);
+            });
+        }
+    </script>
+</body>
+</html>
