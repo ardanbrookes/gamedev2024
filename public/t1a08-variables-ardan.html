@@ -8,24 +8,62 @@
         <h2 align="center">Link to w3schools variables <a href="https://www.w3schools.com/js/js_variables.asp">here</a></h2>
 
         <div id="inputSection">
+            <!-- Existing Add Section -->
             Input 1: <input type="text" id="myIn01" value="5"><br>
             Input 2: <input type="text" id="myIn02" value="7"><br>
             <input type="button" value="Add" onclick="{
                 let myX = document.getElementById('myIn01').value;
                 let myY = document.getElementById('myIn02').value;
-                let myTotal = myX + myY;
-                document.getElementById('myDiv01').innerHTML = 'Your answer is ' + myTotal;
-            }">
-            <br>
+                let result = myX + myY;
+                document.getElementById('myDiv01').innerHTML = 'Your answer is ' + result;
+            }"><br>
             <input type="button" value="Add and fix" onclick="{
                 let myX = parseFloat(document.getElementById('myIn01').value);
                 let myY = parseFloat(document.getElementById('myIn02').value);
-                let myTotal = myX + myY;
-                document.getElementById('myDiv01').innerHTML = 'Your answer is ' + myTotal;
+                result = myX + myY; // Store the result in global variable
+                document.getElementById('myDiv01').innerHTML = 'Your answer is ' + result;
             }">
+            <br>
+            <input type="button" value="Subtract" onclick="{
+                let myX = parseFloat(document.getElementById('myIn01').value);
+                let myY = parseFloat(document.getElementById('myIn02').value);
+                result = myX - myY; // Store the result in global variable
+                document.getElementById('myDiv01').innerHTML = 'Result: ' + result;
+            }">
+            <br>
+
+            <input type="button" value="Multiply" onclick="{
+                let myX = parseFloat(document.getElementById('myIn01').value);
+                let myY = parseFloat(document.getElementById('myIn02').value);
+                result = myX * myY; // Store the result in global variable
+                document.getElementById('myDiv01').innerHTML = 'Result: ' + result;
+            }">
+            <br>
         </div>
 
-        <div id="myDiv01">...</div>
+        <!-- Div elements for displaying the results -->
+        <div id="myDiv01">...</div><br><br>
+
+        <!-- New Section for Dynamic Style Change -->
+        Text Colour Decider: <br>
+        <textarea cols="50" rows="5">This button sets the text colour based on the output of myDiv01. If it is negative the colour is red, if it is 1-10 the colour is cyan, if it is above 10 the colour is green and if it is 0 or anything else the colour is white.</textarea><br>
+
+        <input type="button" value="Change Text Color" onclick="{
+            let color;
+            if (result < 0) {
+                color = 'red';
+            } else if (result > 0 && result <= 10) {
+                color = 'cyan';
+            } else if (result > 10) {
+                color = 'lime';
+            } else {
+                color = 'white';
+            }
+
+            document.getElementById('myDiv02').style.color = color;
+            document.getElementById('myDiv02').innerHTML = 'The result is ' + result + ', and the text color is now ' + color;
+        }"><br>
+        <div id="myDiv02">...</div>
 
         <br><br>
 
@@ -47,6 +85,8 @@ string
         </pre>
 
         <script>
+            let result = ''; // Define the global result variable to be used by other buttons
+
             // Function to fetch temperature from an online API (OpenWeatherMap) with error display
             async function getTemperature() {
                 const apiKey = 'c5e57f33bdbc2c6e9a417205c0b34202'; // Your API key
