@@ -15,8 +15,8 @@
             document.getElementById('myDiv01').innerHTML = `Sent: ${myIn} `;
         }
 
-        // Dynamic fetch based on selected API
-        async function fetchData() {
+        // Fetch data dynamically based on the selected API URL
+        async function fetchData(displayRaw = true) {
             // Get the selected URL from the dropdown
             const apiUrl = document.getElementById('mySelect01').value;
 
@@ -28,19 +28,89 @@
                 }
 
                 const data = await response.json();
+                const myJson = JSON.stringify(data, null, 2); // Raw JSON
 
-                // Display the JSON response in a formatted way
-                const myJson = JSON.stringify(data, null, 2);
-                document.getElementById('myDiv01').innerHTML = `<pre>${myJson}</pre>`;
+                // Show raw JSON in myDiv01 if displayRaw is true
+                if (displayRaw) {
+                    document.getElementById('myDiv01').innerHTML = `<pre>${myJson}</pre>`;
+                }
+
+                // Format the data in myDiv02 based on content
+                if (!displayRaw) {
+                    // Randomfox API
+                    if (data.image) {
+                        const imageUrl = data.image;
+                        document.getElementById('myDiv02').innerHTML = `<img src="${imageUrl}" alt="Image" style="width: 300px;"><br>`;
+                    }
+
+                    // Dog CEO API
+                    else if (data.message) {
+                        const imageUrl = data.message;
+                        document.getElementById('myDiv02').innerHTML = `<img src="${imageUrl}" alt="Image" style="width: 300px;"><br>`;
+                    }
+
+                    // Handle multiple-choice questions (check if it's from a quiz API)
+                    else if (data.results && data.results[0].type === "multiple") {
+                        const result = data.results[0];
+
+                        // Display the question
+                        document.getElementById('myDiv02').innerHTML = `<p>${result.question}</p>`;
+
+                        // Create a dropdown (select box) for the answers
+                        let selectBox = `<select id="answerSelect">`;
+
+                        // Add incorrect answers to the dropdown
+                        result.incorrect_answers.forEach(answer => {
+                            selectBox += `<option value="${answer}">${answer}</option>`;
+                        });
+
+                        // Add the correct answer to the dropdown
+                        selectBox += `<option value="${result.correct_answer}">${result.correct_answer}</option>`;
+
+                        selectBox += `</select>`;
+
+                        // Append the select box to the div
+                        document.getElementById('myDiv02').innerHTML += selectBox;
+                        
+                        // Add a button to submit or check the answer, passing the correct answer
+                        document.getElementById('myDiv02').innerHTML += `<br><button onclick="checkAnswer('${result.correct_answer}')">Submit Answer</button>`;
+                    }
+
+                    // Handle jokes, advice, facts, etc.
+                    else if (data.joke) {
+                        // If there's a joke (specific to some APIs like chucknorris.io), show it
+                        document.getElementById('myDiv02').innerHTML = `<p>${data.joke}</p>`;
+                    } else if (data.slip && data.slip.advice) {
+                        // Advice slip case
+                        document.getElementById('myDiv02').innerHTML = `<p>Advice: ${data.slip.advice}</p>`;
+                    } else if (data.fact) {
+                        // If it's from numbersapi
+                        document.getElementById('myDiv02').innerHTML = `<p>${data.fact}</p>`;
+                    } else {
+                        // Default to showing the raw JSON if no specific case is found
+                        document.getElementById('myDiv02').innerHTML = `<pre>${myJson}</pre>`;
+                    }
+                }
 
             } catch (error) {
                 // Display error in case of failure
                 document.getElementById('myDiv01').innerHTML = `<p>Error fetching data: ${error.message}</p>`;
+                document.getElementById('myDiv02').innerHTML = '';
+            }
+        }
+
+        // Function to check the selected answer
+        function checkAnswer(correctAnswer) {
+            const selectedAnswer = document.getElementById('answerSelect').value;
+            if (selectedAnswer === correctAnswer) {
+                document.getElementById+=("Correct!"); DO THIS
+            } else {
+                alert("Incorrect, try again!");
             }
         }
     </script>
 
-    <!-- Static textarea -->
+    <!-- Static textarea for educational reference -->
     <textarea rows="20" cols="70">
 1. **JavaScript Objects**:
 - Used in JavaScript to store data as key-value pairs.
@@ -80,13 +150,14 @@ Example:
         <option value="http://numbersapi.com/random/trivia?json">numbersapi</option>
         <option value="https://api.funtranslations.com/translate/yoda.json?text=Hello%20world">funtranslations</option>
         <option value="https://api.chucknorris.io/jokes/random">chucknorris</option>
-        <option value="https://api.artic.edu/api/v1/artworks/search?q=cats">artic</option>
     </select><br>
 
-    <!-- Button to trigger the fetch and display the JSON -->
-    <input type="button" value="show JSON" onclick="fetchData()"><br>
+    <!-- Buttons to trigger the fetch: one for raw JSON, one for formatted JSON -->
+    <input type="button" value="Show JSON" onclick="fetchData(true)"><br>
+    <input type="button" value="Show JSON Formatted" onclick="fetchData(false)"><br>
 
     <!-- Div to show the fetched JSON -->
     <div id="myDiv01">...</div>
+    <div id="myDiv02" width="50%">...</div>
 </body>
 </html>
