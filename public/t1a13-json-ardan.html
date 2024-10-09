@@ -15,6 +15,22 @@
             document.getElementById('myDiv01').innerHTML = `Sent: ${myIn} `;
         }
 
+        function shuffle(array) {
+            let currentIndex = array.length;
+
+            // While there remain elements to shuffle...
+            while (currentIndex != 0) {
+
+                // Pick a remaining element...
+                let randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+
+                // And swap it with the current element.
+                [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+            }
+        }
+
         // Fetch data dynamically based on the selected API URL
         async function fetchData(displayRaw = true) {
             // Get the selected URL from the dropdown
@@ -59,14 +75,17 @@
 
                         // Create a dropdown (select box) for the answers
                         let selectBox = `<select id="answerSelect">`;
-
+                        
+                        
+                        result.incorrect_answers.push(result.correct_answer);
+                        shuffle(result.incorrect_answers)
                         // Add incorrect answers to the dropdown
                         result.incorrect_answers.forEach(answer => {
                             selectBox += `<option value="${answer}">${answer}</option>`;
                         });
 
                         // Add the correct answer to the dropdown
-                        selectBox += `<option value="${result.correct_answer}">${result.correct_answer}</option>`;
+                        // selectBox += `<option value="${result.correct_answer}">${result.correct_answer}</option>`;
 
                         selectBox += `</select>`;
 
@@ -159,13 +178,13 @@ Example:
 
     <!-- Dropdown menu with various API URLs -->
     <select id="mySelect01" onchange="myShowJSON(this.value)">
-        <option value="https://randomfox.ca/floof/">randomfox</option>
+        <option value="https://randomfox.ca/floof/">random fox</option>
         <option value="https://dog.ceo/api/breeds/image/random">dog ceo</option>
-        <option value="https://opentdb.com/api.php?amount=1">opentdb</option>
-        <option value="https://api.adviceslip.com/advice">adviceslip</option>
-        <option value="http://numbersapi.com/random/trivia?json">numbersapi</option>
-        <option value="https://api.funtranslations.com/translate/yoda.json?text=Hello%20world">funtranslations</option>
-        <option value="https://api.chucknorris.io/jokes/random">chucknorris</option>
+        <option value="https://opentdb.com/api.php?amount=1&difficulty=medium&type=multiple">open trivia</option>
+        <option value="https://api.adviceslip.com/advice">advice slip</option>
+        <option value="http://numbersapi.com/random/trivia?json">numbers facts</option>
+        <option value="https://api.funtranslations.com/translate/yoda.json?text=Hello%20world">fun translations</option>
+        <option value="https://api.chucknorris.io/jokes/random">chuck norris</option>
         <option value="http://ip-api.com/json">ip adress</option>
     </select><br>
 
@@ -173,6 +192,7 @@ Example:
     <input type="button" value="Show JSON" onclick="fetchData(true)"><br>
     <div id="myDiv01">...</div>
     <input type="button" value="Show JSON Formatted" onclick="fetchData(false)"><br>
-    <div id="myDiv02" width="50%">...</div>
+    <div id="myDiv02" width="50%">...</div><br>
+    Notes:<br><textarea rows="5" cols="50">opentdb gets rate limited after 5s</textarea>
 </body>
 </html>

@@ -33,25 +33,34 @@
         <input type="range" id="latitude" min="-90" max="90" value="0" step="1" oninput="updatePinPosition()">
     </div>
 
+    <input type="button" value="Show location on map" onclick="{showLocation()}">
+
     <script>
         const mapWidth = 720;
         const mapHeight = 360;
         const pin = document.getElementById('pin');
 
-        function updatePinPosition() {
-            const longitude = parseInt(document.getElementById('longitude').value);
-            const latitude = parseInt(document.getElementById('latitude').value);
+        async function showLocation() {
+            try {
+                const response = await fetch("http://ip-api.com/json");
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
 
-            // Map longitude and latitude to pixel coordinates
-            const x = ((longitude + 180) / 360) * mapWidth;
-            const y = ((90 - latitude) / 180) * mapHeight;
+            // this parses json response
+            const data = await response.json();
 
-            pin.style.left = `${x+10}px`;
-            pin.style.top = `${y+10}px`;
+            // this turns longitude an latitude to pixel coordinates
+            const x = ((data.lon + 180) / 360) * mapWidth;
+            const y = ((90 - data.lat) / 180) * mapHeight;
+
+            // this moves pin position on map
+            pin.style.left = `${x - 10}px`;
+            pin.style.top = `${y - 20}px`;
+            } catch (error) {
+                console.error("error fetching location data: ", error);
+            }
         }
-
-        // Initialize pin position
-        updatePinPosition();
     </script>
 </body>
 </html>
