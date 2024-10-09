@@ -40,7 +40,8 @@
                     // Randomfox API
                     if (data.image) {
                         const imageUrl = data.image;
-                        document.getElementById('myDiv02').innerHTML = `<img src="${imageUrl}" alt="Image" style="width: 300px;"><br>`;
+                        document.getElementById('myDiv02').innerHTML = `<a href="${data.link}">Link to fox page<br>`;   
+                        document.getElementById('myDiv02').innerHTML += `<img src="${imageUrl}" alt="Image" style="width: 300px;">`;                     
                     }
 
                     // Dog CEO API
@@ -75,18 +76,33 @@
                         // Add a button to submit or check the answer, passing the correct answer
                         document.getElementById('myDiv02').innerHTML += `<br><button onclick="checkAnswer('${result.correct_answer}')">Submit Answer</button>`;
                     }
-
-                    // Handle jokes, advice, facts, etc.
-                    else if (data.joke) {
-                        // If there's a joke (specific to some APIs like chucknorris.io), show it
-                        document.getElementById('myDiv02').innerHTML = `<p>${data.joke}</p>`;
-                    } else if (data.slip && data.slip.advice) {
-                        // Advice slip case
+                    else if (data.slip && data.slip.advice) {
+                        // Advice slip
                         document.getElementById('myDiv02').innerHTML = `<p>Advice: ${data.slip.advice}</p>`;
-                    } else if (data.fact) {
-                        // If it's from numbersapi
-                        document.getElementById('myDiv02').innerHTML = `<p>${data.fact}</p>`;
-                    } else {
+                    }
+                    else if (data.text) {
+                        // numbersapi
+                        document.getElementById('myDiv02').innerHTML = `<p>${data.text}</p>`;
+                    } 
+                    else if (data.contents) {
+                        // numbersapi
+                        document.getElementById('myDiv02').innerHTML = `<p>${data.contents.text}</p>`;
+                        document.getElementById('myDiv02').innerHTML += `<p>${data.contents.translation}</p>`;
+                        document.getElementById('myDiv02').innerHTML += `<p>${data.contents.translated}</p>`;
+                    }
+                    else if (data.value) {
+                        // numbersapi
+                        document.getElementById('myDiv02').innerHTML = `<p>${data.value}</p>`;
+                    }
+                    else if (data.country) {
+                        // numbersapi
+                        document.getElementById('myDiv02').innerHTML = `<p>Your country: ${data.country}</p>`;
+                        document.getElementById('myDiv02').innerHTML += `<p>Your region: ${data.region}</p>`;
+                        document.getElementById('myDiv02').innerHTML += `<p>Your city: ${data.city}</p>`;
+                        document.getElementById('myDiv02').innerHTML += `<p>Your coordinates: ${data.lat}, ${data.lon}</p>`;
+                        document.getElementById('myDiv02').innerHTML += `<p>Your ip adress: ${data.query}</p>`;
+                    }
+                    else {
                         // Default to showing the raw JSON if no specific case is found
                         document.getElementById('myDiv02').innerHTML = `<pre>${myJson}</pre>`;
                     }
@@ -103,15 +119,15 @@
         function checkAnswer(correctAnswer) {
             const selectedAnswer = document.getElementById('answerSelect').value;
             if (selectedAnswer === correctAnswer) {
-                document.getElementById+=("Correct!"); DO THIS
+                document.getElementById('myDiv02').innerHTML = 'Correct';
             } else {
-                alert("Incorrect, try again!");
+                document.getElementById('myDiv02').innerHTML = 'Incorrect';
             }
         }
     </script>
 
     <!-- Static textarea for educational reference -->
-    <textarea rows="20" cols="70">
+    <textarea rows="10" cols="70">
 1. **JavaScript Objects**:
 - Used in JavaScript to store data as key-value pairs.
 - Keys can be unquoted, values can be any type (including functions).
@@ -150,14 +166,13 @@ Example:
         <option value="http://numbersapi.com/random/trivia?json">numbersapi</option>
         <option value="https://api.funtranslations.com/translate/yoda.json?text=Hello%20world">funtranslations</option>
         <option value="https://api.chucknorris.io/jokes/random">chucknorris</option>
+        <option value="http://ip-api.com/json">ip adress</option>
     </select><br>
 
     <!-- Buttons to trigger the fetch: one for raw JSON, one for formatted JSON -->
     <input type="button" value="Show JSON" onclick="fetchData(true)"><br>
-    <input type="button" value="Show JSON Formatted" onclick="fetchData(false)"><br>
-
-    <!-- Div to show the fetched JSON -->
     <div id="myDiv01">...</div>
+    <input type="button" value="Show JSON Formatted" onclick="fetchData(false)"><br>
     <div id="myDiv02" width="50%">...</div>
 </body>
 </html>
