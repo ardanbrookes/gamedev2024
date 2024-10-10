@@ -118,8 +118,8 @@
                         document.getElementById('myDiv02').innerHTML = `<p>Your country: ${data.country}</p>`;
                         document.getElementById('myDiv02').innerHTML += `<p>Your region: ${data.region}</p>`;
                         document.getElementById('myDiv02').innerHTML += `<p>Your city: ${data.city}</p>`;
-                        document.getElementById('myDiv02').innerHTML += `<p>Your coordinates: ${data.lat}, ${data.lon}</p>`;
-                        document.getElementById('myDiv02').innerHTML += `<p>Your ip adress: ${data.query}</p>`;
+                        document.getElementById('myDiv02').innerHTML += `<p>Your coordinates: ${data.loc}</p>`;
+                        document.getElementById('myDiv02').innerHTML += `<p>Your ip adress: ${data.ip}</p>`;
                     }
                     else {
                         // Default to showing the raw JSON if no specific case is found
@@ -185,7 +185,7 @@ Example:
         <option value="http://numbersapi.com/random/trivia?json">numbers facts</option>
         <option value="https://api.funtranslations.com/translate/yoda.json?text=Hello%20world">fun translations</option>
         <option value="https://api.chucknorris.io/jokes/random">chuck norris</option>
-        <option value="http://ip-api.com/json">ip adress</option>
+        <option value="https://ipinfo.io/json">ip adress</option>
     </select><br>
 
     <!-- Buttons to trigger the fetch: one for raw JSON, one for formatted JSON -->
