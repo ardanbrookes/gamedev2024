@@ -1,8 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="css-ardan.css">
     <style>
         #map-container {
@@ -15,23 +11,20 @@
             height: 20px; /* Adjust size as needed */
         }
     </style>
-    <title>Map with Pin</title>
 </head>
 <body>
     <h1 align="center">Display Location on Map</h1>
 
+    <textarea rows="5" cols="70">
+        this page gets your latitude and longitude from an api then places a pin on a map where you live
+    </textarea>
+
     <div id="map-container">
         <img width="720" height="360" src="worldMap.png" alt="World Map">
         <img id="pin" src="pin.png" alt="Pin">
-    </div>
+    </div><br>
 
-    <div align="center">
-        <label for="longitude">Longitude (-180 to 180):</label>
-        <input type="range" id="longitude" min="-180" max="180" value="0" step="1" oninput="updatePinPosition()">
-        <br>
-        <label for="latitude">Latitude (-90 to 90):</label>
-        <input type="range" id="latitude" min="-90" max="90" value="0" step="1" oninput="updatePinPosition()">
-    </div>
+    Your coordinates: <div id="myDivLon"></div><div id="myDivLat"></div>
 
     <input type="button" value="Show location on map" onclick="{showLocation()}">
 
@@ -57,9 +50,12 @@
             // this moves pin position on map
             pin.style.left = `${x - 10}px`;
             pin.style.top = `${y - 20}px`;
+            document.getElementById('myDivLon').innerHTML = `${data.lon}`;
+            document.getElementById('myDivLat').innerHTML = `${data.lat}`;
             } catch (error) {
                 console.error("error fetching location data: ", error);
             }
+
         }
     </script>
 </body>
