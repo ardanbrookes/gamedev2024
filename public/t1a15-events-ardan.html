@@ -1,0 +1,140 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css-ardan.css">
+        <style>
+            td {
+                border: 1px solid white;
+                width: 25%;
+                text-align: center;
+            }
+        </style>
+        <script>
+            // Trigger alert when the DOM is fully loaded
+            document.addEventListener("DOMContentLoaded", function() {
+                alert("this alert pauses the page before it loads using the DOMContentLoaded event so you can see the onload event when it triggers");
+            });
+        </script>
+    </head>
+    <body 
+        onmousemove="
+        document.getElementById('myMouseCoords').innerHTML = 
+        `x:${event.clientX}, y:${event.clientY}`"
+        onwheel="event.deltaY < 0 ? document.getElementById('myNum01').value++ : document.getElementById('myNum01').value--;">
+
+        <script>
+            document.addEventListener('keydown', function(event) {
+                let textDiv = document.getElementById('myText');
+        
+                // Toggle italic if "i" is pressed
+                if (event.key === 'i' || event.key === 'I') {
+                    event.preventDefault();
+                    textDiv.style.fontStyle = textDiv.style.fontStyle === 'italic' ? 'normal' : 'italic';
+                }
+        
+                // Toggle bold if "b" is pressed
+                if (event.key === 'b' || event.key === 'B') {
+                    textDiv.style.fontWeight = textDiv.style.fontWeight === 'bold' ? 'normal' : 'bold';
+                }
+        
+                // Toggle underline if "u" is pressed
+                if (event.key === 'u' || event.key === 'U') {
+                    textDiv.style.textDecoration = textDiv.style.textDecoration === 'underline' ? 'none' : 'underline';
+                }
+            });
+        </script>
+
+        <h1 align="center">t1a15 events ardan</h1>
+
+        <textarea rows="20" cols="82">
+Array example:
+let myArray = ['ardan', 'gurp', 'cameron', 1, 4];
+
+Object Example:
+let myPerson = {
+    'firstName': 'John',
+    'lastName': 'Doe',
+    'age': 50,
+    'eyeColor': 'blue'
+}
+
+Array in object:
+let myPerson2 = {
+    'name': 'Gurp',
+    'classes': ['history 12', ' french level 2', ' pre ap english', ' game dev'],
+}
+
+Object in array:
+let myArray2 = [
+    {name: 'ardan', favouriteColour: 'blue'}, 
+    {name: 'gurp', favouriteColour: 'purple'}, 
+    {name: 'cameron', favouriteColour: 'blue'}
+];
+        </textarea><br><br>
+
+        <table align="center" style="border: 1px solid white; width: 80%;">
+            <tr>
+                <td>
+                    <input type="button" value="onclick" onclick="
+                        document.getElementById('myDiv01').innerHTML = 'button was clicked';
+                    ">
+                    <div id="myDiv01">...</div>
+                </td>
+
+                <td>
+                    <b id="hoverText" 
+                        onmouseover="this.style.color = 'lime';"
+                        onmouseout="this.style.color = 'whitesmoke';"
+                    >onhover this text turns lime green</b>
+                </td>
+
+                <td>
+                    <div id="myText">
+                        press "i" to toggle italic, "b" to toggle bold, and "u" to toggle underline
+                    </div>
+                </td>
+
+                <td>
+                    <div id="myMouseCoords"></div>
+                    <div id="myMouseCoords"></div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div>onchange the output gets set to the selected option</div>
+                    <select id="mySelect01" onchange="
+                        document.getElementById('mySelectOutput').innerHTML = this.value">
+                        <option value="option 1">option 1</option>
+                        <option value="option 2">option 2</option>
+                        <option value="option 3">option 3</option>
+                    </select>
+                    <div id="mySelectOutput">...</div>
+                </td>
+
+                <td>
+                    <div>onfocus the input un blurs</div>
+                    <input id="myFocusInput" type="password" style="filter: blur(10px);" value="password" 
+                        onfocus="this.style.filter = 'none';"
+                        onblur="this.style.filter = 'blur(10px)';">
+                </td>
+                
+                <td>
+                    <div id="loadMessage" style="color: red;">page is loading</div>
+                
+                    <script>
+                        window.onload = function() {
+                            document.getElementById('loadMessage').innerHTML = 'Page loaded successfully!';
+                            document.getElementById('loadMessage').style.color = 'lime'
+                        };
+                    </script>
+                </td>
+                
+
+                <td>
+                    <div>onwheel the number increases or decreases</div>
+                    <input id="myNum01" type="number" value="0">
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
