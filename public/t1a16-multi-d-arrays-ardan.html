@@ -1,106 +1,119 @@
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="css-ardan.css">
-        <style>
-            table {
-                width: 100%;
-                margin-right: auto;
-                margin-left: auto;
-                border: 1px solid whitesmoke;
-            }
-            table#my4DTable {
-                width: 75%;
-                border: none;
-            }
 
-            td {
-                border: 1px solid whitesmoke;
-                border-radius: 5px;
-                text-align: center;
-                width: 33%;
-                padding: 20px;
-            }
-        </style>
-    </head>
-    <body>
-        <script>
-            // Set global Variables
-            let myMax = 3;
-            let myArrayManual = new Array(myMax);
-            let myArrayAuto = new Array(myMax);
+<head>
+    <link rel="stylesheet" type="text/css" href="css-ardan.css">
+    <style>
+        table {
+            width: 100%;
+            margin-right: auto;
+            margin-left: auto;
+            border: 1px solid whitesmoke;
+            border-radius: 10px;
+            padding: 15px;
+        }
 
-            // Initialize arrays for testing
-            myArrayManual = [[3, 4, 4], [1, 2, 3], [5, 6, 7]];
-            myArrayAuto = [
-                [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-                [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-                [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
-            ];
-my4DArrayAuto = [
-    [
-        [
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
-        ],
-        [
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
-        ],
-        [
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
-        ]
-    ],
-    [
-        [
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
-        ],
-        [
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
-        ],
-        [
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
-        ]
-    ],
-    [
-        [
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
-        ],
-        [
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
-        ],
-        [
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
-            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
-        ]
-    ]
-];
-        </script>
+        table#my4DTable {
+            width: 75%;
+            border: none;
+            margin: auto;
+            padding: none;
+        }
 
-        <h1 align="center">t1a16 Multi-Dimensional Arrays Ardan</h1>
+        td#topLevelTd {
+            border: none;
+        }
 
-        Input: <input type="text" id="MyFirstName" value="fred"><br>
+        td {
+            border: 1px solid whitesmoke;
+            border-radius: 5px;
+            text-align: center;
+            width: 33%;
+            padding: 15px;
+            margin: 10px;
+            
+        }
+    </style>
+</head>
 
-        <input type="button" value="Set Manual Array" onclick="{
+<body>
+    <script>
+        // Set global Variables
+        let myMax = 3;
+        let myArrayManual = new Array(myMax);
+        let myArrayAuto = new Array(myMax);
+
+        // Initialize arrays for testing
+        myArrayManual = [[3, 4, 4], [1, 2, 3], [5, 6, 7]];
+        myArrayAuto = [
+            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+            [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
+        ];
+        my4DArrayAuto = [
+            [
+                [
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
+                ],
+                [
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
+                ],
+                [
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
+                ]
+            ],
+            [
+                [
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
+                ],
+                [
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
+                ],
+                [
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
+                ]
+            ],
+            [
+                [
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
+                ],
+                [
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
+                ],
+                [
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)],
+                    [Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]
+                ]
+            ]
+        ];
+    </script>
+
+    <h1 align="center">t1a16 Multi-Dimensional Arrays Ardan</h1>
+
+    Input: <input type="text" id="MyFirstName" value="fred"><br>
+
+    <input type="button" value="Set Manual Array" onclick="{
             myArrayManual = [[3, 4, 4], [1, 2, 3], [5, 6, 7]];
             console.log(myArrayManual);
         }">
 
-        <input type="button" value="Show Manual Array" onclick="{
+    <input type="button" value="Show Manual Array" onclick="{
             document.getElementById('myDiv01').innerHTML = '';
             console.log(myArrayManual);
 
@@ -112,7 +125,7 @@ my4DArrayAuto = [
             }
         }">
 
-        <input type="button" value="Set Auto Array" onclick="{
+    <input type="button" value="Set Auto Array" onclick="{
             // Populate the entire auto array with random values
             for (let myLoop0 = 0; myLoop0 < myMax; myLoop0++) {
                 for (let myLoop1 = 0; myLoop1 < myMax; myLoop1++) {
@@ -122,7 +135,7 @@ my4DArrayAuto = [
             console.log(myArrayAuto);
         }">
 
-        <input type="button" value="Show Auto Array" onclick="{
+    <input type="button" value="Show Auto Array" onclick="{
             document.getElementById('myDiv01').innerHTML = '';
 
             for (let myLoop0 = 0; myLoop0 < myMax; myLoop0++) {
@@ -133,220 +146,228 @@ my4DArrayAuto = [
             }
         }"><br>
 
-        <div id="myDiv01">...</div><br>
+    <div id="myDiv01">...</div><br>
 
 
-        <input type="button" value="set 4d array" onclick="{
-            // Populate the entire auto array with random values
-            for (let myLoop0 = 0; myLoop0 < myMax; myLoop0++) {
-                for (let myLoop1 = 0; myLoop2 < myMax; myLoop1++) {
-                    for (let myLoop2 = 0; myLoop3 < myMax; myLoop2++) {
-                        for (let myLoop3 = 0; myLoop3 < myMax; myLoop3++) {
-                            my4DArrayAuto[myLoop0][myLoop1][myLoop2][myLoop3] = Math.floor(Math.random() * 100);
-                        }
+    <input type="button" value="set 4d array" onclick="{
+        // Populate the entire auto array with random values
+        for (let myLoop0 = 0; myLoop0 < myMax; myLoop0++) {
+            for (let myLoop1 = 0; myLoop1 < myMax; myLoop1++) {
+                for (let myLoop2 = 0; myLoop2 < myMax; myLoop2++) {
+                    for (let myLoop3 = 0; myLoop3 < myMax; myLoop3++) {
+                        my4DArrayAuto[myLoop0][myLoop1][myLoop2][myLoop3] = Math.floor(Math.random() * 100);
                     }
                 }
             }
-            console.log(my4DArrayAuto);
-        }">
-<input type="button" value="Show 4D Array" onclick="{
-    // Loop through the 4D array and update corresponding table cells
-    for (let myLoop0 = 0; myLoop0 < myMax; myLoop0++) {
-        for (let myLoop1 = 0; myLoop1 < myMax; myLoop1++) {
-            for (let myLoop2 = 0; myLoop2 < myMax; myLoop2++) {
-                for (let myLoop3 = 0; myLoop3 < myMax; myLoop3++) {
-                    // Construct cell ID
-                    let cellId = `cell_${myLoop0}_${myLoop1}_${myLoop2}_${myLoop3}`;
-                    // Update the table cell content with the value from the array
-                    document.getElementById(cellId).innerHTML = my4DArrayAuto[myLoop0][myLoop1][myLoop2][myLoop3];
+        }
+        console.log(my4DArrayAuto);
+    }">
+    <input type="button" value="Show 4D Array" onclick="{
+        // Loop through the 4D array and update corresponding table cells
+        for (let myLoop0 = 0; myLoop0 < myMax; myLoop0++) {
+            for (let myLoop1 = 0; myLoop1 < myMax; myLoop1++) {
+                for (let myLoop2 = 0; myLoop2 < myMax; myLoop2++) {
+                    for (let myLoop3 = 0; myLoop3 < myMax; myLoop3++) {
+                        // Construct cell ID
+                        let cellId = `cell_${myLoop0}_${myLoop1}_${myLoop2}_${myLoop3}`;
+                        // Update the table cell content with the value from the array
+                        document.getElementById(cellId).innerHTML += my4DArrayAuto[myLoop0][myLoop1][myLoop2][myLoop3];
+                    }
                 }
             }
         }
-    }
-}">
+    }">
 
 
 
-<table id="my4DTable" align="center">
-    <tr>
-        <td>
-            <table>
-                <tr>
-                    <td id="cell_0_0_0_0"></td>
-                    <td id="cell_0_0_0_1"></td>
-                    <td id="cell_0_0_0_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_0_0_1_0"></td>
-                    <td id="cell_0_0_1_1"></td>
-                    <td id="cell_0_0_1_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_0_0_2_0"></td>
-                    <td id="cell_0_0_2_1"></td>
-                    <td id="cell_0_0_2_2"></td>
-                </tr>
-            </table>
-        </td>
-        <td>
-            <table>
-                <tr>
-                    <td id="cell_0_1_0_0"></td>
-                    <td id="cell_0_1_0_1"></td>
-                    <td id="cell_0_1_0_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_0_1_1_0"></td>
-                    <td id="cell_0_1_1_1"></td>
-                    <td id="cell_0_1_1_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_0_1_2_0"></td>
-                    <td id="cell_0_1_2_1"></td>
-                    <td id="cell_0_1_2_2"></td>
-                </tr>
-            </table>
-        </td>
-        <td>
-            <table>
-                <tr>
-                    <td id="cell_0_2_0_0"></td>
-                    <td id="cell_0_2_0_1"></td>
-                    <td id="cell_0_2_0_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_0_2_1_0"></td>
-                    <td id="cell_0_2_1_1"></td>
-                    <td id="cell_0_2_1_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_0_2_2_0"></td>
-                    <td id="cell_0_2_2_1"></td>
-                    <td id="cell_0_2_2_2"></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <table>
-                <tr>
-                    <td id="cell_1_0_0_0"></td>
-                    <td id="cell_1_0_0_1"></td>
-                    <td id="cell_1_0_0_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_1_0_1_0"></td>
-                    <td id="cell_1_0_1_1"></td>
-                    <td id="cell_1_0_1_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_1_0_2_0"></td>
-                    <td id="cell_1_0_2_1"></td>
-                    <td id="cell_1_0_2_2"></td>
-                </tr>
-            </table>
-        </td>
-        <td>
-            <table>
-                <tr>
-                    <td id="cell_1_1_0_0"></td>
-                    <td id="cell_1_1_0_1"></td>
-                    <td id="cell_1_1_0_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_1_1_1_0"></td>
-                    <td id="cell_1_1_1_1"></td>
-                    <td id="cell_1_1_1_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_1_1_2_0"></td>
-                    <td id="cell_1_1_2_1"></td>
-                    <td id="cell_1_1_2_2"></td>
-                </tr>
-            </table>
-        </td>
-        <td>
-            <table>
-                <tr>
-                    <td id="cell_1_2_0_0"></td>
-                    <td id="cell_1_2_0_1"></td>
-                    <td id="cell_1_2_0_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_1_2_1_0"></td>
-                    <td id="cell_1_2_1_1"></td>
-                    <td id="cell_1_2_1_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_1_2_2_0"></td>
-                    <td id="cell_1_2_2_1"></td>
-                    <td id="cell_1_2_2_2"></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <table>
-                <tr>
-                    <td id="cell_2_0_0_0"></td>
-                    <td id="cell_2_0_0_1"></td>
-                    <td id="cell_2_0_0_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_2_0_1_0"></td>
-                    <td id="cell_2_0_1_1"></td>
-                    <td id="cell_2_0_1_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_2_0_2_0"></td>
-                    <td id="cell_2_0_2_1"></td>
-                    <td id="cell_2_0_2_2"></td>
-                </tr>
-            </table>
-        </td>
-        <td>
-            <table>
-                <tr>
-                    <td id="cell_2_1_0_0"></td>
-                    <td id="cell_2_1_0_1"></td>
-                    <td id="cell_2_1_0_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_2_1_1_0"></td>
-                    <td id="cell_2_1_1_1"></td>
-                    <td id="cell_2_1_1_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_2_1_2_0"></td>
-                    <td id="cell_2_1_2_1"></td>
-                    <td id="cell_2_1_2_2"></td>
-                </tr>
-            </table>
-        </td>
-        <td>
-            <table>
-                <tr>
-                    <td id="cell_2_2_0_0"></td>
-                    <td id="cell_2_2_0_1"></td>
-                    <td id="cell_2_2_0_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_2_2_1_0"></td>
-                    <td id="cell_2_2_1_1"></td>
-                    <td id="cell_2_2_1_2"></td>
-                </tr>
-                <tr>
-                    <td id="cell_2_2_2_0"></td>
-                    <td id="cell_2_2_2_1"></td>
-                    <td id="cell_2_2_2_2"></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
+    <table id="my4DTable" align="center">
+        <tr>
+            <td id="topLevelTd">
+                <table>
+                    <tr>
+                        <td id="cell_0_0_0_0"><div>0,0,0,0</div></td>
+                        <td id="cell_0_0_0_1"><div>0,0,0,1</div></td>
+                        <td id="cell_0_0_0_2"><div>0,0,0,2</div></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_0_0_1_0"><div>0,0,1,0</div></td>
+                        <td id="cell_0_0_1_1"><div>0,0,1,1</div></td>
+                        <td id="cell_0_0_1_2"><div>0,0,1,2</div></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_0_0_2_0"></td>
+                        <td id="cell_0_0_2_1"></td>
+                        <td id="cell_0_0_2_2"></td>
+                    </tr>
+                </table>
+            </td>
+            <td id="topLevelTd">
+                <table>
+                    <tr>
+                        <td id="cell_0_1_0_0"></td>
+                        <td id="cell_0_1_0_1"></td>
+                        <td id="cell_0_1_0_2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_0_1_1_0"></td>
+                        <td id="cell_0_1_1_1"></td>
+                        <td id="cell_0_1_1_2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_0_1_2_0"></td>
+                        <td id="cell_0_1_2_1"></td>
+                        <td id="cell_0_1_2_2"></td>
+                    </tr>
+                </table>
+            </td>
+            <td id="topLevelTd">
+                <table>
+                    <tr>
+                        <td id="cell_0_2_0_0"></td>
+                        <td id="cell_0_2_0_1"></td>
+                        <td id="cell_0_2_0_2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_0_2_1_0"></td>
+                        <td id="cell_0_2_1_1"></td>
+                        <td id="cell_0_2_1_2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_0_2_2_0"></td>
+                        <td id="cell_0_2_2_1"></td>
+                        <td id="cell_0_2_2_2"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td id="topLevelTd">
+                <table>
+                    <tr>
+                        <td id="cell_1_0_0_0"></td>
+                        <td id="cell_1_0_0_1"></td>
+                        <td id="cell_1_0_0_2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_1_0_1_0"></td>
+                        <td id="cell_1_0_1_1"></td>
+                        <td id="cell_1_0_1_2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_1_0_2_0"></td>
+                        <td id="cell_1_0_2_1"></td>
+                        <td id="cell_1_0_2_2"></td>
+                    </tr>
+                </table>
+            </td>
+            <td id="topLevelTd">
+                <table>
+                    <tr>
+                        <td id="cell_1_1_0_0"></td>
+                        <td id="cell_1_1_0_1"></td>
+                        <td id="cell_1_1_0_2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_1_1_1_0"></td>
+                        <td id="cell_1_1_1_1"></td>
+                        <td id="cell_1_1_1_2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_1_1_2_0"></td>
+                        <td id="cell_1_1_2_1"></td>
+                        <td id="cell_1_1_2_2"></td>
+                    </tr>
+                </table>
+            </td>
+            <td id="topLevelTd">
+                <table>
+                    <tr>
+                        <td id="cell_1_2_0_0"></td>
+                        <td id="cell_1_2_0_1"></td>
+                        <td id="cell_1_2_0_2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_1_2_1_0"></td>
+                        <td id="cell_1_2_1_1"></td>
+                        <td id="cell_1_2_1_2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_1_2_2_0"></td>
+                        <td id="cell_1_2_2_1"></td>
+                        <td id="cell_1_2_2_2"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td id="topLevelTd">
+                <table>
+                    <tr>
+                        <td id="cell_2_0_0_0"></td>
+                        <td id="cell_2_0_0_1"></td>
+                        <td id="cell_2_0_0_2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_2_0_1_0"></td>
+                        <td id="cell_2_0_1_1"></td>
+                        <td id="cell_2_0_1_2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_2_0_2_0"></td>
+                        <td id="cell_2_0_2_1"></td>
+                        <td id="cell_2_0_2_2"></td>
+                    </tr>
+                </table>
+            </td>
+            <td id="topLevelTd">
+                <table>
+                    <tr>
+                        <td id="cell_2_1_0_0"></td>
+                        <td id="cell_2_1_0_1"></td>
+                        <td id="cell_2_1_0_2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_2_1_1_0"></td>
+                        <td id="cell_2_1_1_1"></td>
+                        <td id="cell_2_1_1_2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_2_1_2_0"></td>
+                        <td id="cell_2_1_2_1"></td>
+                        <td id="cell_2_1_2_2"></td>
+                    </tr>
+                </table>
+            </td>
+            <td id="topLevelTd">
+                <table>
+                    <tr>
+                        <td id="cell_2_2_0_0"></td>
+                        <td id="cell_2_2_0_1"></td>
+                        <td id="cell_2_2_0_2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_2_2_1_0"></td>
+                        <td id="cell_2_2_1_1"></td>
+                        <td id="cell_2_2_1_2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell_2_2_2_0"></td>
+                        <td id="cell_2_2_2_1"></td>
+                        <td id="cell_2_2_2_2"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table><br>
+
+    <textarea rows="5" cols="40">
+One use of 4d arrays is the game "5d chess with multiverse time travel" the pices are on a 4d array and can move across arrays just like spaces on the board.
+    </textarea><br>
+
+    <img width="600" src="https://en.chessbase.com/portals/all/2020/07/5d%20chess/screenshot_2020_06_20_16_43_53.png">
 
 
-    </body>
+
+</body>
+
 </html>
