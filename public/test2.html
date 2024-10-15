@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rubik's Cube</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #282c34;
+        }
+
+        #cube {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+
+        .face {
+            position: absolute;
+            width: 66.66px; /* 200px / 3 */
+            height: 66.66px; /* 200px / 3 */
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bold;
+            opacity: 0.8;
+            transition: background 0.3s;
+        }
+
+        .front  { transform: translateZ(100px); }
+        .back   { transform: rotateY(180deg) translateZ(100px); }
+        .left   { transform: rotateY(-90deg) translateZ(100px); }
+        .right  { transform: rotateY(90deg) translateZ(100px); }
+        .top    { transform: rotateX(90deg) translateZ(100px); }
+        .bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+        /* Positioning for the Rubik's Cube layout */
+        .face:nth-child(1) { background-color: red; }
+        .face:nth-child(2) { background-color: green; }
+        .face:nth-child(3) { background-color: blue; }
+        .face:nth-child(4) { background-color: yellow; }
+        .face:nth-child(5) { background-color: white; }
+        .face:nth-child(6) { background-color: orange; }
+
+        /* Highlight effect on hover */
+        .face:hover {
+            opacity: 1;
+            box-shadow: 0 0 10px #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="cube">
+        <div class="face front">F</div>
+        <div class="face back">B</div>
+        <div class="face left">L</div>
+        <div class="face right">R</div>
+        <div class="face top">U</div>
+        <div class="face bottom">D</div>
+    </div>
+    <script>
+        const cube = document.getElementById('cube');
+        let isRotated = false;
+
+        // Click to rotate the cube 90 degrees
+        cube.addEventListener('click', () => {
+            isRotated = !isRotated;
+            cube.style.transform = isRotated ? 'rotateY(90deg)' : 'rotateY(0deg)';
+        });
+    </script>
+</body>
+</html>
