@@ -3,35 +3,67 @@
 <head>
     <link rel="stylesheet" type="text/css" href="css-ardan.css">
     <style>
-        table {
-            width: 100%;
-            margin-right: auto;
-            margin-left: auto;
-            border: 1px solid whitesmoke;
-            border-radius: 10px;
-            padding: 15px;
-        }
+table {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    padding: 10px;
+}
 
-        table#my4DTable {
-            width: 75%;
-            border: none;
-            margin: auto;
-            padding: none;
-        }
+table#my4DTable {
+    width: 75%;
+    border: none;
+    margin: auto;
+    padding: 0;
+}
 
-        td#topLevelTd {
-            border: none;
-        }
+td#topLevelTd {
+    border: none;
+}
 
-        td {
-            border: 1px solid whitesmoke;
-            border-radius: 5px;
-            text-align: center;
-            width: 33%;
-            padding: 15px;
-            margin: 10px;
+td {
+    border-radius: 5px;
+    text-align: center;
+    width: 33%;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+}
 
-        }
+td td {
+    background-color: whitesmoke;
+    border: 1px solid #cfcfcf;
+    transition: background-color 0.2s ease;
+}
+
+td table {
+    background-color: whitesmoke;
+    border: 1px solid #cfcfcf;
+    transition: background-color 0.2s ease;
+}
+
+td td:hover {
+    background-color: #cfcfcf;
+    border: 1px solid #acacac;
+}
+
+td table:hover {
+    background-color: #cfcfcf;
+    border: 1px solid #acacac;
+}
+
+td div {
+    font-weight: bold;
+    color: #333;
+}
+
+td div + div {
+    font-size: 0.85rem;
+    color: #444;
+    margin-top: 5px;
+}
+
     </style>
 </head>
 
@@ -171,7 +203,7 @@
                         // Construct cell ID
                         let cellId = `cell_${myLoop0}_${myLoop1}_${myLoop2}_${myLoop3}`;
                         // Update the table cell content with the value from the array
-                        document.getElementById(cellId).innerHTML += my4DArrayAuto[myLoop0][myLoop1][myLoop2][myLoop3];
+                        document.getElementById(cellId).innerHTML = my4DArrayAuto[myLoop0][myLoop1][myLoop2][myLoop3];
                     }
                 }
             }
@@ -179,41 +211,49 @@
     }">
 
 
-
     <table id="my4DTable" align="center">
         <tr>
             <td id="topLevelTd">
                 <table>
                     <tr>
-                        <td id="cell_0_0_0_0">
+                        <td>
+                            <div id="cell_0_0_0_0"></div>
                             <div>0,0,0,0</div>
                         </td>
-                        <td id="cell_0_0_0_1">
+                        <td>
+                            <div id="cell_0_0_0_1"></div>
                             <div>0,0,0,1</div>
                         </td>
-                        <td id="cell_0_0_0_2">
+                        <td>
+                            <div id="cell_0_0_0_2"></div>
                             <div>0,0,0,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_0_0_1_0">
+                        <td>
+                            <div id="cell_0_0_1_0"></div>
                             <div>0,0,1,0</div>
                         </td>
-                        <td id="cell_0_0_1_1">
+                        <td>
+                            <div id="cell_0_0_1_1"></div>
                             <div>0,0,1,1</div>
                         </td>
-                        <td id="cell_0_0_1_2">
+                        <td>
+                            <div id="cell_0_0_1_2"></div>
                             <div>0,0,1,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_0_0_2_0">
+                        <td>
+                            <div id="cell_0_0_2_0"></div>
                             <div>0,0,2,0</div>
                         </td>
-                        <td id="cell_0_0_2_1">
+                        <td>
+                            <div id="cell_0_0_2_1"></div>
                             <div>0,0,2,1</div>
                         </td>
-                        <td id="cell_0_0_2_2">
+                        <td>
+                            <div id="cell_0_0_2_2"></div>
                             <div>0,0,2,2</div>
                         </td>
                     </tr>
@@ -222,35 +262,44 @@
             <td id="topLevelTd">
                 <table>
                     <tr>
-                        <td id="cell_0_1_0_0">
+                        <td>
+                            <div id="cell_0_1_0_0"></div>
                             <div>0,1,0,0</div>
                         </td>
-                        <td id="cell_0_1_0_1">
+                        <td>
+                            <div id="cell_0_1_0_1"></div>
                             <div>0,1,0,1</div>
                         </td>
-                        <td id="cell_0_1_0_2">
+                        <td>
+                            <div id="cell_0_1_0_2"></div>
                             <div>0,1,0,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_0_1_1_0">
+                        <td>
+                            <div id="cell_0_1_1_0"></div>
                             <div>0,1,1,0</div>
                         </td>
-                        <td id="cell_0_1_1_1">
+                        <td>
+                            <div id="cell_0_1_1_1"></div>
                             <div>0,1,1,1</div>
                         </td>
-                        <td id="cell_0_1_1_2">
+                        <td>
+                            <div id="cell_0_1_1_2"></div>
                             <div>0,1,1,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_0_1_2_0">
+                        <td>
+                            <div id="cell_0_1_2_0"></div>
                             <div>0,1,2,0</div>
                         </td>
-                        <td id="cell_0_1_2_1">
+                        <td>
+                            <div id="cell_0_1_2_1"></div>
                             <div>0,1,2,1</div>
                         </td>
-                        <td id="cell_0_1_2_2">
+                        <td>
+                            <div id="cell_0_1_2_2"></div>
                             <div>0,1,2,2</div>
                         </td>
                     </tr>
@@ -259,35 +308,44 @@
             <td id="topLevelTd">
                 <table>
                     <tr>
-                        <td id="cell_0_2_0_0">
+                        <td>
+                            <div id="cell_0_2_0_0"></div>
                             <div>0,2,0,0</div>
                         </td>
-                        <td id="cell_0_2_0_1">
+                        <td>
+                            <div id="cell_0_2_0_1"></div>
                             <div>0,2,0,1</div>
                         </td>
-                        <td id="cell_0_2_0_2">
+                        <td>
+                            <div id="cell_0_2_0_2"></div>
                             <div>0,2,0,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_0_2_1_0">
+                        <td>
+                            <div id="cell_0_2_1_0"></div>
                             <div>0,2,1,0</div>
                         </td>
-                        <td id="cell_0_2_1_1">
+                        <td>
+                            <div id="cell_0_2_1_1"></div>
                             <div>0,2,1,1</div>
                         </td>
-                        <td id="cell_0_2_1_2">
+                        <td>
+                            <div id="cell_0_2_1_2"></div>
                             <div>0,2,1,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_0_2_2_0">
+                        <td>
+                            <div id="cell_0_2_2_0"></div>
                             <div>0,2,2,0</div>
                         </td>
-                        <td id="cell_0_2_2_1">
+                        <td>
+                            <div id="cell_0_2_2_1"></div>
                             <div>0,2,2,1</div>
                         </td>
-                        <td id="cell_0_2_2_2">
+                        <td>
+                            <div id="cell_0_2_2_2"></div>
                             <div>0,2,2,2</div>
                         </td>
                     </tr>
@@ -298,35 +356,44 @@
             <td id="topLevelTd">
                 <table>
                     <tr>
-                        <td id="cell_1_0_0_0">
+                        <td>
+                            <div id="cell_1_0_0_0"></div>
                             <div>1,0,0,0</div>
                         </td>
-                        <td id="cell_1_0_0_1">
+                        <td>
+                            <div id="cell_1_0_0_1"></div>
                             <div>1,0,0,1</div>
                         </td>
-                        <td id="cell_1_0_0_2">
+                        <td>
+                            <div id="cell_1_0_0_2"></div>
                             <div>1,0,0,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_1_0_1_0">
+                        <td>
+                            <div id="cell_1_0_1_0"></div>
                             <div>1,0,1,0</div>
                         </td>
-                        <td id="cell_1_0_1_1">
+                        <td>
+                            <div id="cell_1_0_1_1"></div>
                             <div>1,0,1,1</div>
                         </td>
-                        <td id="cell_1_0_1_2">
+                        <td>
+                            <div id="cell_1_0_1_2"></div>
                             <div>1,0,1,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_1_0_2_0">
+                        <td>
+                            <div id="cell_1_0_2_0"></div>
                             <div>1,0,2,0</div>
                         </td>
-                        <td id="cell_1_0_2_1">
+                        <td>
+                            <div id="cell_1_0_2_1"></div>
                             <div>1,0,2,1</div>
                         </td>
-                        <td id="cell_1_0_2_2">
+                        <td>
+                            <div id="cell_1_0_2_2"></div>
                             <div>1,0,2,2</div>
                         </td>
                     </tr>
@@ -335,35 +402,44 @@
             <td id="topLevelTd">
                 <table>
                     <tr>
-                        <td id="cell_1_1_0_0">
+                        <td>
+                            <div id="cell_1_1_0_0"></div>
                             <div>1,1,0,0</div>
                         </td>
-                        <td id="cell_1_1_0_1">
+                        <td>
+                            <div id="cell_1_1_0_1"></div>
                             <div>1,1,0,1</div>
                         </td>
-                        <td id="cell_1_1_0_2">
+                        <td>
+                            <div id="cell_1_1_0_2"></div>
                             <div>1,1,0,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_1_1_1_0">
+                        <td>
+                            <div id="cell_1_1_1_0"></div>
                             <div>1,1,1,0</div>
                         </td>
-                        <td id="cell_1_1_1_1">
+                        <td>
+                            <div id="cell_1_1_1_1"></div>
                             <div>1,1,1,1</div>
                         </td>
-                        <td id="cell_1_1_1_2">
+                        <td>
+                            <div id="cell_1_1_1_2"></div>
                             <div>1,1,1,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_1_1_2_0">
+                        <td>
+                            <div id="cell_1_1_2_0"></div>
                             <div>1,1,2,0</div>
                         </td>
-                        <td id="cell_1_1_2_1">
+                        <td>
+                            <div id="cell_1_1_2_1"></div>
                             <div>1,1,2,1</div>
                         </td>
-                        <td id="cell_1_1_2_2">
+                        <td>
+                            <div id="cell_1_1_2_2"></div>
                             <div>1,1,2,2</div>
                         </td>
                     </tr>
@@ -372,35 +448,44 @@
             <td id="topLevelTd">
                 <table>
                     <tr>
-                        <td id="cell_1_2_0_0">
+                        <td>
+                            <div id="cell_1_2_0_0"></div>
                             <div>1,2,0,0</div>
                         </td>
-                        <td id="cell_1_2_0_1">
+                        <td>
+                            <div id="cell_1_2_0_1"></div>
                             <div>1,2,0,1</div>
                         </td>
-                        <td id="cell_1_2_0_2">
+                        <td>
+                            <div id="cell_1_2_0_2"></div>
                             <div>1,2,0,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_1_2_1_0">
+                        <td>
+                            <div id="cell_1_2_1_0"></div>
                             <div>1,2,1,0</div>
                         </td>
-                        <td id="cell_1_2_1_1">
+                        <td>
+                            <div id="cell_1_2_1_1"></div>
                             <div>1,2,1,1</div>
                         </td>
-                        <td id="cell_1_2_1_2">
+                        <td>
+                            <div id="cell_1_2_1_2"></div>
                             <div>1,2,1,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_1_2_2_0">
+                        <td>
+                            <div id="cell_1_2_2_0"></div>
                             <div>1,2,2,0</div>
                         </td>
-                        <td id="cell_1_2_2_1">
+                        <td>
+                            <div id="cell_1_2_2_1"></div>
                             <div>1,2,2,1</div>
                         </td>
-                        <td id="cell_1_2_2_2">
+                        <td>
+                            <div id="cell_1_2_2_2"></div>
                             <div>1,2,2,2</div>
                         </td>
                     </tr>
@@ -411,35 +496,44 @@
             <td id="topLevelTd">
                 <table>
                     <tr>
-                        <td id="cell_2_0_0_0">
+                        <td>
+                            <div id="cell_2_0_0_0"></div>
                             <div>2,0,0,0</div>
                         </td>
-                        <td id="cell_2_0_0_1">
+                        <td>
+                            <div id="cell_2_0_0_1"></div>
                             <div>2,0,0,1</div>
                         </td>
-                        <td id="cell_2_0_0_2">
+                        <td>
+                            <div id="cell_2_0_0_2"></div>
                             <div>2,0,0,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_2_0_1_0">
+                        <td>
+                            <div id="cell_2_0_1_0"></div>
                             <div>2,0,1,0</div>
                         </td>
-                        <td id="cell_2_0_1_1">
+                        <td>
+                            <div id="cell_2_0_1_1"></div>
                             <div>2,0,1,1</div>
                         </td>
-                        <td id="cell_2_0_1_2">
+                        <td>
+                            <div id="cell_2_0_1_2"></div>
                             <div>2,0,1,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_2_0_2_0">
+                        <td>
+                            <div id="cell_2_0_2_0"></div>
                             <div>2,0,2,0</div>
                         </td>
-                        <td id="cell_2_0_2_1">
+                        <td>
+                            <div id="cell_2_0_2_1"></div>
                             <div>2,0,2,1</div>
                         </td>
-                        <td id="cell_2_0_2_2">
+                        <td>
+                            <div id="cell_2_0_2_2"></div>
                             <div>2,0,2,2</div>
                         </td>
                     </tr>
@@ -448,35 +542,44 @@
             <td id="topLevelTd">
                 <table>
                     <tr>
-                        <td id="cell_2_1_0_0">
+                        <td>
+                            <div id="cell_2_1_0_0"></div>
                             <div>2,1,0,0</div>
                         </td>
-                        <td id="cell_2_1_0_1">
+                        <td>
+                            <div id="cell_2_1_0_1"></div>
                             <div>2,1,0,1</div>
                         </td>
-                        <td id="cell_2_1_0_2">
+                        <td>
+                            <div id="cell_2_1_0_2"></div>
                             <div>2,1,0,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_2_1_1_0">
+                        <td>
+                            <div id="cell_2_1_1_0"></div>
                             <div>2,1,1,0</div>
                         </td>
-                        <td id="cell_2_1_1_1">
+                        <td>
+                            <div id="cell_2_1_1_1"></div>
                             <div>2,1,1,1</div>
                         </td>
-                        <td id="cell_2_1_1_2">
+                        <td>
+                            <div id="cell_2_1_1_2"></div>
                             <div>2,1,1,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_2_1_2_0">
+                        <td>
+                            <div id="cell_2_1_2_0"></div>
                             <div>2,1,2,0</div>
                         </td>
-                        <td id="cell_2_1_2_1">
+                        <td>
+                            <div id="cell_2_1_2_1"></div>
                             <div>2,1,2,1</div>
                         </td>
-                        <td id="cell_2_1_2_2">
+                        <td>
+                            <div id="cell_2_1_2_2"></div>
                             <div>2,1,2,2</div>
                         </td>
                     </tr>
@@ -485,35 +588,44 @@
             <td id="topLevelTd">
                 <table>
                     <tr>
-                        <td id="cell_2_2_0_0">
+                        <td>
+                            <div id="cell_2_2_0_0"></div>
                             <div>2,2,0,0</div>
                         </td>
-                        <td id="cell_2_2_0_1">
+                        <td>
+                            <div id="cell_2_2_0_1"></div>
                             <div>2,2,0,1</div>
                         </td>
-                        <td id="cell_2_2_0_2">
+                        <td>
+                            <div id="cell_2_2_0_2"></div>
                             <div>2,2,0,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_2_2_1_0">
+                        <td>
+                            <div id="cell_2_2_1_0"></div>
                             <div>2,2,1,0</div>
                         </td>
-                        <td id="cell_2_2_1_1">
+                        <td>
+                            <div id="cell_2_2_1_1"></div>
                             <div>2,2,1,1</div>
                         </td>
-                        <td id="cell_2_2_1_2">
+                        <td>
+                            <div id="cell_2_2_1_2"></div>
                             <div>2,2,1,2</div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="cell_2_2_2_0">
+                        <td>
+                            <div id="cell_2_2_2_0"></div>
                             <div>2,2,2,0</div>
                         </td>
-                        <td id="cell_2_2_2_1">
+                        <td>
+                            <div id="cell_2_2_2_1"></div>
                             <div>2,2,2,1</div>
                         </td>
-                        <td id="cell_2_2_2_2">
+                        <td>
+                            <div id="cell_2_2_2_2"></div>
                             <div>2,2,2,2</div>
                         </td>
                     </tr>
@@ -525,7 +637,7 @@
 
 
     <textarea rows="5" cols="40">
-One use of 4d arrays is the game "5d chess with multiverse time travel" the pices are on a 4d array and can move across arrays just like spaces on the board.
+One use of 4d arrays is the game "5d chess with multiverse time travel" the pieces are on a 4d array and can move across arrays just like spaces on the board.
     </textarea><br>
 
     <img width="600" src="https://en.chessbase.com/portals/all/2020/07/5d%20chess/screenshot_2020_06_20_16_43_53.png">

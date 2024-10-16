@@ -33,7 +33,8 @@
         <option id="option04"></option>
     </select>
     
-    <input type="button" value="Submit" onclick="checkAnswer()">
+    <input type="button" value="Submit" onclick="checkAnswer()"><br>
+    <div id="answerDiv"></div>
     
     <script>
         let correctAnswer = ''; // Store the correct answer globally
@@ -96,9 +97,9 @@
         function checkAnswer() {
             const selectedAnswer = document.getElementById('options').value;
             if (selectedAnswer === correctAnswer) {
-                alert("Correct!");
+                document.getElementById('answerDiv').innerHTML = "Correct!";
             } else {
-                alert(`Incorrect, it was ${correctAnswer}`);
+                document.getElementById('answerDiv').innerHTML = `Incorrect, it was ${correctAnswer}`;
             }
         }
     
