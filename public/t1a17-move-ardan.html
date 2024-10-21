@@ -45,7 +45,7 @@
                 document.getElementById('myStopMovement').click();
             }
             if (event.key === 'Backspace') {  // Stop movement when backspace is pressed
-                document.getElementById('myResetMovement').click();
+                clearInterval(myClock02);
             }
         });
     </script>

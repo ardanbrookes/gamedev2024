@@ -23,18 +23,64 @@
                 document.getElementById('myDiv01').innerHTML = this.myName + ' is a great cat <br>';
             }
         } // end extended class MyCat
+
+        class MyDog extends MyAnimal {
+            myShow() {
+                document.getElementById('myDiv01').innerHTML = this.myName + ' is a good boy <br>And is ' + this.myAge + ' years old';
+            }
+        } // end extended class MyDog
+
+        class MyCreature extends MyAnimal {
+            constructor(passName, passAge) {
+                super(passName, passAge);
+            }
+
+            addProperty(propName, propValue) {
+                this[propName] = propValue;  // Dynamically add new property
+            }
+
+            myShow() {
+                let propertiesHTML = '';
+                for (let prop in this) {
+                    if (this.hasOwnProperty(prop)) {
+                        propertiesHTML += prop + ': ' + this[prop] + '<br>';
+                    }
+                }
+                document.getElementById('myDiv01').innerHTML = propertiesHTML;
+            }
+        } // end extended class MyCreature
     </script>
 
     <input type="button" value="Example Class Set and Show Class Animal" onClick="{
-        myDog = new MyAnimal('Snickers', 5);
-        myDog.myShow();
-    }"><br><br>
-
-    <input type="text" id="myText01" value="may be useful later"><br>
-
+        myAnimal = new MyAnimal('Snickers', 5);
+        myAnimal.myShow();
+    }"><br>
     <input type="button" value="Example Extend Class Animal as Cat" onClick="{
         myPet = new MyCat('Fluffy', 14);
         myPet.myShow();
+    }"><br>
+
+    <input type="button" value="Example Extend Class Animal as Dog" onClick="{
+    myPet = new MyDog('George', 0.5);
+    myPet.myShow();
+    }"><br>
+
+
+    <input type="button" value="Add property to class extension MyCreature" onClick="{
+        const propName = document.getElementById('propertyName').value;
+        const propValue = document.getElementById('propertyValue').value;
+        if (myPet instanceof MyCreature) {
+            myPet.addProperty(propName, propValue);  // Add dynamic property
+        }
+    }">
+
+    Property Name: <input type="text" id="propertyName" value="...">
+    Property Value: <input type="text" id="propertyValue" value="..."><br>
+
+    <input type="button" value="Show MyCreature" onClick="{
+        if (myPet instanceof MyCreature) {
+            myPet.myShow();  // Show all properties including dynamic ones
+        }
     }"><br><br>
 
     <div id="myDiv01">...</div>
