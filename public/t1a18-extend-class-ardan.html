@@ -30,7 +30,7 @@
             }
         } // end extended class MyDog
 
-        class MyCreature extends MyAnimal {
+        class myCreature extends MyAnimal {
             constructor(passName, passAge) {
                 super(passName, passAge);
             }
@@ -48,13 +48,14 @@
                 }
                 document.getElementById('myDiv01').innerHTML = propertiesHTML;
             }
-        } // end extended class MyCreature
+        } // end extended class myCreature
     </script>
 
     <input type="button" value="Example Class Set and Show Class Animal" onClick="{
         myAnimal = new MyAnimal('Snickers', 5);
         myAnimal.myShow();
     }"><br>
+
     <input type="button" value="Example Extend Class Animal as Cat" onClick="{
         myPet = new MyCat('Fluffy', 14);
         myPet.myShow();
@@ -65,25 +66,32 @@
     myPet.myShow();
     }"><br>
 
+    <!-- New button to create myCreature -->
+    <input type="button" value="Create myCreature" onClick="{
+        myPet = new myCreature(document.getElementById('myCreatureName').value, parseInt(document.getElementById('myCreatureAge').value));
+        myPet.myShow();
+    }">
+    Name: <input type="text" id="myCreatureName" value="...">
+    Age: <input type="number" id="myCreatureAge" value="10"><br>
 
-    <input type="button" value="Add property to class extension MyCreature" onClick="{
+    <input type="button" value="Add property to myCreature" onClick="{
         const propName = document.getElementById('propertyName').value;
         const propValue = document.getElementById('propertyValue').value;
-        if (myPet instanceof MyCreature) {
+        if (myPet instanceof myCreature) {
             myPet.addProperty(propName, propValue);  // Add dynamic property
+            myPet.myShow();
         }
     }">
 
     Property Name: <input type="text" id="propertyName" value="...">
-    Property Value: <input type="text" id="propertyValue" value="..."><br>
+    Property Value: <input type="text" id="propertyValue" value="..."><br><br>
 
-    <input type="button" value="Show MyCreature" onClick="{
-        if (myPet instanceof MyCreature) {
-            myPet.myShow();  // Show all properties including dynamic ones
-        }
-    }"><br><br>
+    <div id="myDiv01">...</div><br>
 
-    <div id="myDiv01">...</div>
+    <textarea rows="5" cols="50">
+myCreature is another class extension where you set the name and age then you can add a property with a name and value.
+Setting the property name to an already existing property will change the value of that property.
+    </textarea>
 </body>
 
 </html>

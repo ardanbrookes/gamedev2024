@@ -1,16 +1,20 @@
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="css-ardan.css">
-    </head>
-    <body>
-        <h1 align="center">t1a12 objects ardan</h1>
 
-        <h2><a href="https://www.w3schools.com/js/js_objects.asp#:~:text=How%20to%20Define%20a%20JavaScript%20Object%20Using#:~:text=How%20to%20Define%20a%20JavaScript%20Object%20Using">w3schools objects</a></h2>
+<head>
+    <link rel="stylesheet" type="text/css" href="css-ardan.css">
+</head>
 
-        Objects are stored named variables<br>
+<body>
+    <h1 align="center">t1a12 objects ardan</h1>
 
-        <h4>Example objects code:</h4>
-        <pre>
+    <h2><a
+            href="https://www.w3schools.com/js/js_objects.asp#:~:text=How%20to%20Define%20a%20JavaScript%20Object%20Using#:~:text=How%20to%20Define%20a%20JavaScript%20Object%20Using">w3schools
+            objects</a></h2>
+
+    Objects are stored named variables<br>
+
+    <h4>Example objects code:</h4>
+    <pre>
 let myPerson = {
 "firstName": "John",
 "lastName": "Doe",
@@ -18,11 +22,40 @@ let myPerson = {
 "eyeColor": "blue"
 }
         </pre>
-    
-        <h4>Example working code</h4>
 
-        <input type="button" value="Example Object Set and Show" onclick="{
+    <h4>Example working code</h4>
+
+    <script>
+        let car = {
+            make: "Toyota Corolla",
+            start: function () {
+                console.log("Car started");
+                document.getElementById('myDiv02').innerHTML = "Car started";
+            }
+        };
+
+        let carPosition = 0;
+        let carInterval;
+        
+        // This function will move the car at the speed defined by the range input
+        function moveCar() {
+            let carSpeed = document.getElementById('carSpeed').value;
             
+            carInterval = setInterval(function () {
+                carPosition += parseInt(carSpeed); // Moves the car based on the speed set
+                document.getElementById('carImage').style.left = carPosition + 'px';
+            }, 50); // Interval remains constant, car speed determines how far it moves each interval
+        }
+
+        function stopCar() {
+            clearInterval(carInterval);
+            carPosition = 0; // Resets the car's position
+            document.getElementById('carImage').style.left = '0px';
+            document.getElementById('myDiv02').innerHTML = '';
+        }
+    </script>
+
+    <input type="button" value="Example Object Set and Show" onclick="{
             let myPerson = {
                 'firstName': 'John',
                 'lastName': 'Doe',
@@ -32,22 +65,30 @@ let myPerson = {
 
             document.getElementById('myDiv01').innerHTML = '<br>myPerson Object has properties: <br>'
             document.getElementById('myDiv01').innerHTML += 'firstName: ' + myPerson.firstName + '<br>'
-            document.getElementById('myDiv01').innerHTML += 'firstName: ' + myPerson.lastName + '<br>'
-            document.getElementById('myDiv01').innerHTML += 'firstName: ' + myPerson.age + '<br>'
-            document.getElementById('myDiv01').innerHTML += 'firstName: ' + myPerson.eyeColor + '<br>'
+            document.getElementById('myDiv01').innerHTML += 'lastName: ' + myPerson.lastName + '<br>'
+            document.getElementById('myDiv01').innerHTML += 'age: ' + myPerson.age + '<br>'
+            document.getElementById('myDiv01').innerHTML += 'eyeColor: ' + myPerson.eyeColor + '<br>'
         }">
 
-        <script>
-            let car = {
-                make: "Toyota",
-                start: function() {
-                    console.log("Car started");
-                }
-            };
-        </script>
+    <input type="button" value="Show Car" onclick="{
+        document.getElementById('myDiv01').innerHTML = 'Car make: ' + car.make + '<br>Car speed: ' + document.getElementById('carSpeed').value;
+    }">
 
+    <input type="button" value="Start Car" onclick="{
+        car.start();
+        moveCar();
+    }">
 
-        <div id="myDiv01">...</div>
+    <input type="button" value="Stop Car" onclick="stopCar();">
 
-    </body>
+    Car Speed: 0 <input type="range" id="carSpeed" min="0" max="10" value="3"> 30
+
+    <div id="myDiv01">...</div><br>
+    <div id="myDiv02">...</div>
+
+    <img id="carImage" src="https://www.xautoworld.com/wp-content/uploads/2016/10/2017-corolla-side-view.jpg" 
+    style="height:80px; position:absolute; left:0px; top:100px;">
+
+</body>
+
 </html>
