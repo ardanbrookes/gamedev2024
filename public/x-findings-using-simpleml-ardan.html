@@ -5,8 +5,28 @@
     <body>
         <h1 align="center">my findings from trying out openml for sheets on the S&P 500</h1>
         <h4><a href="https://docs.google.com/spreadsheets/d/1PdILIQajrFq_4bba5nIpxJgmqbuM7vDGpz35srtfmSQ/edit?usp=sharing">Link to my spreadsheet</a></h4>
-        <div>
-            <div>The first thing I did was download the historical data for the S&P 500 going back 10 years. Then I tried just a basic prediction going back 10 years </div>
+        <div style="width: 60%; margin: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div style="text-align: left; width: 37%;">
+                    The first thing I did was download the <a href="https://www.nasdaq.com/market-activity/index/spx/historical?page=253&rows_per_page=10&timeline=y10" style="color: lightblue;">historical data for the S&P 500 going back 10 years</a>. Then I tried just a basic prediction 2 years into the future and got this:
+                </div>
+                <img src="chart01.png" style="width: 61%;">
+            </div>
+            <div style="text-align: left; margin-top: 20px;">
+                It at least looks like stock market-type noise but over the longer term, it is pretty straight compared to the real stock market and is lacking the personality, so I'm not sure how accurate it would be.
+            </div>
+        </div><br>
+
+        <div style="width: 60%; margin: auto;">
+            <div style="text-align: left; margin-top: 20px;">
+                After that I wanted to see if it can predict the future in any way at all so I ran it each year back to 2021 and put all the results on a graph.
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <img src="chart02.png" style="width: 61%;">
+                <div style="text-align: left; width: 37%;">
+                    It clearly has no accuracy predicting the future from this graph, 2024, 2023 and 2022 data all trend the exact same direction over the long term with basically just random noise added on. 2021 was an interesting glitch I will get to next.
+                </div>
+            </div>
         </div>
     </body>
 </html>

@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X06 Webcam Stream with Screenshot and Naming Ardan</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -37,6 +36,15 @@
             color: #333;
         }
 
+        input[type="text"] {
+            margin-top: 10px;
+            padding: 5px;
+            font-size: 1em;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
         button {
             margin-top: 20px;
             padding: 10px 20px;
@@ -60,9 +68,11 @@
 </head>
 <body>
 
+    <h1 align="center">X06 Webcam Stream with Screenshot and Naming Ardan</h1>
     <div id="webcam-container">
         <video id="webcam" autoplay playsinline></video>
         <div id="status">Accessing your webcam...</div>
+        <input type="text" id="screenshot-name" value="you are an absolute masterpiece">
         <button id="capture-btn">Capture Screenshot</button>
         <a id="download-link">Download Screenshot</a>
     </div>
@@ -76,6 +86,7 @@
         const captureButton = document.getElementById('capture-btn');
         const canvas = document.getElementById('canvas');
         const downloadLink = document.getElementById('download-link');
+        const screenshotNameInput = document.getElementById('screenshot-name');
 
         async function startWebcam() {
             try {
@@ -100,11 +111,8 @@
             // Convert the canvas content to a JPEG data URL
             const imageDataUrl = canvas.toDataURL('image/jpeg');
 
-            // Prompt the user for a filename, with a default value
-            const filename = prompt("Enter a name for your screenshot:", "you are a masterpiece");
-
-            // If the user provides a name, use it. Otherwise, use the default.
-            const fileNameToUse = filename ? filename : "you are a masterpiece";
+            // Get the filename from the input field, or use a default if empty
+            const fileNameToUse = screenshotNameInput.value ? screenshotNameInput.value : "you are a masterpiece";
 
             // Create a download link for the image
             downloadLink.href = imageDataUrl;
