@@ -3,12 +3,16 @@
         <link rel="stylesheet" type="text/css" href="css-ardan.css">
     </head>
     <body>
-        <h1 align="center">my findings from trying out openml for sheets on the S&P 500</h1>
+        <h1 align="center">Ardan X08 my findings from trying out openml for sheets to predict the S&P 500</h1>
         <h4><a href="https://docs.google.com/spreadsheets/d/1PdILIQajrFq_4bba5nIpxJgmqbuM7vDGpz35srtfmSQ/edit?usp=sharing">Link to my spreadsheet</a></h4>
         <div style="width: 60%; margin: auto;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div style="text-align: left; width: 37%;">
-                    The first thing I did was download the <a href="https://www.nasdaq.com/market-activity/index/spx/historical?page=253&rows_per_page=10&timeline=y10" style="color: lightblue;">historical data for the S&P 500 going back 10 years</a>. Then I tried just a basic prediction 2 years into the future and got this:
+                    The first thing I did was download the 
+                    <a href="https://www.nasdaq.com/market-activity/index/spx/historical?page=253&rows_per_page=10&timeline=y10" style="color: lightblue;">
+                        historical data for the S&P 500 going back 10 years.
+                    </a> 
+                    Then I tried just a basic prediction 2 years into the future and got this:
                 </div>
                 <img src="chart01.png" style="width: 61%;">
             </div>
@@ -24,9 +28,33 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <img src="chart02.png" style="width: 61%;">
                 <div style="text-align: left; width: 37%;">
-                    It clearly has no accuracy predicting the future from this graph, 2024, 2023 and 2022 data all trend the exact same direction over the long term with basically just random noise added on. 2021 was an interesting glitch I will get to next.
+                    It clearly has no accuracy predicting the future from this graph, 2024, 2023 and 2022 data all trend the exact same direction over the long term with basically just random noise added on. 
+                    2021 was an interesting glitch I will get to next.
                 </div>
             </div>
+        </div><br><br>
+
+        <div style="width: 60%; margin: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div style="text-align: left; width: 37%;">
+                    For some time periods seemingly at random the prediction would be very straight with minor noise at some points. 
+                    I tried to figure out what caused it or where exactly it happened but I couldn't figure it out.
+                </div>
+                <img src="chart03.png" style="width: 61%;">
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <img src="chart04.png" style="width: 61%;">
+                <div style="text-align: left; width: 37%;">
+                    I found examples around 2017 and 2021-2022, the one around 2021-22 is cleaner possibly because there is more data beforehand. 
+                    I think this shows that the AI is not that refined and prone to flaws.
+                </div>
+            </div>
+        </div><br><br>
+
+        <div style="width: 60%; margin: auto; text-align: left;">
+            Overall the tech is interesting and cool but not perfect and a horrible predictor of the future market. 
+            It definitely has useful functions likc the ones they provided in the tutorial sheet but the stock market has far too many variables to be predicted by something like this. 
+            It would be interesting to get yearly weekly and daily data and layer them to try to get better prediction or use it for a more specific function like short term day trading with less outside factors.
         </div>
     </body>
 </html>

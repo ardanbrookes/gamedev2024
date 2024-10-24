@@ -1,0 +1,252 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="css-ardan.css">
+</head>
+
+<body>
+    <h1 align="center">x09 exchange rate converter ardan</h1>
+    <textarea rows="5" cols="50">
+This website takes the input currency and converts it to the output currency. 
+If you set the input currency to "enter other currency" you can enter your own currency.
+The amount of currency to convery number changed how much of the input currency you convert to the output currency.
+    </textarea><br><br>
+    
+    Convert from:
+    <select id="mySelectIn" onclick="calcExchangeRate()">
+        <option value="CAD">Canadian dollar (CAD)</option>
+        <option value="BRL">Brazilian real (BRL)</option>
+        <option value="USD">United States dollar (USD)</option>
+        <option value="EUR">Euro (EUR)</option>
+        <option value="JPY">Japanese yen (JPY)</option>
+        <option value="CNY">Chinese yuan (CNY)</option>
+        <option value="GBP">Pound sterling (GBP)</option>
+        <option value="other">Enter other currency</option>
+    </select>
+    or enter any ISO currency code: <input type="text" id="myTextIn"><br>
+
+    Convert to:
+    <select id="mySelectOut" onclick="calcExchangeRate()">
+        <option value="CAD">Canadian dollar (CAD)</option>
+        <option value="BRL">Brazilian real (BRL)</option>
+        <option value="USD">United States dollar (USD)</option>
+        <option value="EUR">Euro (EUR)</option>
+        <option value="JPY">Japanese yen (JPY)</option>
+        <option value="CNY">Chinese yuan (CNY)</option>
+        <option value="GBP">Pound sterling (GBP)</option>
+        <option value="other">Enter other currency</option>
+    </select>
+    or enter any ISO currency code: <input type="text" id="myTextOut"><br>
+
+    Amount of currency to convert: <input type="number" id="myExchangeNumber" value="1">
+
+    <input type="button" value="Calculate" onclick="calcExchangeRate()">
+
+    <div id="myDiv01">...</div><br>
+
+    <script>
+        function calcExchangeRate() {
+            let exchangeIn;
+            let exchangeOut;
+            let exchangeNumber = document.getElementById('myExchangeNumber').value;
+            
+            if (document.getElementById('mySelectIn').value != 'other') {
+                exchangeIn = document.getElementById('mySelectIn').value;
+            } else {
+                exchangeIn = document.getElementById('myTextIn').value;
+            }
+
+            if (document.getElementById('mySelectOut').value != 'other') {
+                exchangeOut = document.getElementById('mySelectOut').value;
+            } else {
+                exchangeOut = document.getElementById('myTextOut').value;
+            }
+
+            async function fetchExchangeRate() {
+                try {
+                    const response = await fetch(`https://v6.exchangerate-api.com/v6/cb1df47f1129960786569289/latest/${exchangeIn}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+
+                    document.getElementById('myDiv01').innerHTML = `${exchangeNumber} ${exchangeIn} is worth ${parseFloat((data.conversion_rates[exchangeOut] * exchangeNumber).toFixed(3))} ${exchangeOut}`;
+
+
+
+                } catch (error) {
+                    console.error("error: ", error);
+                }
+            }
+
+            fetchExchangeRate();
+        }
+    </script>
+
+    List of currencies and their ISO code to try<br>
+    <textarea rows="15" cols="43">
+United Arab Emirates dirham: "AED",
+Afghan afghani: "AFN",
+Albanian lek: "ALL",
+Armenian dram: "AMD",
+Netherlands Antillean guilder: "ANG",
+Angolan kwanza: "AOA",
+Argentine peso: "ARS",
+Australian dollar: "AUD",
+Aruban florin: "AWG",
+Azerbaijani manat: "AZN",
+Bosnia-Herzegovina convertible mark: "BAM",
+Barbadian dollar: "BBD",
+Bangladeshi taka: "BDT",
+Bulgarian lev: "BGN",
+Bahraini dinar: "BHD",
+Burundian franc: "BIF",
+Bermudian dollar: "BMD",
+Brunei dollar: "BND",
+Bolivian boliviano: "BOB",
+Brazilian real: "BRL",
+Bahamian dollar: "BSD",
+Bhutanese ngultrum: "BTN",
+Botswana pula: "BWP",
+Belarusian ruble: "BYN",
+Belize dollar: "BZD",
+Canadian dollar: "CAD",
+Congolese franc: "CDF",
+Swiss franc: "CHF",
+Chilean peso: "CLP",
+Chinese yuan: "CNY",
+Colombian peso: "COP",
+Costa Rican colón: "CRC",
+Cuban peso: "CUP",
+Cape Verdean escudo: "CVE",
+Czech koruna: "CZK",
+Djiboutian franc: "DJF",
+Danish krone: "DKK",
+Dominican peso: "DOP",
+Algerian dinar: "DZD",
+Egyptian pound: "EGP",
+Eritrean nakfa: "ERN",
+Ethiopian birr: "ETB",
+Euro: "EUR",
+Fijian dollar: "FJD",
+Falkland Islands pound: "FKP",
+Faroese króna: "FOK",
+British pound: "GBP",
+Georgian lari: "GEL",
+Guernsey pound: "GGP",
+Ghanaian cedi: "GHS",
+Gibraltar pound: "GIP",
+Gambian dalasi: "GMD",
+Guinean franc: "GNF",
+Guatemalan quetzal: "GTQ",
+Guyanese dollar: "GYD",
+Hong Kong dollar: "HKD",
+Honduran lempira: "HNL",
+Croatian kuna: "HRK",
+Haitian gourde: "HTG",
+Hungarian forint: "HUF",
+Indonesian rupiah: "IDR",
+Israeli new shekel: "ILS",
+Isle of Man pound: "IMP",
+Indian rupee: "INR",
+Iraqi dinar: "IQD",
+Iranian rial: "IRR",
+Icelandic króna: "ISK",
+Jersey pound: "JEP",
+Jamaican dollar: "JMD",
+Jordanian dinar: "JOD",
+Japanese yen: "JPY",
+Kenyan shilling: "KES",
+Kyrgyzstani som: "KGS",
+Cambodian riel: "KHR",
+Kiribati dollar: "KID",
+Comorian franc: "KMF",
+South Korean won: "KRW",
+Kuwaiti dinar: "KWD",
+Cayman Islands dollar: "KYD",
+Kazakhstani tenge: "KZT",
+Lao kip: "LAK",
+Lebanese pound: "LBP",
+Sri Lankan rupee: "LKR",
+Liberian dollar: "LRD",
+Lesotho loti: "LSL",
+Libyan dinar: "LYD",
+Moroccan dirham: "MAD",
+Moldovan leu: "MDL",
+Malagasy ariary: "MGA",
+Macedonian denar: "MKD",
+Myanmar kyat: "MMK",
+Mongolian tögrög: "MNT",
+Macanese pataca: "MOP",
+Mauritanian ouguiya: "MRU",
+Mauritian rupee: "MUR",
+Maldivian rufiyaa: "MVR",
+Malawian kwacha: "MWK",
+Mexican peso: "MXN",
+Malaysian ringgit: "MYR",
+Mozambican metical: "MZN",
+Namibian dollar: "NAD",
+Nigerian naira: "NGN",
+Nicaraguan córdoba: "NIO",
+Norwegian krone: "NOK",
+Nepalese rupee: "NPR",
+New Zealand dollar: "NZD",
+Omani rial: "OMR",
+Panamanian balboa: "PAB",
+Peruvian sol: "PEN",
+Papua New Guinean kina: "PGK",
+Philippine peso: "PHP",
+Pakistani rupee: "PKR",
+Polish złoty: "PLN",
+Paraguayan guaraní: "PYG",
+Qatari riyal: "QAR",
+Romanian leu: "RON",
+Serbian dinar: "RSD",
+Russian ruble: "RUB",
+Rwandan franc: "RWF",
+Saudi riyal: "SAR",
+Solomon Islands dollar: "SBD",
+Seychellois rupee: "SCR",
+Sudanese pound: "SDG",
+Swedish krona: "SEK",
+Singapore dollar: "SGD",
+Saint Helena pound: "SHP",
+Sierra Leonean leone: "SLE",
+Somali shilling: "SOS",
+Surinamese dollar: "SRD",
+South Sudanese pound: "SSP",
+São Tomé and Príncipe dobra: "STN",
+Syrian pound: "SYP",
+Eswatini lilangeni: "SZL",
+Thai baht: "THB",
+Tajikistani somoni: "TJS",
+Turkmenistani manat: "TMT",
+Tunisian dinar: "TND",
+Tongan paʻanga: "TOP",
+Turkish lira: "TRY",
+Trinidad and Tobago dollar: "TTD",
+Tuvaluan dollar: "TVD",
+New Taiwan dollar: "TWD",
+Tanzanian shilling: "TZS",
+Ukrainian hryvnia: "UAH",
+Ugandan shilling: "UGX",
+United States dollar: "USD",
+Uruguayan peso: "UYU",
+Uzbekistani soʻm: "UZS",
+Venezuelan bolívar: "VES",
+Vietnamese đồng: "VND",
+Vanuatu vatu: "VUV",
+Samoan tālā: "WST",
+Central African CFA franc: "XAF",
+East Caribbean dollar: "XCD",
+Special drawing rights (SDR): "XDR",
+West African CFA franc: "XOF",
+CFP franc: "XPF",
+Yemeni rial: "YER",
+South African rand: "ZAR",
+Zambian kwacha: "ZMW",
+Zimbabwean dollar: "ZWL"
+    </textarea>
+</body>
+
+</html>
