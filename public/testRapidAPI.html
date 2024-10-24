@@ -1,0 +1,40 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="css-ardan.css">
+</head>
+<body>
+
+    <h1>Get Raw JSON Data from RapidAPI</h1>
+
+    <input type="button" value="Fetch Data" onclick="fetchData()">
+
+    <div id="myDiv01"></div>
+
+    <script>
+        async function fetchData() {
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': 'c5233c181emsh2dd649583ed3224p196830jsnfe99a0364164',  // Your RapidAPI Key
+                    'X-RapidAPI-Host': 'news-api14.p.rapidapi.com'  // Correct Host for News API
+                }
+            };
+
+            try {
+                // Correct API Endpoint
+                const response = await fetch('https://news-api14.p.rapidapi.com/top-headlines?country=us', options);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                document.getElementById('myDiv01').innerHTML = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error('Error fetching data: ', error);
+                document.getElementById('myDiv01').innerHTML = 'Error fetching data. Check console for details.';
+            }
+        }
+    </script>
+
+</body>
+</html>
