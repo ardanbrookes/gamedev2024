@@ -16,15 +16,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: auto;
         }
         .needle {
             width: 2px;
-            height: 100px;
+            height: 90px;
             background-color: red;
             position: absolute;
-            top: 10%;
+            top: 50%;
             transform-origin: bottom center;
+            transform: translateY(-50%);
         }
         .direction-labels {
             position: absolute;
@@ -79,7 +79,8 @@
         const startButton = document.getElementById("start-button");
 
         function updateDirection(alpha) {
-            needle.style.transform = `rotate(${alpha}deg)`;
+            // Adjust the rotation to match true compass orientation
+            needle.style.transform = `translateY(-50%) rotate(${alpha}deg)`;
 
             const direction = Math.round(alpha / 45) % 8;
             const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
