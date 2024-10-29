@@ -16,6 +16,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transform: rotate(180deg); /* Rotate compass 180 degrees */
         }
         .needle {
             width: 2px;
@@ -37,12 +38,19 @@
             margin-top: 10px;
             font-size: 1em;
         }
+        #start-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 1em;
+        }
     </style>
 </head>
 
 <body>
     <h1 align="center">Compass Ardan</h1><br>
 
+    <button id="start-button">Enable Compass</button>
     <div class="compass-container">
         <div class="needle" id="needle"></div>
         <div class="direction" id="direction">N</div>
@@ -53,11 +61,11 @@
         const needle = document.getElementById("needle");
         const directionLabel = document.getElementById("direction");
         const errorLabel = document.getElementById("error");
+        const startButton = document.getElementById("start-button");
 
         function updateDirection(alpha) {
             needle.style.transform = `rotate(${alpha}deg)`;
 
-            // Determine compass direction
             const direction = Math.round(alpha / 45) % 8;
             const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
             directionLabel.textContent = directions[direction];
@@ -65,11 +73,11 @@
 
         function startCompass() {
             if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === "function") {
-                // For iOS 13+ compatibility: request permission
                 DeviceOrientationEvent.requestPermission()
                     .then((response) => {
                         if (response === "granted") {
                             window.addEventListener("deviceorientation", handleOrientation, true);
+                            startButton.style.display = "none"; // Hide the button once permission is granted
                         } else {
                             errorLabel.textContent = "Permission to access compass was denied.";
                         }
@@ -78,8 +86,8 @@
                         errorLabel.textContent = `Error: ${error.message}`;
                     });
             } else if (window.DeviceOrientationEvent) {
-                // Non-iOS or non-permission-required devices
                 window.addEventListener("deviceorientation", handleOrientation, true);
+                startButton.style.display = "none"; // Hide the button if permission not required
             } else {
                 errorLabel.textContent = "Compass not supported on this device.";
             }
@@ -93,7 +101,7 @@
             }
         }
 
-        startCompass();
+        startButton.addEventListener("click", startCompass);
     </script>
 </body>
 </html>
