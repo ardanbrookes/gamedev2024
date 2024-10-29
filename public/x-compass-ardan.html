@@ -1,32 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compass</title>
+    <title>Compass - Ardan</title>
+    <link rel="stylesheet" type="text/css" href="css-ardan.css">
     <style>
-        body {
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
-        }
-
         .compass-container {
             width: 200px;
             height: 200px;
             position: relative;
-            background-color: #eee;
+            background-color: #6e6e70;
             border-radius: 50%;
-            border: 5px solid #333;
+            border: 5px solid whitesmoke;
             display: flex;
             justify-content: center;
             align-items: center;
         }
-
         .needle {
             width: 2px;
             height: 100px;
@@ -35,51 +25,75 @@
             top: 10%;
             transform-origin: bottom center;
         }
-
         .direction {
             position: absolute;
             bottom: 10px;
             font-size: 1.2em;
             font-weight: bold;
         }
+        #error {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 1em;
+        }
     </style>
 </head>
 
 <body>
-
-    <h1 align="center">x? compass ardan</h1><br>
+    <h1 align="center">Compass Ardan</h1><br>
 
     <div class="compass-container">
         <div class="needle" id="needle"></div>
         <div class="direction" id="direction">N</div>
     </div>
+    <div id="error"></div>
 
     <script>
         const needle = document.getElementById("needle");
         const directionLabel = document.getElementById("direction");
+        const errorLabel = document.getElementById("error");
 
         function updateDirection(alpha) {
-            // Rotate the needle based on the compass data (alpha)
             needle.style.transform = `rotate(${alpha}deg)`;
 
-            // Determine the compass direction (N, NE, E, SE, S, SW, W, NW)
+            // Determine compass direction
             const direction = Math.round(alpha / 45) % 8;
             const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
             directionLabel.textContent = directions[direction];
         }
 
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener("deviceorientation", (event) => {
-                if (event.alpha !== null) {
-                    updateDirection(event.alpha);
-                } else {
-                    directionLabel.textContent = "No compass data";
-                }
-            });
-        } else {
-            directionLabel.textContent = "Compass not supported";
+        function startCompass() {
+            if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === "function") {
+                // For iOS 13+ compatibility: request permission
+                DeviceOrientationEvent.requestPermission()
+                    .then((response) => {
+                        if (response === "granted") {
+                            window.addEventListener("deviceorientation", handleOrientation, true);
+                        } else {
+                            errorLabel.textContent = "Permission to access compass was denied.";
+                        }
+                    })
+                    .catch((error) => {
+                        errorLabel.textContent = `Error: ${error.message}`;
+                    });
+            } else if (window.DeviceOrientationEvent) {
+                // Non-iOS or non-permission-required devices
+                window.addEventListener("deviceorientation", handleOrientation, true);
+            } else {
+                errorLabel.textContent = "Compass not supported on this device.";
+            }
         }
+
+        function handleOrientation(event) {
+            if (event.alpha !== null) {
+                updateDirection(event.alpha);
+            } else {
+                errorLabel.textContent = "No compass data available.";
+            }
+        }
+
+        startCompass();
     </script>
 </body>
-
 </html>
