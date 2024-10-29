@@ -1,77 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Compass</title>
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f0f8ff;
-    }
-    .compass-container {
-      width: 200px;
-      height: 200px;
-      position: relative;
-      background-color: #eee;
-      border-radius: 50%;
-      border: 5px solid #333;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .needle {
-      width: 2px;
-      height: 100px;
-      background-color: red;
-      position: absolute;
-      top: 10%;
-      transform-origin: bottom center;
-    }
-    .direction {
-      position: absolute;
-      bottom: 10px;
-      font-size: 1.2em;
-      font-weight: bold;
-    }
-  </style>
-</head>
-<body>
-  <div class="compass-container">
-    <div class="needle" id="needle"></div>
-    <div class="direction" id="direction">N</div>
-  </div>
-
-  <script>
-    const needle = document.getElementById("needle");
-    const directionLabel = document.getElementById("direction");
-
-    function updateDirection(alpha) {
-      // Rotate the needle based on the compass data (alpha)
-      needle.style.transform = `rotate(${alpha}deg)`;
-      
-      // Determine the compass direction (N, NE, E, SE, S, SW, W, NW)
-      const direction = Math.round(alpha / 45) % 8;
-      const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
-      directionLabel.textContent = directions[direction];
-    }
-
-    if (window.DeviceOrientationEvent) {
-      window.addEventListener("deviceorientation", (event) => {
-        if (event.alpha !== null) {
-          updateDirection(event.alpha);
-        } else {
-          directionLabel.textContent = "No compass data";
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compass</title>
+    <style>
+        body {
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
         }
-      });
-    } else {
-      directionLabel.textContent = "Compass not supported";
-    }
-  </script>
+
+        .compass-container {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            background-color: #eee;
+            border-radius: 50%;
+            border: 5px solid #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .needle {
+            width: 2px;
+            height: 100px;
+            background-color: red;
+            position: absolute;
+            top: 10%;
+            transform-origin: bottom center;
+        }
+
+        .direction {
+            position: absolute;
+            bottom: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1 align="center">x? compass ardan</h1><br>
+
+    <div class="compass-container">
+        <div class="needle" id="needle"></div>
+        <div class="direction" id="direction">N</div>
+    </div>
+
+    <script>
+        const needle = document.getElementById("needle");
+        const directionLabel = document.getElementById("direction");
+
+        function updateDirection(alpha) {
+            // Rotate the needle based on the compass data (alpha)
+            needle.style.transform = `rotate(${alpha}deg)`;
+
+            // Determine the compass direction (N, NE, E, SE, S, SW, W, NW)
+            const direction = Math.round(alpha / 45) % 8;
+            const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+            directionLabel.textContent = directions[direction];
+        }
+
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener("deviceorientation", (event) => {
+                if (event.alpha !== null) {
+                    updateDirection(event.alpha);
+                } else {
+                    directionLabel.textContent = "No compass data";
+                }
+            });
+        } else {
+            directionLabel.textContent = "Compass not supported";
+        }
+    </script>
 </body>
+
 </html>
