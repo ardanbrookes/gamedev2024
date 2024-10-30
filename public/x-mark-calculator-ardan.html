@@ -1,0 +1,57 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="css-ardan.css">
+</head>
+
+<body>
+    <h1 align="center">t1x12 G.U.R.P. (Grade Update Result Predictor) ardan</h1>
+
+    Current mark (Excluding assignment you want to update): <input type="number" id="myTop">
+
+    Current course total <input type="number" id="myBottom" value="180">
+
+    Enter grade threshold:<select id="mySelectIn" onclick="calcExchangeRate()">
+        <option value="100">Perfect (100%)</option>
+        <option value="92.5">4.0 GPA (92.5%)</option>
+        <option value="85.5">A (85.5%)</option>
+        <option value="72.5">B (72.5%)</option>
+        <option value="67.5">C+ (66.5%)</option>
+        <option value="59.5">C (59.5%)</option>
+        <option value="49.5">C- (49.5%)</option>
+        <option value="49.4">Fail (49.4%)</option>
+        <option value="other">Enter other</option>
+    </select>
+    or enter any grade threshold: <input type="text" id="myTextIn"><br>
+    <input type="button" onclick="calcExchangeRate()" value="calculate">
+    <div id="myOut"></div>
+
+    <script>
+        // returns: (number) mark required to get user to desired %
+        function CalcualteMark(grade, total, desired) {
+            grade = parseFloat(grade)
+            total = parseFloat(total)
+            desired = parseFloat(desired)
+
+            console.log(grade, total, desired)
+            return -((desired / 100) * grade - total)
+        }
+
+        function calcExchangeRate() {
+            let reqMark;
+            let grade = document.getElementById('myTop').value;
+            let total = document.getElementById('myBottom').value;
+            
+            if (document.getElementById('mySelectIn').value != 'other') {
+                reqMark = document.getElementById('mySelectIn').value;
+            } else {
+                reqMark = document.getElementById('myTextIn').value;
+            }
+
+            document.getElementById("myOut").innerText = "the assigmnent should be worth" + CalcualteMark(grade, total, reqMark) + "marks"
+        }
+
+    </script>
+</body>
+
+</html>
