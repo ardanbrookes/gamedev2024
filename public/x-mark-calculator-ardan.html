@@ -34,7 +34,8 @@
             desired = parseFloat(desired)
 
             console.log(grade, total, desired)
-            return -((desired / 100) * grade - total)
+            console.log((desired / 100) * grade)
+            return ((desired / 100) * total - grade)
         }
 
         function calcExchangeRate() {
@@ -48,7 +49,7 @@
                 reqMark = document.getElementById('myTextIn').value;
             }
 
-            document.getElementById("myOut").innerText = "the assigmnent should be worth" + CalcualteMark(grade, total, reqMark) + "marks"
+            document.getElementById("myOut").innerText = "the assigmnent should be worth " + CalcualteMark(grade, total, reqMark) + " marks"
         }
 
     </script>
