@@ -1,9 +1,34 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <link rel="stylesheet" type="text/css" href="css-ardan.css">
+    <style>
+        table {
+            margin: auto;
+            /* width: 80%; Allows table to resize to fit the image */
+        }
+
+        img {
+            height: 100px;
+            width: 100px;
+        }
+
+        table#bananaTable td {
+            border: 1px solid white;
+            height: 100px;
+            width: 100px;
+        }
+
+        td {
+            border: 1px solid white;
+        }
+    </style>
 </head>
+
 <body>
+
+    
     <h1 align="center">t1a11 arrays ardan</h1>
 
     <script>
@@ -30,7 +55,7 @@
         }
 
         // Initialize the select boxes after the DOM is fully loaded
-        window.onload = function() {
+        window.onload = function () {
             selectArrayNumber = document.getElementById('arrayNumber');
             selectArrayNumber2 = document.getElementById('arrayNumber2');
             updateSelectBoxes();  // Call the function to populate select boxes
@@ -75,7 +100,116 @@
         }
     }"><br>
 
-    <div id="myDiv01"></div> <!-- Added this div to display output -->
+    <div id="myDiv01"></div><br><br> <!-- Added this div to display output -->
+
+
+    <h3 align="center">Array used for coordinates in a table</h3>
+
+
+    <div align="center">
+        Select row:
+        <select id="rows">
+            <option value="0">Row 0</option>
+            <option value="1">Row 1</option>
+            <option value="2">Row 2</option>
+            <option value="3">Row 3</option>
+        </select>
+        Select column:
+        <select id="columns">
+            <option value="0">Column 0</option>
+            <option value="1">Column 1</option>
+            <option value="2">Column 2</option>
+            <option value="3">Column 3</option>
+        </select>
+        <input type="button" value="Move to selected cell" onclick="moveToSelected()">
+    </div>
+
+    <table style="width: 20%;" border="1px solid white">
+
+        <tr>
+            <td></td>
+            <td><input type="button" value="Up" onclick="moveImage('up')"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><input type="button" value="Left" onclick="moveImage('left')"></td>
+            <td></td>
+            <td><input type="button" value="Right" onclick="moveImage('right')"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="button" value="Down" onclick="moveImage('down')"></td>
+            <td></td>
+        </tr>
+    </table>
+
+
+    <table style="border: 1px solid white;" id="bananaTable">
+        <tr>
+            <td id="cell-0-0"></td>
+            <td id="cell-0-1"></td>
+            <td id="cell-0-2"></td>
+            <td id="cell-0-3"></td>
+        </tr>
+        <tr>
+            <td id="cell-1-0"></td>
+            <td id="cell-1-1"></td>
+            <td id="cell-1-2"></td>
+            <td id="cell-1-3"></td>
+        </tr>
+        <tr>
+            <td id="cell-2-0"></td>
+            <td id="cell-2-1"></td>
+            <td id="cell-2-2"></td>
+            <td id="cell-2-3"></td>
+        </tr>
+        <tr>
+            <td id="cell-3-0"></td>
+            <td id="cell-3-1"></td>
+            <td id="cell-3-2"></td>
+            <td id="cell-3-3"></td>
+        </tr>
+    </table>
+
     
+
+    <script>
+        let position = [0, 0]; // Start at top-left corner (0,0)
+        const imageHtml = '<img src="banana.png" style="width:100%; height:auto;">';
+
+        function updateImagePosition() {
+            // Clear previous cell
+            document.querySelectorAll("td").forEach(cell => cell.innerHTML = "");
+
+            // Set new cell with the image
+            const cellId = `cell-${position[0]}-${position[1]}`;
+            document.getElementById(cellId).innerHTML = imageHtml;
+        }
+
+        function moveImage(direction) {
+            // Update position based on direction
+            if (direction === 'up' && position[0] > 0) position[0]--;
+            if (direction === 'down' && position[0] < 3) position[0]++;
+            if (direction === 'left' && position[1] > 0) position[1]--;
+            if (direction === 'right' && position[1] < 3) position[1]++;
+            updateImagePosition();
+        }
+
+        function moveToSelected() {
+            // Get selected row and column values
+            const row = parseInt(document.getElementById("rows").value);
+            const col = parseInt(document.getElementById("columns").value);
+
+            // Update position array
+            position = [row, col];
+            updateImagePosition();
+        }
+
+        // Initialize the image in the starting position
+        updateImagePosition();
+    </script>
+
+
 </body>
+
 </html>
