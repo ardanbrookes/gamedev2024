@@ -1,0 +1,100 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="css-ardan.css">
+    <script>
+        let myGlobalX = 0;
+        let myClock01;
+        let myClock02;
+        let mySpeed01 = 30;
+        function autoImageMoveRight() {
+            clearInterval(myClock02);
+            myClock02 = setInterval(function () {
+                document.getElementById('myButton02').click();
+            }, 30);
+        }
+        function resetImageMove() {
+            document.getElementById('borzoi2').style.left = '0px';
+            document.getElementById('borzoi2').style.top = '0px';
+            clearInterval(myClock02);
+        }
+        function changeBackgroundSpeed(speed) {
+            clearInterval(myClock01)
+            if (speed === 'faster') {
+                mySpeed01 = mySpeed01 / 2;
+                if (mySpeed01 < 2) mySpeed01 = 2;
+                myClock01 = setInterval(function () {
+                    document.getElementById('myButton01').click();
+                }, mySpeed01);
+                console.log('myspeed ', mySpeed01)
+            }
+            if (speed === 'slower') {
+                mySpeed01 = mySpeed01 * 2;
+                if (mySpeed01 > 200) mySpeed01 = 200;
+                myClock01 = setInterval(function () {
+                    document.getElementById('myButton01').click();
+                }, mySpeed01);
+                console.log('myspeed ', mySpeed01)
+            }
+            if (speed === 'stop') {
+                clearInterval(myClock01);
+                console.log('myspeed ', mySpeed01)
+            }
+            document.getElementById('displayBackgroundSpeed').innerHTML = parseFloat(mySpeed01).toFixed(2);
+        }
+    </script>
+    <style>
+        body {
+            background-image: url('desert-background.jpeg');
+            background-color: none;
+            background-repeat: repeat;
+            background-size: 25%;
+        }
+        div.speed-display {
+            display: flex;
+            justify-content: center;
+            margin: auto;
+            background-color: #1d1e20;
+            width: fit-content;
+            padding: 5px;
+            border: 2px solid whitesmoke;
+            border-radius: 10px;
+        }
+        div.speed-display div {
+            padding-left: 6px;
+        }
+    </style>
+</head>
+
+<body id="myBody">
+
+    <h1 align="center">t2a19-move-background-fred.html</h1>
+
+    <input id="myButton01" type="button" value="Background Move Left" onclick="
+        let myTemp = '100px 0px';
+        myGlobalX -= 5;
+        myTemp = myGlobalX + 'px 0px';
+        document.getElementById('myBody').style.backgroundPosition = myTemp;
+
+    ">
+
+    <input type="button" value="Auto Background Left Faster" onclick="changeBackgroundSpeed('faster')">
+
+    <input type="button" value="Auto Background Left Slower" onclick="changeBackgroundSpeed('slower')">
+
+    <input type="button" value="Auto Background Stop" onclick="changeBackgroundSpeed('stop')"><br>
+
+    <input type="button" id="myButton02" value="Image Right"
+        onclick="
+        document.getElementById('borzoi2').style.left = parseInt(document.getElementById('borzoi2').style.left) + 10 + 'px';">
+
+    <input type="button" value="Auto Image Move Right" onclick="autoImageMoveRight()">
+
+    <input type="button" value="Reset Image Move" onclick="resetImageMove()"><br>
+
+    <div class="speed-display">Speed: <div id="displayBackgroundSpeed">...</div></div><br>
+
+    <img id="borzoi2" style="position:relative; width:100px; height:100px; top:0px; left:0px;" src="borzoi2.jpg">
+</body>
+
+</html>
