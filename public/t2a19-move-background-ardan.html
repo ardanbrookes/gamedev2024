@@ -40,7 +40,7 @@
                 clearInterval(myClock01);
                 console.log('myspeed ', mySpeed01)
             }
-            document.getElementById('displayBackgroundSpeed').innerHTML = parseFloat(mySpeed01).toFixed(2);
+            document.getElementById('displayBackgroundSpeed').innerHTML = parseFloat(5000 / mySpeed01).toFixed(2);
         }
     </script>
     <style>
@@ -82,7 +82,7 @@
 
     <input type="button" value="Auto Background Left Slower" onclick="changeBackgroundSpeed('slower')">
 
-    <input type="button" value="Auto Background Stop" onclick="changeBackgroundSpeed('stop')"><br>
+    <input type="button" value="Stop Background" onclick="changeBackgroundSpeed('stop')"><br>
 
     <input type="button" id="myButton02" value="Image Right"
         onclick="
@@ -92,7 +92,7 @@
 
     <input type="button" value="Reset Image Move" onclick="resetImageMove()"><br>
 
-    <div class="speed-display">Speed: <div id="displayBackgroundSpeed">...</div></div><br>
+    <div class="speed-display">Background Speed:<div id="displayBackgroundSpeed">...</div>px/s</div><br>
 
     <img id="borzoi2" style="position:relative; width:100px; height:100px; top:0px; left:0px;" src="borzoi2.jpg">
 </body>
