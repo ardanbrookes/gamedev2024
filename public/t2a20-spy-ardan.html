@@ -1,0 +1,103 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="css-ardan.css">
+    
+    <style>
+    body{
+        background-color: #1d1e20;
+        color: whitesmoke;
+        font-family: verdana;
+        text-align: center;
+        position: relative;
+        text-decoration: none;
+    }
+    div {
+        border: 2px rgb(119, 119, 119) solid;
+        border-radius: 10px;
+        width: fit-content;
+        margin: auto;
+        background: rgb(227, 228, 230);
+        color: black;
+    }
+</style>
+</head>
+<body>
+<h1 align=center>t2a20 spy ardan</h1>
+<div>
+    <h2>Partial Substitution Cipher</h2>
+<textarea id="myArea01" rows=4 cols=70>Hello how are you</textarea><br> 
+
+
+<input type=button value="encrypt" onclick="{
+   let myTemp = ''
+   myString = document.getElementById('myArea01').value.toLowerCase().split('')
+   for (let myLoop=0;   myLoop < myString.length; myLoop++){
+      myTemp = myString[myLoop]
+      if (myString[myLoop] == 'e') {myTemp  = 'f'} 
+      if (myString[myLoop] == 'h') {myTemp  = 'i'}
+      if (myString[myLoop] == 'f') {myTemp  = 'h'} 
+      if (myString[myLoop] == 'i') {myTemp  = 'e'} 
+      myString[myLoop] = myTemp
+   }
+   document.getElementById('myArea02').value = myString.join('')
+}"><br>
+
+
+
+<textarea id="myArea02" rows=4 cols=70></textarea><br> 
+
+<input type=button value="decrypt" onclick="{
+   for (let myLoop=0;   myLoop < myString.length; myLoop++){
+      myTemp = myString[myLoop]
+      if (myString[myLoop] == 'f') {myTemp  = 'e'} 
+      if (myString[myLoop] == 'i') {myTemp  = 'h'}
+      if (myString[myLoop] == 'h') {myTemp  = 'f'} 
+      if (myString[myLoop] == 'e') {myTemp  = 'i'} 
+      myString[myLoop] = myTemp
+   }
+   document.getElementById('myArea03').value = myString.join('')
+}"><br>
+
+
+<textarea id="myArea03" rows=4 cols=70></textarea>
+</div>
+<div>
+    <h2>Partial Substitution Cipher</h2>
+<textarea id="myArea01" rows=4 cols=70>Hello how are you</textarea><br> 
+
+
+<input type=button value="encrypt" onclick="{
+   let myTemp = ''
+   myString = document.getElementById('myArea01').value.toLowerCase().split('')
+   for (let myLoop=0;   myLoop < myString.length; myLoop++){
+      myTemp = myString[myLoop]
+      if (myString[myLoop] == 'e') {myTemp  = 'f'} 
+      if (myString[myLoop] == 'h') {myTemp  = 'i'}
+      if (myString[myLoop] == 'f') {myTemp  = 'h'} 
+      if (myString[myLoop] == 'i') {myTemp  = 'e'} 
+      myString[myLoop] = myTemp
+   }
+   document.getElementById('myArea02').value = myString.join('')
+}"><br>
+
+
+
+<textarea id="myArea02" rows=4 cols=70></textarea><br> 
+
+<input type=button value="decrypt" onclick="{
+   for (let myLoop=0;   myLoop < myString.length; myLoop++){
+      myTemp = myString[myLoop]
+      if (myString[myLoop] == 'f') {myTemp  = 'e'} 
+      if (myString[myLoop] == 'i') {myTemp  = 'h'}
+      if (myString[myLoop] == 'h') {myTemp  = 'f'} 
+      if (myString[myLoop] == 'e') {myTemp  = 'i'} 
+      myString[myLoop] = myTemp
+   }
+   document.getElementById('myArea03').value = myString.join('')
+}"><br>
+
+
+<textarea id="myArea03" rows=4 cols=70></textarea>
+</div>
+</body>
+</html>

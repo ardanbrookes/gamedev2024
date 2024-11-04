@@ -26,6 +26,7 @@
                 myClock01 = setInterval(function () {
                     document.getElementById('myButton01').click();
                 }, mySpeed01);
+                document.getElementById('displayBackgroundSpeed').innerHTML = parseFloat(5000 / mySpeed01).toFixed(2);
                 console.log('myspeed ', mySpeed01)
             }
             if (speed === 'slower') {
@@ -34,13 +35,15 @@
                 myClock01 = setInterval(function () {
                     document.getElementById('myButton01').click();
                 }, mySpeed01);
+                document.getElementById('displayBackgroundSpeed').innerHTML = parseFloat(5000 / mySpeed01).toFixed(2);
                 console.log('myspeed ', mySpeed01)
             }
             if (speed === 'stop') {
                 clearInterval(myClock01);
+                document.getElementById('displayBackgroundSpeed').innerHTML = 0;
                 console.log('myspeed ', mySpeed01)
             }
-            document.getElementById('displayBackgroundSpeed').innerHTML = parseFloat(5000 / mySpeed01).toFixed(2);
+
         }
     </script>
     <style>
