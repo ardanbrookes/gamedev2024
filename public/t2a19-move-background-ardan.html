@@ -7,17 +7,44 @@
         let myClock01;
         let myClock02;
         let mySpeed01 = 30;
-        function autoImageMoveRight() {
+        let imageVelocity = 0;
+        const gravity = 0.6;
+        const jumpStrength = -9;
+
+        function autoImageFall() {
             clearInterval(myClock02);
+            imageVelocity = 0; // Reset initial velocity
+            document.getElementById('borzoi2').style.top = '0px'; // Ensure initial position is set
+
             myClock02 = setInterval(function () {
-                document.getElementById('myButton02').click();
-            }, 30);
+                let image = document.getElementById('borzoi2');
+                let currentTop = parseFloat(image.style.top) || 0;
+
+                // Update position and apply gravity
+                imageVelocity += gravity;
+                currentTop += imageVelocity;
+
+                // Reset if it reaches a certain point, e.g., "ground"
+                if (currentTop >= 600) {
+                    currentTop = 600; // Example ground level
+                    imageVelocity = 0;
+                }
+
+                image.style.top = currentTop + 'px';
+            }, 25);
         }
+
+        function imageJump() {
+            imageVelocity = jumpStrength;
+        }
+
         function resetImageMove() {
             document.getElementById('borzoi2').style.left = '0px';
             document.getElementById('borzoi2').style.top = '0px';
             clearInterval(myClock02);
+            imageVelocity = 0;
         }
+
         function changeBackgroundSpeed(speed) {
             clearInterval(myClock01)
             if (speed === 'faster') {
@@ -27,7 +54,6 @@
                     document.getElementById('myButton01').click();
                 }, mySpeed01);
                 document.getElementById('displayBackgroundSpeed').innerHTML = parseFloat(5000 / mySpeed01).toFixed(2);
-                console.log('myspeed ', mySpeed01)
             }
             if (speed === 'slower') {
                 mySpeed01 = mySpeed01 * 2;
@@ -36,16 +62,14 @@
                     document.getElementById('myButton01').click();
                 }, mySpeed01);
                 document.getElementById('displayBackgroundSpeed').innerHTML = parseFloat(5000 / mySpeed01).toFixed(2);
-                console.log('myspeed ', mySpeed01)
             }
             if (speed === 'stop') {
                 clearInterval(myClock01);
                 mySpeed01 = 200;
                 document.getElementById('displayBackgroundSpeed').innerHTML = 0;
-                console.log('myspeed ', mySpeed01)
             }
-
         }
+
     </script>
     <style>
         body {
@@ -79,21 +103,14 @@
         myGlobalX -= 5;
         myTemp = myGlobalX + 'px 0px';
         document.getElementById('myBody').style.backgroundPosition = myTemp;
-
     ">
 
     <input type="button" value="Auto Background Left Faster" onclick="changeBackgroundSpeed('faster')">
-
     <input type="button" value="Auto Background Left Slower" onclick="changeBackgroundSpeed('slower')">
-
     <input type="button" value="Stop Background" onclick="changeBackgroundSpeed('stop')"><br>
 
-    <input type="button" id="myButton02" value="Image Right"
-        onclick="
-        document.getElementById('borzoi2').style.left = parseInt(document.getElementById('borzoi2').style.left) + 10 + 'px';">
-
-    <input type="button" value="Auto Image Move Right" onclick="autoImageMoveRight()">
-
+    <input type="button" id="myButton02" value="Jump" onclick="imageJump()">
+    <input type="button" value="Start Image Fall" onclick="autoImageFall()">
     <input type="button" value="Reset Image Move" onclick="resetImageMove()"><br>
 
     <div class="speed-display">Background Speed:<div id="displayBackgroundSpeed">...</div>px/s</div><br>
