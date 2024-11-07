@@ -1,0 +1,164 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="css-ardan.css">
+    <script>
+        // Global variables
+        let myCanvas, myContext;
+        let lineFromX = 30, lineFromY = 200, lineToX = 30, lineToY = 200;
+        let lineWidth = 1, lineColor = '#000000';  // Default width and color
+        const lines = [];  // Array to store drawn lines
+
+        window.onload = () => {
+            myCanvas = document.getElementById('myCoolTag');
+            myContext = myCanvas.getContext('2d');
+        };
+
+        function updateLineCoordinates(type, value) {
+            if (type === 'fromX') lineFromX = value;
+            else if (type === 'fromY') lineFromY = value;
+            else if (type === 'toX') lineToX = value;
+            else if (type === 'toY') lineToY = value;
+            else if (type === 'width') lineWidth = value;
+            else if (type === 'color') lineColor = value;
+
+            document.getElementById(type + 'Value').innerText = value;
+            drawPreviewLine();  // Draw preview when updating range
+        }
+
+        function drawLineTo() {
+            // Store the finalized line in the lines array with its width and color
+            lines.push({ fromX: lineFromX, fromY: lineFromY, toX: lineToX, toY: lineToY, width: lineWidth, color: lineColor });
+
+            // Draw the new line directly on the canvas without clearing it
+            myContext.beginPath();
+            myContext.lineWidth = 1;
+            myContext.strokeStyle = 'gray';
+            myContext.moveTo(lineFromX, lineFromY);
+            myContext.lineTo(lineToX, lineToY);
+            myContext.stroke();
+        }
+
+        function drawPreviewLine() {
+            // Redraw all stored lines first, and then draw the preview line on top
+            redrawCanvas();
+
+            // Draw the preview line in a temporary color
+            myContext.beginPath();
+            myContext.lineWidth = lineWidth;
+            myContext.strokeStyle = 'rgba(0, 0, 0, 0.3)'; // Light preview color
+            myContext.moveTo(lineFromX, lineFromY);
+            myContext.lineTo(lineToX, lineToY);
+            myContext.stroke();
+        }
+
+        function drawFractal(x = 400, y = 500, length = 150, angle = -Math.PI / 2, depth = 8) {
+            if (depth === 0) return;  // Base case to end recursion
+
+            const endX = x + length * Math.cos(angle);
+            const endY = y + length * Math.sin(angle);
+
+            // Draw the current branch
+            myContext.beginPath();
+            myContext.lineWidth = depth;
+            myContext.strokeStyle = `hsl(${depth * 20}, 100%, 50%)`;  // Color varies by depth
+            myContext.moveTo(x, y);
+            myContext.lineTo(endX, endY);
+            myContext.stroke();
+
+            // Recursive calls to draw two smaller branches
+            drawFractal(endX, endY, length * 0.709, angle - Math.PI / 4, depth - 1);  // Right branch
+            drawFractal(endX, endY, length * 0.709, angle + Math.PI / 4, depth - 1);  // Left branch
+        }
+
+        function redrawCanvas() {
+            // Clear the canvas
+            myContext.clearRect(0, 0, myCanvas.width, myCanvas.height);
+
+            // Redraw all stored lines with their specified width and color
+            for (const line of lines) {
+                myContext.beginPath();
+                myContext.lineWidth = line.width;
+                myContext.strokeStyle = line.color;
+                myContext.moveTo(line.fromX, line.fromY);
+                myContext.lineTo(line.toX, line.toY);
+                myContext.stroke();
+            }
+        }
+
+        function drawArc() {
+            myContext.beginPath();
+            myContext.lineWidth = 10;
+            myContext.strokeStyle = 'green';
+            myContext.arc(95, 50, 40, 0, 2 * Math.PI);
+            myContext.stroke();
+        }
+
+        function drawRotatedText() {
+            myContext.font = '20px Arial';
+            myContext.fillText('Hello World', 400, 100);
+            myContext.translate(400, 100);  
+            myContext.rotate(60 * Math.PI / 180);
+            myContext.fillText('Hello World', 10, 10);
+            myContext.resetTransform();
+        }
+
+        function drawQuadraticCurve() {
+            myContext.beginPath();
+            myContext.moveTo(300, 100);
+            myContext.quadraticCurveTo(100, 220, 240, 110);
+            myContext.stroke();
+        }
+
+        function drawGradient() {
+            let myGradient = myContext.createLinearGradient(100, 300, 200, 400);
+            myGradient.addColorStop(0, 'red');
+            myGradient.addColorStop(0.5, 'blue');
+            myGradient.addColorStop(1, 'yellow');
+
+            myContext.fillStyle = myGradient;
+            myContext.fillRect(100, 300, 200, 400);
+
+            myContext.fillStyle = 'black'; // Reset fillStyle
+        }
+
+        function clearRectangle() {
+            myContext.clearRect(20, 20, 50, 50);
+        }
+
+        function clearAll() {
+            myContext.clearRect(0, 0, myCanvas.width, myCanvas.height);
+            lines.length = 0;  // Clear stored lines
+        }
+    </script>
+</head>
+
+<body>
+    <h2 align=center>t2a08-canvas by Fred</h2>
+    Use the sliders to change line coordinates and draw lines <br><br>
+
+    <label>Line From X: <input type="range" min="0" max="800" value="30" oninput="updateLineCoordinates('fromX', this.value)">
+    <span id="fromXValue">30</span></label>
+    <label>Line To X: <input type="range" min="0" max="800" value="30" oninput="updateLineCoordinates('toX', this.value)">
+    <span id="toXValue">30</span></label><br>
+    <label>Line From Y: <input type="range" min="0" max="500" value="200" oninput="updateLineCoordinates('fromY', this.value)">
+    <span id="fromYValue">200</span></label>
+    <label>Line To Y: <input type="range" min="0" max="500" value="200" oninput="updateLineCoordinates('toY', this.value)">
+    <span id="toYValue">200</span></label><br>
+
+    <label>Line Width: <input type="number" value="1" oninput="updateLineCoordinates('width', this.value)"></label>
+    <label>Line Color: <input type="color" value="#000000" oninput="updateLineCoordinates('color', this.value)"></label>
+    <input type="button" value="Draw Line" onclick="drawLineTo()"><br>
+
+    <input type="button" value="Draw Fractal" onclick="drawFractal()"><br>
+
+    <input type="button" value="Draw Arc" onclick="drawArc()">
+    <input type="button" value="Draw Rotated Text" onclick="drawRotatedText()">
+    <input type="button" value="Draw Quadratic Curve" onclick="drawQuadraticCurve()">
+    <input type="button" value="Draw Gradient" onclick="drawGradient()"><br><br>
+
+    <input type="button" value="Clear Rect (20, 20, 50, 50)" onclick="clearRectangle()">
+    <input type="button" value="Clear All" onclick="clearAll()"><br><br>
+
+    <canvas id="myCoolTag" width="800" height="500" style="border:1px solid #000000; background-color: white;"></canvas>
+</body>
+</html>
