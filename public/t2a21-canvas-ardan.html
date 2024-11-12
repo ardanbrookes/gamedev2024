@@ -1,9 +1,10 @@
+<!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="css-ardan.css">
     <script>
         // Global variables
-        let myCanvas, myContext;
+        let myCanvas, myContext, fractalCanvas, fractalContext, previewCanvas, previewContext;
         let lineFromX = 30, lineFromY = 200, lineToX = 30, lineToY = 200;
         let lineWidth = 1, lineColor = '#000000';  // Default width and color
         const lines = [];  // Array to store drawn lines
@@ -11,6 +12,18 @@
         window.onload = () => {
             myCanvas = document.getElementById('myCoolTag');
             myContext = myCanvas.getContext('2d');
+
+            // Off-screen canvas for fractals
+            fractalCanvas = document.createElement('canvas');
+            fractalCanvas.width = myCanvas.width;
+            fractalCanvas.height = myCanvas.height;
+            fractalContext = fractalCanvas.getContext('2d');
+
+            // Off-screen canvas for line preview
+            previewCanvas = document.createElement('canvas');
+            previewCanvas.width = myCanvas.width;
+            previewCanvas.height = myCanvas.height;
+            previewContext = previewCanvas.getContext('2d');
         };
 
         function updateLineCoordinates(type, value) {
@@ -26,55 +39,67 @@
         }
 
         function drawLineTo() {
-            // Store the finalized line in the lines array with its width and color
             lines.push({ fromX: lineFromX, fromY: lineFromY, toX: lineToX, toY: lineToY, width: lineWidth, color: lineColor });
 
-            // Draw the new line directly on the canvas without clearing it
             myContext.beginPath();
-            myContext.lineWidth = 1;
-            myContext.strokeStyle = 'gray';
+            myContext.lineWidth = lineWidth;
+            myContext.strokeStyle = lineColor;
             myContext.moveTo(lineFromX, lineFromY);
             myContext.lineTo(lineToX, lineToY);
             myContext.stroke();
         }
 
         function drawPreviewLine() {
-            // Redraw all stored lines first, and then draw the preview line on top
-            redrawCanvas();
+            // Clear the preview canvas only
+            previewContext.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
 
-            // Draw the preview line in a temporary color
-            myContext.beginPath();
-            myContext.lineWidth = lineWidth;
-            myContext.strokeStyle = 'rgba(0, 0, 0, 0.3)'; // Light preview color
-            myContext.moveTo(lineFromX, lineFromY);
-            myContext.lineTo(lineToX, lineToY);
-            myContext.stroke();
-        }
+            // Draw the preview line
+            previewContext.beginPath();
+            previewContext.lineWidth = lineWidth;
+            previewContext.strokeStyle = 'rgba(0, 0, 0, 0.3)'; // Light preview color
+            previewContext.moveTo(lineFromX, lineFromY);
+            previewContext.lineTo(lineToX, lineToY);
+            previewContext.stroke();
 
-        function drawFractal(x = 400, y = 500, length = 150, angle = -Math.PI / 2, depth = 8) {
-            if (depth === 0) return;  // Base case to end recursion
-
-            const endX = x + length * Math.cos(angle);
-            const endY = y + length * Math.sin(angle);
-
-            // Draw the current branch
-            myContext.beginPath();
-            myContext.lineWidth = depth;
-            myContext.strokeStyle = `hsl(${depth * 20}, 100%, 50%)`;  // Color varies by depth
-            myContext.moveTo(x, y);
-            myContext.lineTo(endX, endY);
-            myContext.stroke();
-
-            // Recursive calls to draw two smaller branches
-            drawFractal(endX, endY, length * 0.709, angle - Math.PI / 4, depth - 1);  // Right branch
-            drawFractal(endX, endY, length * 0.709, angle + Math.PI / 4, depth - 1);  // Left branch
-        }
-
-        function redrawCanvas() {
-            // Clear the canvas
+            // Clear the main canvas and redraw all elements, then overlay preview
             myContext.clearRect(0, 0, myCanvas.width, myCanvas.height);
+            myContext.drawImage(fractalCanvas, 0, 0);  // Draw fractal layer
+            redrawLines();  // Redraw lines
+            myContext.drawImage(previewCanvas, 0, 0);  // Overlay the preview
+        }
 
-            // Redraw all stored lines with their specified width and color
+        function drawFractal(x = 400, y = 500, length = 150, angle = -Math.PI / 2, depth = null) {
+            depth = depth ?? parseInt(document.getElementById('fractalDepth').value);
+
+            // Clear the fractal canvas layer only
+            fractalContext.clearRect(0, 0, fractalCanvas.width, fractalCanvas.height);
+
+            function drawFractalRecursive(x, y, length, angle, depth) {
+                if (depth === 0) return;
+
+                const endX = x + length * Math.cos(angle);
+                const endY = y + length * Math.sin(angle);
+
+                fractalContext.beginPath();
+                fractalContext.lineWidth = (depth / 2);
+                fractalContext.strokeStyle = `hsl(${depth * 20}, 100%, 50%)`;  // Color varies by depth
+                fractalContext.moveTo(x, y);
+                fractalContext.lineTo(endX, endY);
+                fractalContext.stroke();
+
+                drawFractalRecursive(endX, endY, length * 0.709, angle - Math.PI / 4, depth - 1);  // Right branch
+                drawFractalRecursive(endX, endY, length * 0.709, angle + Math.PI / 4, depth - 1);  // Left branch
+            }
+
+            drawFractalRecursive(x, y, length, angle, depth);
+
+            myContext.clearRect(0, 0, myCanvas.width, myCanvas.height);  // Clear main canvas
+            myContext.drawImage(fractalCanvas, 0, 0);  // Draw fractal layer
+            redrawLines();  // Redraw lines to keep them on top
+        }
+
+        function redrawLines() {
+            // Redraw all stored lines
             for (const line of lines) {
                 myContext.beginPath();
                 myContext.lineWidth = line.width;
@@ -117,8 +142,6 @@
 
             myContext.fillStyle = myGradient;
             myContext.fillRect(100, 300, 200, 400);
-
-            myContext.fillStyle = 'black'; // Reset fillStyle
         }
 
         function clearRectangle() {
@@ -127,7 +150,9 @@
 
         function clearAll() {
             myContext.clearRect(0, 0, myCanvas.width, myCanvas.height);
-            lines.length = 0;  // Clear stored lines
+            fractalContext.clearRect(0, 0, fractalCanvas.width, fractalCanvas.height);
+            previewContext.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+            lines.length = 0;
         }
     </script>
 </head>
@@ -149,14 +174,14 @@
     <label>Line Color: <input type="color" value="#000000" oninput="updateLineCoordinates('color', this.value)"></label>
     <input type="button" value="Draw Line" onclick="drawLineTo()"><br>
 
+    <label>Fractal Depth: <input type="number" value="12" min="8" max="20" id="fractalDepth"></label>
     <input type="button" value="Draw Fractal" onclick="drawFractal()"><br>
 
     <input type="button" value="Draw Arc" onclick="drawArc()">
     <input type="button" value="Draw Rotated Text" onclick="drawRotatedText()">
     <input type="button" value="Draw Quadratic Curve" onclick="drawQuadraticCurve()">
-    <input type="button" value="Draw Gradient" onclick="drawGradient()"><br><br>
-
-    <input type="button" value="Clear Rect (20, 20, 50, 50)" onclick="clearRectangle()">
+    <input type="button" value="Draw Gradient" onclick="drawGradient()">
+    <input type="button" value="Clear Rect (20, 20, 50, 50)" onclick="clearRectangle()"><br>
     <input type="button" value="Clear All" onclick="clearAll()"><br><br>
 
     <canvas id="myCoolTag" width="800" height="500" style="border:1px solid #000000; background-color: white;"></canvas>

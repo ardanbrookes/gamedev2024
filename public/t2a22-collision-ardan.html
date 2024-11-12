@@ -1,0 +1,220 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="css-ardan.css">
+    <script>
+        function myHitOther(my1, my2) {
+            // Retrieve element properties for my1
+            let top1 = parseInt(document.getElementById(my1).style.top);
+            let left1 = parseInt(document.getElementById(my1).style.left);
+            let right1 = left1 + parseInt(document.getElementById(my1).style.width);
+            let bottom1 = top1 + parseInt(document.getElementById(my1).style.height);
+
+            // Retrieve element properties for my2
+            let top2 = parseInt(document.getElementById(my2).style.top);
+            let left2 = parseInt(document.getElementById(my2).style.left);
+            let right2 = left2 + parseInt(document.getElementById(my2).style.width);
+            let bottom2 = top2 + parseInt(document.getElementById(my2).style.height);
+
+            // Check for collision
+            return (
+                bottom1 >= top2 &&
+                top1 <= bottom2 &&
+                right1 >= left2 &&
+                left1 <= right2
+            );
+        }
+
+        function myCheckHit() {
+            if (myHitOther('myImg1', 'myImg2')) {
+                alert('You lose');
+                // Reset or reposition 'myImg1' if needed
+                document.getElementById('myImg1').style.left = '28px';
+                // Add additional if statements or functionality here
+            }
+        }
+    </script>
+    <script>
+        // Global variables
+        let myClock02;
+
+        window.addEventListener('keydown', function (event) {
+            clearInterval(myClock02);  // Stop any ongoing interval before starting a new one
+
+            if (event.key === 'ArrowUp') {
+                myClock02 = setInterval(function () {
+                    document.getElementById('myButtonUp').click();
+                }, 30);  // Activate click every 30 ms (milliseconds)
+            }
+            if (event.key === 'ArrowLeft') {
+                myClock02 = setInterval(function () {
+                    document.getElementById('myButtonLeft').click();
+                }, 30);  // Activate click every 30 ms (milliseconds)
+            }
+            if (event.key === 'ArrowDown') {
+                myClock02 = setInterval(function () {
+                    document.getElementById('myButtonDown').click();
+                }, 30);  // Activate click every 30 ms (milliseconds)
+            }
+            if (event.key === 'ArrowRight') {
+                myClock02 = setInterval(function () {
+                    document.getElementById('myButtonRight').click();
+                }, 30);  // Activate click every 30 ms (milliseconds)
+            }
+            if (event.key === ' ') {  // Stop movement when space is pressed
+                document.getElementById('myStopMovement').click();
+            }
+            if (event.key === 'Backspace') {  // Stop movement when backspace is pressed
+                clearInterval(myClock02);
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <h1 align="center">t2a22 collision Ardan</h1>
+
+    <table style="border: 1px solid white; margin: auto;">
+        <tr>
+            <td>
+                <input type="button" id="myButtonUpLeft" value="Up-Left" onclick="{
+                    document.getElementById('my1').style.left = parseInt(document.getElementById('my1').style.left) - 7 + 'px';
+                    document.getElementById('my1').style.top = parseInt(document.getElementById('my1').style.top) - 7 + 'px';
+                }">
+            </td>
+            <td>
+                <input type="button" id="myButtonUp" value="Up" onclick="{
+                    document.getElementById('my1').style.top = parseInt(document.getElementById('my1').style.top) - 10 + 'px';
+                }">
+            </td>
+            <td>
+                <input type="button" id="myButtonUpRight" value="Up-Right" onclick="{
+                    document.getElementById('my1').style.left = parseInt(document.getElementById('my1').style.left) + 7 + 'px';
+                    document.getElementById('my1').style.top = parseInt(document.getElementById('my1').style.top) - 7 + 'px';
+                }">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" id="myButtonLeft" value="Left" onclick="{
+                    document.getElementById('my1').style.left = parseInt(document.getElementById('my1').style.left) - 10 + 'px';
+                }">
+            </td>
+            <td>
+                <input type="button" id="myResetMovement" value="reset movement" onclick="{
+                    document.getElementById('my1').style.left = '0px';
+                    document.getElementById('my1').style.top = '0px';
+                    clearInterval(myClock02);
+                }">
+            </td>
+            <td>
+                <input type="button" id="myButtonRight" value="Right" onclick="{
+                    document.getElementById('my1').style.left = parseInt(document.getElementById('my1').style.left) + 10 + 'px';
+                }">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" id="myButtonDownLeft" value="Down-Left" onclick="{
+                    document.getElementById('my1').style.left = parseInt(document.getElementById('my1').style.left) - 7 + 'px';
+                    document.getElementById('my1').style.top = parseInt(document.getElementById('my1').style.top) + 7 + 'px';
+                }">
+            </td>
+            <td>
+                <input type="button" id="myButtonDown" value="Down" onclick="{
+                    document.getElementById('my1').style.top = parseInt(document.getElementById('my1').style.top) + 10 + 'px';
+                }">
+            </td>
+            <td>
+                <input type="button" id="myButtonDownRight" value="Down-Right" onclick="{
+                    document.getElementById('my1').style.left = parseInt(document.getElementById('my1').style.left) + 7 + 'px';
+                    document.getElementById('my1').style.top = parseInt(document.getElementById('my1').style.top) + 7 + 'px';
+                }">
+            </td>
+        </tr>
+    </table>
+    <br>
+
+    <table style="border: 1px solid white; margin: auto;">
+        <tr>
+            <td>
+                <input type="button" value="Auto Move Up Left" onclick="{
+                    clearInterval(myClock02);
+                    myClock02 = setInterval(function(){ 
+                        document.getElementById('myButtonUpLeft').click(); 
+                    }, 30);  // Activate click every 30 ms (milliseconds)
+                }">
+            </td>
+            <td>
+                <input type="button" value="Auto Move Up" onclick="{
+                    clearInterval(myClock02);
+                    myClock02 = setInterval(function(){ 
+                        document.getElementById('myButtonUp').click(); 
+                    }, 30);  // Activate click every 30 ms (milliseconds)
+                }">
+            </td>
+            <td>
+                <input type="button" value="Auto Move Up Right" onclick="{
+                    clearInterval(myClock02);
+                    myClock02 = setInterval(function(){ 
+                        document.getElementById('myButtonUpRight').click(); 
+                    }, 30);  // Activate click every 30 ms (milliseconds)
+                }">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" value="Auto Move Left" onclick="{
+                    clearInterval(myClock02);
+                    myClock02 = setInterval(function(){ 
+                        document.getElementById('myButtonLeft').click(); 
+                    }, 30);  // Activate click every 30 ms (milliseconds)
+                }">
+            </td>
+            <td>
+                <input type="button" id="myStopMovement" value="stop movement" onclick="{
+                    clearInterval(myClock02);
+                }">
+            </td>
+            <td>
+                <input type="button" value="Auto Move Right" onclick="{
+                    clearInterval(myClock02);
+                    myClock02 = setInterval(function(){ 
+                        document.getElementById('myButtonRight').click(); 
+                    }, 30);  // Activate click every 30 ms (milliseconds)
+                }">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" value="Auto Move Down Left" onclick="{
+                    clearInterval(myClock02);
+                    myClock02 = setInterval(function(){ 
+                        document.getElementById('myButtonDownLeft').click(); 
+                    }, 30);  // Activate click every 30 ms (milliseconds)
+                }">
+            </td>
+            <td>
+                <input type="button" value="Auto Move Down" onclick="{ 
+                    clearInterval(myClock02);
+                    myClock02 = setInterval(function(){ 
+                        document.getElementById('myButtonDown').click(); 
+                    }, 30);  // Activate click every 30 ms (milliseconds)
+                }">
+            </td>
+            <td>
+                <input type="button" value="Auto Move Down Right" onclick="{
+                    clearInterval(myClock02);
+                    myClock02 = setInterval(function(){ 
+                        document.getElementById('myButtonDownRight').click(); 
+                    }, 30);  // Activate click every 30 ms (milliseconds)
+                }">
+            </td>
+        </tr>
+    </table>
+
+    <img id="my1" style="position:absolute; width:100px; height:100px; top:500px; left:500px;" src="borzoi-overview.jpg">
+    <img id="my2" style="position:absolute; width:100px; height:100px; top:0px; left:0px;" src="evil_borzoi.jpg">
+</body>
+
+</html>
