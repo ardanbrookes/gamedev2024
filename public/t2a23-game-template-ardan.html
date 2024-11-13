@@ -1,0 +1,123 @@
+<body id="myBody" style="background-repeat: repeat; background-size: 80%;" background="moneyTree.jpg" onkeydown="
+  {
+    let myKey = event.key;
+    document.getElementById('myDiv01').innerHTML = myKey;
+    
+    if (myKey == 'w') {
+      clearInterval(myInterval);
+      myInterval = setInterval(function() {
+        document.getElementById('myImg01').style.top = parseInt(document.getElementById('myImg01').style.top) - 3 + 'px';
+        myCheckHit();
+      }, 20);
+    }
+    if (myKey == 's') {
+      clearInterval(myInterval);
+      myInterval = setInterval(function() {
+        document.getElementById('myImg01').style.top = parseInt(document.getElementById('myImg01').style.top) + 3 + 'px';
+        myCheckHit();
+      }, 20);
+    }
+    if (myKey == 'd') {
+      clearInterval(myInterval);
+      myInterval = setInterval(function() {
+        document.getElementById('myImg01').style.left = parseInt(document.getElementById('myImg01').style.left) + 3 + 'px';
+        myCheckHit();
+      }, 20);
+    }
+    if (myKey == 'a') {
+      clearInterval(myInterval);
+      myInterval = setInterval(function() {
+        document.getElementById('myImg01').style.left = parseInt(document.getElementById('myImg01').style.left) - 3 + 'px';
+        myCheckHit();
+      }, 20);
+    }
+    
+  }">
+
+  <h1 align="center">t4a01 Game Template with WASD by Fred</h1>
+  <br><br><br><br>
+
+  <script>
+    // Global variables
+    let myGlobalX = 0;
+    let myClock;
+    let myInterval = 0;
+    let myImg02Interval;
+
+    // Global functions
+    function myHitOther(my1, my2) {
+      let left1 = parseInt(document.getElementById(my1).style.left);
+      let right1 = left1 + parseInt(document.getElementById(my1).style.width);
+      let top1 = parseInt(document.getElementById(my1).style.top);
+      let bottom1 = top1 + parseInt(document.getElementById(my1).style.height);
+
+      let left2 = parseInt(document.getElementById(my2).style.left);
+      let right2 = left2 + parseInt(document.getElementById(my2).style.width);
+      let top2 = parseInt(document.getElementById(my2).style.top);
+      let bottom2 = top2 + parseInt(document.getElementById(my2).style.height);
+
+      if ((right1 >= left2) && (bottom1 >= top2) && (left1 <= right2) && (top1 <= bottom2)) {
+        return true;
+      }
+      return false;
+    }
+
+    function myCheckHit() {
+      if (myHitOther('myImg01', 'myImg02')) {
+        alert('You lose');
+        document.getElementById('myImg01').style.left = '20px';
+        location = 'https://www.google.com';  // Go to your next level
+      }
+    }
+
+    function moveImg02TowardImg01() {
+      let img1 = document.getElementById('myImg01');
+      let img2 = document.getElementById('myImg02');
+
+      let x1 = parseInt(img1.style.left);
+      let y1 = parseInt(img1.style.top);
+      let x2 = parseInt(img2.style.left);
+      let y2 = parseInt(img2.style.top);
+
+      let dx = x1 - x2;
+      let dy = y1 - y2;
+      let distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance > 1) {  // If img02 is not overlapping with img01
+        img2.style.left = x2 + (dx / distance) * 1 + 'px';  // Move at one-third the speed
+        img2.style.top = y2 + (dy / distance) * 1 + 'px';
+      }
+    }
+
+    // Start moving myImg02 toward myImg01
+    myImg02Interval = setInterval(moveImg02TowardImg01, 60);
+
+  </script>
+
+  <img id="myImg01" style="position: absolute; width: 100px; height: 100px; top: 500px; left: 500px;" src="jensenHuang.jpg">
+  <img id="myImg02" style="position: absolute; width: 100px; height: 100px; top: 0px; left: 0px;" src="bezos.png">
+
+  <input type="button" value="Auto Background Left" onclick="
+    {
+      clearInterval(myClock);
+      let myTemp = '100px 0px';
+      myClock = setInterval(function() {
+        myGlobalX -= 5;
+        myTemp = myGlobalX + 'px 0px';
+        document.getElementById('myBody').style.backgroundPosition = myTemp;
+      }, 100);
+    }"
+  >
+
+  <input type="button" value="Image Right Fast Button" 
+    onTouchStart="{ this.click(); event.preventDefault(); }" 
+    onclick="
+    {
+      document.getElementById('myImg01').style.left = parseInt(document.getElementById('myImg01').style.left) + 10 + 'px';
+      myCheckHit();
+    }"
+  >
+  <br><br>
+
+  <div id="myDiv01" style="color: red;">..</div>
+</body>

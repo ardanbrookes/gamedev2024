@@ -1,87 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rubik's Cube</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<body id="myBody" style="background-repeat:repeat; background-size: 80%" background="myBackground01.jpg" onkeydown="{
 
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #282c34;
-        }
+    let myKey = event.key
+    //  let myKey = String.toLowerCase(event.key)
+    document.getElementById('myDiv01').innerHTML = myKey
+    if (myKey == 'd') {
+ 
+ 
+      // either uncomment
+       clearInterval(myInterval)
+       myInterval = setInterval(function(){
+          document.getElementById('myImg01').style.left = parseInt(document.getElementById('myImg01').style.left) + 3
+          myCheckHit()
+       } ,20)
+    }
+ 
+ 
+ 
+ }">
 
-        #cube {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            transform-style: preserve-3d;
-            transition: transform 0.5s;
-        }
+    <h1 align=center>t4a01-game-template-with-wasd-by-fred</h1>
+    <br><br><br><br>
 
-        .face {
-            position: absolute;
-            width: 66.66px; /* 200px / 3 */
-            height: 66.66px; /* 200px / 3 */
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid #ccc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-            font-weight: bold;
-            opacity: 0.8;
-            transition: background 0.3s;
-        }
-
-        .front  { transform: translateZ(100px); }
-        .back   { transform: rotateY(180deg) translateZ(100px); }
-        .left   { transform: rotateY(-90deg) translateZ(100px); }
-        .right  { transform: rotateY(90deg) translateZ(100px); }
-        .top    { transform: rotateX(90deg) translateZ(100px); }
-        .bottom { transform: rotateX(-90deg) translateZ(100px); }
-
-        /* Positioning for the Rubik's Cube layout */
-        .face:nth-child(1) { background-color: red; }
-        .face:nth-child(2) { background-color: green; }
-        .face:nth-child(3) { background-color: blue; }
-        .face:nth-child(4) { background-color: yellow; }
-        .face:nth-child(5) { background-color: white; }
-        .face:nth-child(6) { background-color: orange; }
-
-        /* Highlight effect on hover */
-        .face:hover {
-            opacity: 1;
-            box-shadow: 0 0 10px #fff;
-        }
-    </style>
-</head>
-<body>
-    <div id="cube">
-        <div class="face front">F</div>
-        <div class="face back">B</div>
-        <div class="face left">L</div>
-        <div class="face right">R</div>
-        <div class="face top">U</div>
-        <div class="face bottom">D</div>
-    </div>
     <script>
-        const cube = document.getElementById('cube');
-        let isRotated = false;
 
-        // Click to rotate the cube 90 degrees
-        cube.addEventListener('click', () => {
-            isRotated = !isRotated;
-            cube.style.transform = isRotated ? 'rotateY(90deg)' : 'rotateY(0deg)';
-        });
+        // global variables here
+        let myGlobalX = 0
+        let myClock
+        let myInterval = 0;
+
+        // global functions here
+        function myHitOther(my1, my2) {
+            left1 = parseInt(document.getElementById(my1).style.left)
+            right1 = left1 + parseInt(document.getElementById(my1).style.width)
+            top1 = parseInt(document.getElementById(my1).style.top)
+            bottom1 = top1 + parseInt(document.getElementById(my1).style.height)
+            left2 = parseInt(document.getElementById(my2).style.left)
+            right2 = left2 + parseInt(document.getElementById(my2).style.width)
+            top2 = parseInt(document.getElementById(my2).style.top)
+            bottom2 = top2 + parseInt(document.getElementById(my2).style.height)
+            if ((right1 >= left2) &&
+                (bottom1 >= top2) &&
+                (left1 <= right2) &&
+                (top1 <= bottom2)) {
+                return true
+            }
+        }
+
+
+        function myCheckHit() {
+            if (myHitOther('myImg01', 'myImg02')) {
+                alert('you lose')
+                document.getElementById('myImg01').style.left = '20px'
+                location = 'www.google.com'  // go to your next level
+            }
+
+
+            // more if statements here like the above
+
+
+
+        }  // end of myCheckHit()
+
+
     </script>
-</body>
-</html>
+
+    <img id="myImg01" style="position:absolute; width:100px; height:80px; top:0px; left:50px;" src="myImage01.jpg">
+    <img id="myImg02" style="position:absolute; width:100px; height:80px; top:0px; left:250px;" src="myImage02.jpg">
+
+    <input type=button value="Auto Background Left" onclick="{
+   clearInterval(myClock)
+   let myTemp = '100px 0px'
+   myClock = setInterval(function(){
+       myGlobalX -= 5
+       myTemp =  myGlobalX + 'px 0px'
+       document.getElementById('myBody').style.backgroundPosition = myTemp
+   }, 100)
+     
+ }">
+
+
+    <input type=button value="Image Right Fast Button" onTouchStart="{this.click(); event.preventDefault();}" onclick="{
+   document.getElementById('myImg01').style.left = parseInt(document.getElementById('myImg01').style.left) + 10 + 'px'
+   myCheckHit()     // checks for all collisions
+ }"><br><br>
+
+
+    <div id="myDiv01" style="color:yellow">..</div>
