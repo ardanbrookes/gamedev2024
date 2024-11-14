@@ -6,28 +6,28 @@
     if (myKey == 'w') {
       clearInterval(myInterval);
       myInterval = setInterval(function() {
-        document.getElementById('myImg01').style.top = parseInt(document.getElementById('myImg01').style.top) - 3 + 'px';
+        document.getElementById('myImg01').style.top = parseInt(document.getElementById('myImg01').style.top) - 4 + 'px';
         myCheckHit();
       }, 20);
     }
     if (myKey == 's') {
       clearInterval(myInterval);
       myInterval = setInterval(function() {
-        document.getElementById('myImg01').style.top = parseInt(document.getElementById('myImg01').style.top) + 3 + 'px';
+        document.getElementById('myImg01').style.top = parseInt(document.getElementById('myImg01').style.top) + 4 + 'px';
         myCheckHit();
       }, 20);
     }
     if (myKey == 'd') {
       clearInterval(myInterval);
       myInterval = setInterval(function() {
-        document.getElementById('myImg01').style.left = parseInt(document.getElementById('myImg01').style.left) + 3 + 'px';
+        document.getElementById('myImg01').style.left = parseInt(document.getElementById('myImg01').style.left) + 4 + 'px';
         myCheckHit();
       }, 20);
     }
     if (myKey == 'a') {
       clearInterval(myInterval);
       myInterval = setInterval(function() {
-        document.getElementById('myImg01').style.left = parseInt(document.getElementById('myImg01').style.left) - 3 + 'px';
+        document.getElementById('myImg01').style.left = parseInt(document.getElementById('myImg01').style.left) - 4 + 'px';
         myCheckHit();
       }, 20);
     }
@@ -64,15 +64,20 @@
 
     function myCheckHit() {
       if (myHitOther('myImg01', 'myImg02')) {
-        alert('You lose');
         document.getElementById('myImg01').style.left = '20px';
-        location = 'https://www.google.com';  // Go to your next level
+        location = 'index.html';  // Go to your next level
       }
     }
 
     function moveImg02TowardImg01() {
       let img1 = document.getElementById('myImg01');
       let img2 = document.getElementById('myImg02');
+
+      // Ensure initial positions are set as pixels
+      if (!img1.style.left) img1.style.left = '500px';
+      if (!img1.style.top) img1.style.top = '500px';
+      if (!img2.style.left) img2.style.left = '0px';
+      if (!img2.style.top) img2.style.top = '0px';
 
       let x1 = parseInt(img1.style.left);
       let y1 = parseInt(img1.style.top);
@@ -84,17 +89,18 @@
       let distance = Math.sqrt(dx * dx + dy * dy);
 
       if (distance > 1) {  // If img02 is not overlapping with img01
-        img2.style.left = x2 + (dx / distance) * 1 + 'px';  // Move at one-third the speed
-        img2.style.top = y2 + (dy / distance) * 1 + 'px';
+        img2.style.left = x2 + (dx / distance) * 2 + 'px';  // Move at one-third the speed
+        img2.style.top = y2 + (dy / distance) * 2 + 'px';
       }
     }
 
     // Start moving myImg02 toward myImg01
-    myImg02Interval = setInterval(moveImg02TowardImg01, 60);
+    myImg02Interval = setInterval(moveImg02TowardImg01, 20);
 
   </script>
 
-  <img id="myImg01" style="position: absolute; width: 100px; height: 100px; top: 500px; left: 500px;" src="jensenHuang.jpg">
+  <img id="myImg01" style="position: absolute; width: 100px; height: 100px; top: 500px; left: 500px;"
+    src="jensenHuang.jpg">
   <img id="myImg02" style="position: absolute; width: 100px; height: 100px; top: 0px; left: 0px;" src="bezos.png">
 
   <input type="button" value="Auto Background Left" onclick="
@@ -106,17 +112,13 @@
         myTemp = myGlobalX + 'px 0px';
         document.getElementById('myBody').style.backgroundPosition = myTemp;
       }, 100);
-    }"
-  >
+    }">
 
-  <input type="button" value="Image Right Fast Button" 
-    onTouchStart="{ this.click(); event.preventDefault(); }" 
-    onclick="
+  <input type="button" value="Image Right Fast Button" onTouchStart="{ this.click(); event.preventDefault(); }" onclick="
     {
       document.getElementById('myImg01').style.left = parseInt(document.getElementById('myImg01').style.left) + 10 + 'px';
       myCheckHit();
-    }"
-  >
+    }">
   <br><br>
 
   <div id="myDiv01" style="color: red;">..</div>
