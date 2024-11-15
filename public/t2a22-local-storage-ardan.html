@@ -1,0 +1,45 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="css-ardan.css">
+</head>
+
+<body onload="initializeStorage()" onunload="storeText()">
+
+    <h2>Local Storage Example</h2>
+
+    <p>Enter text to store:</p>
+    <input type="text" id="myTextInput" size="50" placeholder="Write here to store"><br>
+
+    <input type="button" value="Store Text" onclick="storeText()">
+    <input type="button" value="Retrieve Text" onclick="retrieveText()">
+
+    <h3>Stored Text:</h3>
+    <textarea id="myTextOutput" rows="4" cols="50" readonly></textarea><br><br>
+
+    <div id="displayMessage" style="margin-top: 10px; font-weight: bold;"></div>
+
+    <script>
+        function initializeStorage() {
+            const myStorage = localStorage.getItem('myStoredText');
+            if (myStorage !== null) {
+                document.getElementById('myTextInput').value = myStorage;
+            }
+        }
+
+        function storeText() {
+            const myStorage = localStorage.getItem('myStoredText');
+            const text = document.getElementById('myTextInput').value;
+            localStorage.setItem('myStoredText', text);
+            document.getElementById('displayMessage').innerText = `${myStorage} has been stored.`;
+        }
+
+        function retrieveText() {
+            const myStorage = localStorage.getItem('myStoredText');
+            document.getElementById('myTextOutput').value = myStorage;
+            document.getElementById('displayMessage').innerText = `Retrieved text: "${myStorage}"`;
+        }
+    </script>
+</body>
+
+</html>
