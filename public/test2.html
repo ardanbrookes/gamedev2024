@@ -1,164 +1,196 @@
+<!DOCTYPE html>
+<html>
+
 <head>
-    <style>
-        canvas {
-            border: 1px solid #333;
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-    <canvas id="canvas"></canvas>
-    <p id="order-display">Order of Hilbert Curve: 1</p>
-    <button class="btn" onclick="prev()">Previous</button>
-    <button class="btn" onclick="redraw()">Redraw</button>
-    <button class="btn" onclick="next()">Next</button>
-
+    <link rel="stylesheet" type="text/css" href="css-ardan.css">
     <script>
-        let screen_width = window.innerWidth, screen_height = window.innerHeight;
-        let fps = 24;
-        let canvas = document.getElementById("canvas");
-        let context = canvas.getContext("2d");
-        let order_display = document.getElementById("order-display");
+        // Global variables
+        let myCanvas, myContext, fractalCanvas, fractalContext, previewCanvas, previewContext;
+        let lineFromX = 30, lineFromY = 200, lineToX = 30, lineToY = 200;
+        let lineWidth = 1, lineColor = '#000000';  // Default width and color
+        const lines = [];  // Array to store drawn lines
 
-        // Parameters for Hilbert curve
-        let order, num_points, counter, speed, res, translate, hue_start;
+        window.onload = () => {
+            myCanvas = document.getElementById('myCoolTag');
+            myContext = myCanvas.getContext('2d');
 
-        // Set initial canvas size
-        let canvas_width = 0.45 * screen_width;
-        let canvas_height = canvas_width;
-        canvas.width = canvas_width;
-        canvas.height = canvas_height;
+            // Off-screen canvas for fractals
+            fractalCanvas = document.createElement('canvas');
+            fractalCanvas.width = myCanvas.width;
+            fractalCanvas.height = myCanvas.height;
+            fractalContext = fractalCanvas.getContext('2d');
 
-        // Animation setup
-        let animate = window.requestAnimationFrame
-            || window.webkitRequestAnimationFrame
-            || window.mozRequestAnimationFrame
-            || function(callback) {
-                window.setTimeout(callback, 1000 / fps);
-            };
-
-        window.onload = function() {
-            initParams();
-            animate(step);
+            // Off-screen canvas for line preview
+            previewCanvas = document.createElement('canvas');
+            previewCanvas.width = myCanvas.width;
+            previewCanvas.height = myCanvas.height;
+            previewContext = previewCanvas.getContext('2d');
         };
 
-        window.onresize = function() {
-            screen_width = window.innerWidth;
-            screen_height = window.innerHeight;
-            canvas_width = 0.45 * screen_width;
-            canvas_height = canvas_width;
-            canvas.width = canvas_width;
-            canvas.height = canvas_height;
-            redraw();
-        };
 
-        function step() {
-            update();
-            render();
-            animate(step);
+        function updateLineCoordinates(type, value) {
+            if (type === 'fromX') lineFromX = value;
+            else if (type === 'fromY') lineFromY = value;
+            else if (type === 'toX') lineToX = value;
+            else if (type === 'toY') lineToY = value;
+            else if (type === 'width') lineWidth = value;
+            else if (type === 'color') lineColor = value;
+
+            document.getElementById(type + 'Value').innerText = value;
+            drawPreviewLine();  // Draw preview when updating range
         }
 
-        function prev() {
-            order = Math.max(1, order - 1);
-            order_display.innerText = `Order of Hilbert Curve: ${order}`;
-            initialise();
+        function drawLineTo() {
+            lines.push({ fromX: lineFromX, fromY: lineFromY, toX: lineToX, toY: lineToY, width: lineWidth, color: lineColor });
+
+            myContext.beginPath();
+            myContext.lineWidth = lineWidth;
+            myContext.strokeStyle = lineColor;
+            myContext.moveTo(lineFromX, lineFromY);
+            myContext.lineTo(lineToX, lineToY);
+            myContext.stroke();
         }
 
-        function next() {
-            order++;
-            order_display.innerText = `Order of Hilbert Curve: ${order}`;
-            initialise();
+        function drawPreviewLine() {
+            // Clear the preview canvas only
+            previewContext.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+
+            // Draw the preview line
+            previewContext.beginPath();
+            previewContext.lineWidth = lineWidth;
+            previewContext.strokeStyle = 'rgba(0, 0, 0, 0.3)'; // Light preview color
+            previewContext.moveTo(lineFromX, lineFromY);
+            previewContext.lineTo(lineToX, lineToY);
+            previewContext.stroke();
+
+            // Clear the main canvas and redraw all elements, then overlay preview
+            myContext.clearRect(0, 0, myCanvas.width, myCanvas.height);
+            myContext.drawImage(fractalCanvas, 0, 0);  // Draw fractal layer
+            redrawLines();  // Redraw lines
+            myContext.drawImage(previewCanvas, 0, 0);  // Overlay the preview
         }
 
-        function redraw() {
-            initialise();
-        }
+        function drawFractal(x = 400, y = 500, length = 150, angle = -Math.PI / 2, depth = null) {
+            depth = depth ?? parseInt(document.getElementById('fractalDepth').value);
 
-        // Hilbert curve functions
-        function update() {}
+            // Clear the fractal canvas layer only
+            fractalContext.clearRect(0, 0, fractalCanvas.width, fractalCanvas.height);
 
-        function render() {
-            let point1, point2, hue;
-            for (let i = 0; i < speed && counter < num_points; i++, counter++) {
-                hue = hue_start + (counter * 255) / num_points;
-                if (hue > 255) {
-                    hue_start -= 255;
-                }
-                point1 = getPoint(counter - 1);
-                point2 = getPoint(counter);
-                context.strokeStyle = `hsl(${hue}, 50%, 50%)`;
-                context.beginPath();
-                context.moveTo(point1.x, point1.y);
-                context.lineTo(point2.x, point2.y);
-                context.stroke();
-            }
-        }
+            function drawFractalRecursive(x, y, length, angle, depth) {
+                if (depth === 0) return;
 
-        function getPoint(index) {
-            let vector;
-            let primary_index = index & 3;
-            switch (primary_index) {
-                case 0: vector = { x: 0, y: 0 }; break;
-                case 1: vector = { x: 0, y: 1 }; break;
-                case 2: vector = { x: 1, y: 1 }; break;
-                case 3: vector = { x: 1, y: 0 }; break;
-            }
+                const endX = x + length * Math.cos(angle);
+                const endY = y + length * Math.sin(angle);
 
-            let temp, secondary_index, shift;
-            for (let iteration = 1; iteration < order; iteration++) {
-                index = index >> 2;
-                secondary_index = index & 3;
-                shift = Math.pow(2, iteration);
-                switch (secondary_index) {
-                    case 0:
-                        temp = vector.x;
-                        vector.x = vector.y;
-                        vector.y = temp;
-                        break;
-                    case 1:
-                        vector.y += shift;
-                        break;
-                    case 2:
-                        vector.x += shift;
-                        vector.y += shift;
-                        break;
-                    case 3:
-                        temp = shift - 1 - vector.x;
-                        vector.x = shift - 1 - vector.y;
-                        vector.y = temp;
-                        vector.x += shift;
-                        break;
-                }
+                fractalContext.beginPath();
+                fractalContext.lineWidth = (depth / 2);
+                fractalContext.strokeStyle = `hsl(${depth * 20}, 100%, 50%)`;
+                fractalContext.moveTo(x, y);
+                fractalContext.lineTo(endX, endY);
+                fractalContext.stroke();
+
+                drawFractalRecursive(endX, endY, length * 0.709, angle - Math.PI / 4, depth - 1);  // Right branch
+                drawFractalRecursive(endX, endY, length * 0.709, angle + Math.PI / 4, depth - 1);  // Left branch
             }
 
-            vector.x *= res;
-            vector.x += translate;
-            vector.y *= res;
-            vector.y += translate;
-            return vector;
+            drawFractalRecursive(x, y, length, angle, depth);
+
+            myContext.clearRect(0, 0, myCanvas.width, myCanvas.height);  // Clear main canvas
+            myContext.drawImage(fractalCanvas, 0, 0);  // Draw fractal layer
+            redrawLines();  // Redraw lines to keep them on top
         }
 
-        function initParams() {
-            order = 6;
-            initialise();
+        function redrawLines() {
+            lines.forEach(line => {
+                myContext.beginPath();
+                myContext.lineWidth = line.width;
+                myContext.strokeStyle = line.color;
+                myContext.moveTo(line.fromX, line.fromY);
+                myContext.lineTo(line.toX, line.toY);
+                myContext.stroke();
+            });
         }
 
-        function initialise() {
-            res = canvas_width / Math.pow(2, order);
-            num_points = Math.pow(4, order);
-            translate = res / 2;
-            hue_start = Math.random() * 255;
+        function drawArc() {
+            myContext.beginPath();
+            myContext.lineWidth = 10;
+            myContext.strokeStyle = 'green';
+            myContext.arc(95, 50, 40, 0, 2 * Math.PI);
+            myContext.stroke();
+        }
 
-            if (order <= 4) speed = Math.pow(2, order);
-            else if (order <= 8) speed = Math.pow(2, order + 1);
-            else if (order <= 12) speed = Math.pow(2, order + 2);
-            else if (order <= 16) speed = Math.pow(2, order + 3);
+        function drawRotatedText() {
+            myContext.font = '20px Arial';
+            myContext.fillText('Hello World', 400, 100);
+            myContext.translate(400, 100);
+            myContext.rotate(60 * Math.PI / 180);
+            myContext.fillText('Hello World', 10, 10);
+            myContext.resetTransform();
+        }
 
-            counter = 1;
-            context.fillStyle = "#000000";
-            context.fillRect(0, 0, canvas_width, canvas_height);
-            order_display.innerHTML = `Order of Hilbert Curve: ${order}`;
+        function drawQuadraticCurve() {
+            myContext.beginPath();
+            myContext.moveTo(300, 100);
+            myContext.quadraticCurveTo(100, 220, 240, 110);
+            myContext.stroke();
+        }
+
+        function drawGradient() {
+            let myGradient = myContext.createLinearGradient(100, 300, 200, 400);
+            myGradient.addColorStop(0, 'red');
+            myGradient.addColorStop(0.5, 'blue');
+            myGradient.addColorStop(1, 'yellow');
+
+            myContext.fillStyle = myGradient;
+            myContext.fillRect(100, 300, 200, 400);
+        }
+
+        function clearRectangle() {
+            myContext.clearRect(20, 20, 50, 50);
+        }
+
+        function clearAll() {
+            myContext.clearRect(0, 0, myCanvas.width, myCanvas.height);
+            fractalContext.clearRect(0, 0, fractalCanvas.width, fractalCanvas.height);
+            previewContext.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+            lines.length = 0;
         }
     </script>
+</head>
+
+<body>
+    <h2 align=center>t2a08-canvas by Fred</h2>
+    Use the sliders to change line coordinates and draw lines <br><br>
+
+    <label>Line From X: <input type="range" min="0" max="800" value="30"
+            oninput="updateLineCoordinates('fromX', this.value)">
+        <span id="fromXValue">30</span></label>
+    <label>Line To X: <input type="range" min="0" max="800" value="30"
+            oninput="updateLineCoordinates('toX', this.value)">
+        <span id="toXValue">30</span></label><br>
+    <label>Line From Y: <input type="range" min="0" max="500" value="200"
+            oninput="updateLineCoordinates('fromY', this.value)">
+        <span id="fromYValue">200</span></label>
+    <label>Line To Y: <input type="range" min="0" max="500" value="200"
+            oninput="updateLineCoordinates('toY', this.value)">
+        <span id="toYValue">200</span></label><br>
+
+    <label>Line Width: <input type="number" value="1" oninput="updateLineCoordinates('width', this.value)"></label>
+    <label>Line Color: <input type="color" value="#000000" oninput="updateLineCoordinates('color', this.value)"></label>
+    <input type="button" value="Draw Line" onclick="drawLineTo()"><br>
+
+    <label>Fractal Depth: <input type="number" value="12" min="8" max="20" id="fractalDepth"></label>
+    <input type="button" value="Draw Fractal" onclick="drawFractal()">
+    <input type="button" value="Draw Hilbert Curve" onclick="drawHilbert()"><br>
+
+    <input type="button" value="Draw Arc" onclick="drawArc()">
+    <input type="button" value="Draw Rotated Text" onclick="drawRotatedText()">
+    <input type="button" value="Draw Quadratic Curve" onclick="drawQuadraticCurve()">
+    <input type="button" value="Draw Gradient" onclick="drawGradient()">
+    <input type="button" value="Clear Rect (20, 20, 50, 50)" onclick="clearRectangle()"><br>
+    <input type="button" value="Clear All" onclick="clearAll()"><br><br>
+
+    <canvas id="myCoolTag" width="800" height="500" style="border:1px solid #000000; background-color: white;"></canvas>
 </body>
+
 </html>
