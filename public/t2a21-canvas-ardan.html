@@ -25,6 +25,9 @@
             previewCanvas.width = myCanvas.width;
             previewCanvas.height = myCanvas.height;
             previewContext = previewCanvas.getContext('2d');
+
+            initParams();
+            animate(step);
         };
 
 
@@ -223,10 +226,7 @@
                 window.setTimeout(callback, 1000 / fps);
             };
 
-        window.onload = function() {
-            initParams();
-            animate(step);
-        };
+
 
         window.onresize = function() {
             screen_width = window.innerWidth;
