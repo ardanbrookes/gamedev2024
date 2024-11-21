@@ -144,7 +144,7 @@
         <input type="button" value="11 window.localStorage" onclick="myObjectData(window.localStorage)">
         <input type="button" value="13 myText1" onclick="myObjectData(document.forms.myForm2.myText1)">
         <input type="button" value="14 myText2" onclick="myObjectData(document.getElementById('myText2'))">
-        <input type="button" value="15 " onclick="{myObjectData(document.getElementById('myText2'))}">
+        <input type="button" value="15 " onclick="{myObjectData(document.getElementById('video'))}">
         <input type="button" value="16" onclick="{myObjectData()}">
         <input type="button" value="17" onclick="{myObjectData()}">
         <input type="button" value="18" onclick="{myObjectData()}">
@@ -154,10 +154,7 @@
         <textarea name="myTextarea" rows="20" cols="70" wrap></textarea>
     </form>
 
-    <p>
-        At the bottom of every page make sure you include the following button:
-    </p>
-    <input type="button" value="Back" style="font-size:25px" onclick="window.history.back()"><br><br>
+    <iframe width="560" height="315" id="video" name="video" src="https://www.youtube.com/embed/xopvkx6CpNs?si=nOOZUS62rtc2_IYM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </body>
 
 </html>

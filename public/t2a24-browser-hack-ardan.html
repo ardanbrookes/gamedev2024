@@ -1,9 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:v="urn:schemas-microsoft-com:vml">
+
 <head>
     <title>Browser Hack</title>
     <style>
-        v\:* { BEHAVIOR: url(#default#VML) }
+        v\:* {
+            BEHAVIOR: url(#default#VML)
+        }
+
+        table {
+            border: 1px solid black;
+        }
+
+        td {
+            border: 1px solid black;
+            width: 100px;
+            height: 100px;
+        }
     </style>
     <script>
         document.name = "myDocument";
@@ -69,21 +82,24 @@
             window.status = "Please Wait";
             document.myForm.myText1.value = "";
             document.myForm.myTextarea.value = "";
-            var myLoop = 0;
+            let myLoop = 0;
 
-            for (var prop in myObject) {
+            const objectName = myObject.name || myObject.constructor?.name || "UnnamedObject";
+
+            for (const prop in myObject) {
                 myLoop++;
                 document.myForm.myTextarea.value +=
-                    myObject.name + "." + prop + "=" + myObject[prop] + "\n";
+                    objectName + "." + prop + "=" + myObject[prop] + "\n";
                 if (myLoop % 3 === 1) {
                     window.status += ".";
                 }
             }
-            document.myForm.myText1.value = this.parent.name + "." + myObject.name;
+            document.myForm.myText1.value = this.parent.name + "." + objectName;
             window.status += "Loaded ";
             sorttext();
             window.status += "Sorted.";
         }
+
 
         document.counter = 0;
 
@@ -98,6 +114,7 @@
         }
     </script>
 </head>
+
 <body bgcolor="#81F7F3">
     <h3>Instructions</h3>
     <p>
@@ -107,9 +124,8 @@
         Objects will not work until a real instance of the object is on the web page!
     </p>
 
-    <img id="move1" style="position:absolute; left:600px; top:560px;" 
-         src="https://pbs.twimg.com/media/FxElMFTWABAtHJb?format=jpg&name=large" 
-         width="400" height="200">
+    <img id="move1" style="position:absolute; left:600px; top:560px;"
+        src="https://pbs.twimg.com/media/FxElMFTWABAtHJb?format=jpg&name=large" width="400" height="200">
 
     <form name="myForm2">
         <textarea name="myTextarea">wow</textarea>
@@ -119,39 +135,55 @@
     <h3>Click the buttons to see all usable properties and methods of the object. Click refresh to reset Browser</h3>
     <form name="myForm">
         <bgsound id="myFred3" src="">
-        <input type="text" name="myText1" size="50" value=""><br>
-        
-        <input type="button" value="1 window" onclick="{myObjectData(window)}">
-        <input type="button" value="2 document" onclick="{myObjectData(document)}">
-        <input type="button" value="3 document.myForm2" onclick="{myObjectData(document.myForm2)}">
-        <input type="button" value="4 document.myForm2.myTextarea" onclick="{myObjectData(document.myForm2.myTextarea)}">
-        <input type="button" value="5 window.location" onclick="{myObjectData(window.location)}">
-        <input type="button" value="6 window.parent" onclick="{myObjectData(window.parent)}">
-        <input type="button" value="7 window.chrome" onclick="{myObjectData(window.chrome)}">
-        <input type="button" value="8 document.all.move1.style" onclick="{myObjectData(document.all.move1.style)}">
-        <input type="button" value="9 style" onclick="{myObjectData(style)}">
-        <input type="button" value="10 document.all.move1" onclick="{myObjectData(document.all.move1)}">
-        <input type="button" value="11 window.localStorage" onclick="{myObjectData(window.localStorage)}">
-        <input type="button" value="12 move1" 
-            onclick="{myObjectData(document.getElementById('move1').style)}">
-        <input type="button" id="my10" value="13 myText1" 
-            onclick="{myObjectData(document.myForm2.myText1)}">
-        <input type="button" value="14 myText2" 
-            onclick="{myObjectData(document.getElementById('myText2'))}">
-        <input type="button" value="15 " 
-            onclick="{myObjectData(document.getElementById('myText2'))}">
-        <input type="button" value="16" onclick="{myObjectData()}">
-        <input type="button" value="17" onclick="{myObjectData()}">
-        <input type="button" value="18" onclick="{myObjectData()}">
-        <input type="button" value="19" onclick="{myObjectData()}">
-        <input type="button" value="20" onclick="{myObjectData()}"><br>
+            <input type="text" name="myText1" size="50" value=""><br>
 
-        <textarea name="myTextarea" rows="20" cols="70" wrap></textarea>
+            <input type="button" value="1 window" onclick="{myObjectData(window)}">
+            <input type="button" value="2 document" onclick="{myObjectData(document)}">
+            <input type="button" value="3 document.myForm2" onclick="{myObjectData(document.myForm2)}">
+            <input type="button" value="4 document.myForm2.myTextarea"
+                onclick="{myObjectData(document.myForm2.myTextarea)}">
+            <input type="button" value="5 window.location" onclick="{myObjectData(window.location)}">
+            <input type="button" value="6 window.parent" onclick="{myObjectData(window.parent)}">
+            <input type="button" value="7 window.chrome" onclick="{myObjectData(window.chrome)}">
+            <input type="button" value="8 document.all.move1.style" onclick="{myObjectData(document.all.move1.style)}">
+            <input type="button" value="9 style" onclick="{myObjectData(style)}">
+            <input type="button" value="10 document.all.move1" onclick="{myObjectData(document.all.move1)}">
+            <input type="button" value="11 window.localStorage" onclick="{myObjectData(window.localStorage)}">
+            <input type="button" value="12 move1" onclick="{myObjectData(document.getElementById('move1').style)}">
+            <input type="button" id="my10" value="13 myText1" onclick="{myObjectData(document.myForm2.myText1)}">
+            <input type="button" value="14 myText2" onclick="{myObjectData(document.getElementById('myText2'))}">
+            <input type="button" value="15 video iframe" onclick="{myObjectData(document.getElementById('video'))}">
+            <input type="button" value="16 table" onclick="{myObjectData(document.getElementById('table'))}">
+            <input type="button" value="17 table cell Collection" onclick="{myObjectData(document.getElementsByClassName('tableData'))}">
+            <input type="button" value="18 table cell" onclick="{myObjectData(document.getElementById('td'))}">
+            <input type="button" value="19 list" onclick="{myObjectData(document.getElementById('list'))}">
+            <input type="button" value="20 list element" onclick="{myObjectData(document.getElementById('list element 1'))}"><br>
+
+            <textarea name="myTextarea" rows="20" cols="70" wrap></textarea>
     </form>
+    <iframe width="560" height="315" id="video" name="video"
+        src="https://www.youtube.com/embed/xopvkx6CpNs?si=nOOZUS62rtc2_IYM" title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <table id="table" name="table1">
+        <tr>
+            <td class="tableData" id="td">
+            </td>
+            <td class="tableData">
+            </td>
+        </tr>
+        <tr>
+            <td class="tableData">
+            </td>
+            <td class="tableData">
+            </td>
+        </tr>
+    </table>
+    <ul id="list" name="list">
+        <li id="list element 1" name="list element 1">1 atuff</li>
+        <li id="list element 1" name="list element 1">2 stuff</li>
+    </ul>
 
-    <p>
-        At the bottom of every page make sure you include the following button:
-    </p>
-    <input type="button" value="Back" style="font-size:25px" onclick="{window.history.back()}"><br><br>
 </body>
+
 </html>
