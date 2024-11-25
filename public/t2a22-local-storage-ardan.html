@@ -10,34 +10,84 @@
 
     <p>Enter text to store:</p>
     <input type="text" id="myTextInput" size="50" placeholder="Write here to store"><br>
-
     <input type="button" value="Store Text" onclick="storeText()">
-    <input type="button" value="Retrieve Text" onclick="retrieveText()">
+    <input type="button" value="Retrieve Text" onclick="retrieveText()"><br>
+    
+    <p>Enter file to store:</p>
+    <input type="file" id="myFileInput" style="background-color: rgb(195, 173, 214); color: black;"><br>
+    <input type="button" value="Store File" onclick="storeFile()">
+    <input type="button" value="Retrieve File" onclick="retrieveFile()"><br>
 
-    <h3>Stored Text:</h3>
+    <p>Enter array items to store, comma seperated:</p>
+    <input type="text" id="arrayInput" size="50"><br>
+    <input type="button" value="Store Array" onclick="storeArray()">
+    <input type="button" value="Retrieve Array" onclick="retrieveArray()">
+
+    <h3>Output:</h3>
     <textarea id="myTextOutput" rows="4" cols="50" readonly></textarea><br><br>
-
     <div id="displayMessage" style="margin-top: 10px; font-weight: bold;"></div>
 
     <script>
         function initializeStorage() {
-            const myStorage = localStorage.getItem('myStoredText');
-            if (myStorage !== null) {
-                document.getElementById('myTextInput').value = myStorage;
+            const myStoredText = localStorage.getItem('myStoredText');
+            if (myStoredText !== null) {
+                document.getElementById('myTextInput').value = myStoredText;
             }
         }
 
         function storeText() {
-            const myStorage = localStorage.getItem('myStoredText');
             const text = document.getElementById('myTextInput').value;
             localStorage.setItem('myStoredText', text);
-            document.getElementById('displayMessage').innerText = `${myStorage} has been stored.`;
+            document.getElementById('displayMessage').innerText = `Text has been stored.`;
         }
 
         function retrieveText() {
-            const myStorage = localStorage.getItem('myStoredText');
-            document.getElementById('myTextOutput').value = myStorage;
-            document.getElementById('displayMessage').innerText = `Retrieved text: "${myStorage}"`;
+            const myStoredText = localStorage.getItem('myStoredText');
+            document.getElementById('myTextOutput').value = myStoredText;
+            document.getElementById('displayMessage').innerText = `Retrieved text: "${myStoredText}"`;
+        }
+
+        function storeFile() {
+            const fileInput = document.getElementById('myFileInput');
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    localStorage.setItem('myStoredFile', event.target.result);
+                    document.getElementById('displayMessage').innerText = `File "${file.name}" has been stored.`;
+                };
+                reader.readAsText(file);
+            } else {
+                document.getElementById('displayMessage').innerText = `No file selected to store.`;
+            }
+        }
+
+        function retrieveFile() {
+            const myStoredFile = localStorage.getItem('myStoredFile');
+            if (myStoredFile !== null) {
+                document.getElementById('myTextOutput').value = myStoredFile;
+                document.getElementById('displayMessage').innerText = `Retrieved file content.`;
+            } else {
+                document.getElementById('displayMessage').innerText = `No file content found in storage.`;
+            }
+        }
+
+        function storeArray() {
+            const arrayInput = document.getElementById('arrayInput').value;
+            const array = arrayInput.split(',').map(item => item.trim());
+            localStorage.setItem('myStoredArray', JSON.stringify(array));
+            document.getElementById('displayMessage').innerText = `Array has been stored: [${array.join(', ')}]`;
+        }
+
+        function retrieveArray() {
+            const myStoredArray = localStorage.getItem('myStoredArray');
+            if (myStoredArray !== null) {
+                const array = JSON.parse(myStoredArray);
+                document.getElementById('myTextOutput').value = array.join(', ');
+                document.getElementById('displayMessage').innerText = `Retrieved array: [${array.join(', ')}]`;
+            } else {
+                document.getElementById('displayMessage').innerText = `No array found in storage.`;
+            }
         }
     </script>
 </body>
