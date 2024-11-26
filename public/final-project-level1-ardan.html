@@ -1,0 +1,70 @@
+<html lang="en">
+
+<head>
+    <title>Final Project Level 1</title>
+    <style>
+        /* Apply the background image and styles */
+        body {
+            background-image: url('background1.jpg');
+            background-repeat: repeat;
+            background-size: 80%;
+        }
+
+        /* Center align the title */
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body id="myBody">
+    <h1>Final Project Level 1</h1>
+    <br><br><br><br>
+
+    <script>
+        // Global variables
+        let myGlobalX = 0;
+        let myClock;
+
+        // Global functions
+        function myHitOther(my1, my2) {
+            let left1 = parseInt(document.getElementById(my1).style.left);
+            let right1 = left1 + parseInt(document.getElementById(my1).style.width);
+            let top1 = parseInt(document.getElementById(my1).style.top);
+            let bottom1 = top1 + parseInt(document.getElementById(my1).style.height);
+
+            let left2 = parseInt(document.getElementById(my2).style.left);
+            let right2 = left2 + parseInt(document.getElementById(my2).style.width);
+            let top2 = parseInt(document.getElementById(my2).style.top);
+            let bottom2 = top2 + parseInt(document.getElementById(my2).style.height);
+
+            return (
+                right1 >= left2 &&
+                bottom1 >= top2 &&
+                left1 <= right2 &&
+                top1 <= bottom2
+            );
+        }
+
+        function myCheckHit() {
+            if (myHitOther('myImg01', 'myImg02')) {
+                document.getElementById('myImg01').style.left = '20px';
+            }
+
+            // More if statements can be added here for additional collisions
+        }
+    </script>
+
+    <img id="myImg01" style="position: absolute; width: 100px; height: 80px; top: 0px; left: 50px;" src="dog1.jpg">
+    <img id="myImg02" style="position: absolute; width: 100px; height: 80px; top: 0px; left: 250px;" src="myImage02.jpg">
+
+    <input type="button" value="Image Right Fast Button" onTouchStart="{this.click(); event.preventDefault();}" onclick="{
+            document.getElementById('myImg01').style.left = 
+                parseInt(document.getElementById('myImg01').style.left) + 10 + 'px';
+            myCheckHit(); // Check for all collisions
+        }">
+    <br><br>
+
+</body>
+
+</html>
