@@ -3,68 +3,253 @@
 <head>
     <title>Final Project Level 1</title>
     <style>
-        /* Apply the background image and styles */
         body {
             background-image: url('background1.jpg');
             background-repeat: repeat;
             background-size: 80%;
+            margin: 0;
+            overflow: hidden;
         }
 
-        /* Center align the title */
         h1 {
             text-align: center;
+        }
+
+        img {
+            position: absolute;
         }
     </style>
 </head>
 
-<body id="myBody">
+<body>
     <h1>Final Project Level 1</h1>
-    <br><br><br><br>
+
+    <img id="myImg01" style="width: 100px; height: 80px; top: 400px; left: 50px;" src="dog1.jpg">
+    <img id="myImg02" style="width: 100px; height: 80px; top: 400px; left: 250px;" src="dog2.jpg">
 
     <script>
-        // Global variables
-        let myGlobalX = 0;
-        let myClock;
+        const myImg01 = document.getElementById('myImg01');
+        const myImg02 = document.getElementById('myImg02');
 
-        // Global functions
-        function myHitOther(my1, my2) {
-            let left1 = parseInt(document.getElementById(my1).style.left);
-            let right1 = left1 + parseInt(document.getElementById(my1).style.width);
-            let top1 = parseInt(document.getElementById(my1).style.top);
-            let bottom1 = top1 + parseInt(document.getElementById(my1).style.height);
+        // Initial positions and velocities
+        const velocity01 = { x: 0, y: 0 };
+        const velocity02 = { x: 0, y: 0 };
+        let isJumping01 = false;
+        let isJumping02 = false;
 
-            let left2 = parseInt(document.getElementById(my2).style.left);
-            let right2 = left2 + parseInt(document.getElementById(my2).style.width);
-            let top2 = parseInt(document.getElementById(my2).style.top);
-            let bottom2 = top2 + parseInt(document.getElementById(my2).style.height);
+        const keys = {
+            w: { pressed: false },
+            a: { pressed: false },
+            s: { pressed: false },
+            d: { pressed: false },
+            ArrowUp: { pressed: false },
+            ArrowLeft: { pressed: false },
+            ArrowDown: { pressed: false },
+            ArrowRight: { pressed: false },
+        };
 
+        const defaultGravity = 0.8;
+        const lessGravity = 0.5;
+        const moreGravity = 1.5;
+
+        const speed = 7;
+
+        // Function to detect collision between two rectangles
+        function checkCollision(rect1, rect2) {
             return (
-                right1 >= left2 &&
-                bottom1 >= top2 &&
-                left1 <= right2 &&
-                top1 <= bottom2
+                rect1.left < rect2.left + rect2.width &&
+                rect1.left + rect1.width > rect2.left &&
+                rect1.top < rect2.top + rect2.height &&
+                rect1.top + rect1.height > rect2.top
             );
         }
 
-        function myCheckHit() {
-            if (myHitOther('myImg01', 'myImg02')) {
-                document.getElementById('myImg01').style.left = '20px';
+        function updatePositions() {
+            const rect01 = myImg01.getBoundingClientRect();
+            const rect02 = myImg02.getBoundingClientRect();
+
+            // Adjust gravity based on keys for myImg01
+            let gravity01 = defaultGravity; // Default gravity
+            if (keys.w.pressed && !keys.s.pressed) {
+                gravity01 = lessGravity; // Less gravity when 'w' is pressed, but not 's'
+            } else if (keys.s.pressed && !keys.w.pressed) {
+                gravity01 = moreGravity; // More gravity when 's' is pressed, but not 'w'
+            } else {
+                gravity01 = defaultGravity; // Default gravity when neither or both are pressed
             }
 
-            // More if statements can be added here for additional collisions
+            // Adjust gravity based on keys for myImg02
+            let gravity02 = defaultGravity; // Default gravity
+            if (keys.ArrowUp.pressed && !keys.ArrowDown.pressed) {
+                gravity02 = lessGravity; // Less gravity when 'ArrowUp' is pressed, but not 'ArrowDown'
+            } else if (keys.ArrowDown.pressed && !keys.ArrowUp.pressed) {
+                gravity02 = moreGravity; // More gravity when 'ArrowDown' is pressed, but not 'ArrowUp'
+            } else {
+                gravity02 = defaultGravity; // Default gravity when neither or both are pressed
+            }
+
+            // Update myImg01 position
+            velocity01.y += gravity01; // Apply gravity
+            let newTop01 = rect01.top + velocity01.y;
+
+            // Prevent falling through the bottom
+            if (newTop01 >= window.innerHeight - rect01.height) {
+                velocity01.y = 0;
+                isJumping01 = false; // Reset jumping state
+                newTop01 = window.innerHeight - rect01.height;
+            }
+
+            myImg01.style.top = newTop01 + 'px';
+            myImg01.style.left = rect01.left + velocity01.x + 'px';
+
+            // Update myImg02 position
+            velocity02.y += gravity02; // Apply gravity
+            let newTop02 = rect02.top + velocity02.y;
+
+            // Prevent falling through the bottom
+            if (newTop02 >= window.innerHeight - rect02.height) {
+                velocity02.y = 0;
+                isJumping02 = false; // Reset jumping state
+                newTop02 = window.innerHeight - rect02.height;
+            }
+
+            myImg02.style.top = newTop02 + 'px';
+            myImg02.style.left = rect02.left + velocity02.x + 'px';
+
+            // Check for collision
+            if (checkCollision(rect01, rect02)) {
+                console.log('Collision detected!');
+
+                // Push objects apart to avoid overlap
+                const overlapX = Math.min(
+                    rect01.right - rect02.left,
+                    rect02.right - rect01.left
+                );
+                const overlapY = Math.min(
+                    rect01.bottom - rect02.top,
+                    rect02.bottom - rect01.top
+                );
+
+                if (overlapX < overlapY) {
+                    // Push horizontally
+                    if (rect01.left < rect02.left) {
+                        myImg01.style.left = rect01.left - overlapX + 'px';
+                    } else {
+                        myImg02.style.left = rect02.left - overlapX + 'px';
+                    }
+                } else {
+                    // Push vertically
+                    if (rect01.top < rect02.top) {
+                        myImg01.style.top = rect01.top - overlapY + 'px';
+                    } else {
+                        myImg02.style.top = rect02.top - overlapY + 'px';
+                    }
+                }
+
+                // Stop their velocities
+                velocity01.x = 0;
+                velocity01.y = 0;
+                velocity02.x = 0;
+                velocity02.y = 0;
+            }
         }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Reset velocities
+            velocity01.x = 0;
+            velocity02.x = 0;
+
+            // Movement for myImg01
+            if (keys.a.pressed) {
+                velocity01.x = -speed;
+                myImg01.style.transform = 'scaleX(1)'; // Flip when moving left
+            } else if (keys.d.pressed) {
+                velocity01.x = speed;
+                myImg01.style.transform = 'scaleX(-1)'; // Remove flip when moving right
+            }
+
+            // Movement for myImg02
+            if (keys.ArrowLeft.pressed) {
+                velocity02.x = -speed;
+                myImg02.style.transform = 'scaleX(1)'; // Flip when moving left
+            } else if (keys.ArrowRight.pressed) {
+                velocity02.x = speed;
+                myImg02.style.transform = 'scaleX(-1)'; // Remove flip when moving right
+            }
+
+            updatePositions();
+        }
+
+        animate();
+
+        window.addEventListener('keydown', (event) => {
+            switch (event.key) {
+                case 'w':
+                    if (!isJumping01) {
+                        velocity01.y = -15; // Jump velocity
+                        isJumping01 = true;
+                    }
+                    keys.w.pressed = true;
+                    break;
+                case 'a':
+                    keys.a.pressed = true;
+                    break;
+                case 's':
+                    keys.s.pressed = true;
+                    break;
+                case 'd':
+                    keys.d.pressed = true;
+                    break;
+                case 'ArrowUp':
+                    if (!isJumping02) {
+                        velocity02.y = -15; // Jump velocity
+                        isJumping02 = true;
+                    }
+                    keys.ArrowUp.pressed = true;
+                    break;
+                case 'ArrowLeft':
+                    keys.ArrowLeft.pressed = true;
+                    break;
+                case 'ArrowDown':
+                    keys.ArrowDown.pressed = true;
+                    break;
+                case 'ArrowRight':
+                    keys.ArrowRight.pressed = true;
+                    break;
+            }
+        });
+
+        window.addEventListener('keyup', (event) => {
+            switch (event.key) {
+                case 'a':
+                    keys.a.pressed = false;
+                    break;
+                case 's':
+                    keys.s.pressed = false;
+                    break;
+                case 'd':
+                    keys.d.pressed = false;
+                    break;
+                case 'w':
+                    keys.w.pressed = false;
+                    break;
+                case 'ArrowUp':
+                    keys.ArrowUp.pressed = false;
+                    break;
+                case 'ArrowLeft':
+                    keys.ArrowLeft.pressed = false;
+                    break;
+                case 'ArrowDown':
+                    keys.ArrowDown.pressed = false;
+                    break;
+                case 'ArrowRight':
+                    keys.ArrowRight.pressed = false;
+                    break;
+            }
+        });
     </script>
-
-    <img id="myImg01" style="position: absolute; width: 100px; height: 80px; top: 0px; left: 50px;" src="dog1.jpg">
-    <img id="myImg02" style="position: absolute; width: 100px; height: 80px; top: 0px; left: 250px;" src="myImage02.jpg">
-
-    <input type="button" value="Image Right Fast Button" onTouchStart="{this.click(); event.preventDefault();}" onclick="{
-            document.getElementById('myImg01').style.left = 
-                parseInt(document.getElementById('myImg01').style.left) + 10 + 'px';
-            myCheckHit(); // Check for all collisions
-        }">
-    <br><br>
-
 </body>
 
 </html>

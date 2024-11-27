@@ -7,6 +7,8 @@
             background-image: url('background1.jpg');
             background-repeat: repeat;
             background-size: 80%;
+            margin: 0;
+            overflow: hidden;
         }
 
         h1 {
@@ -21,7 +23,9 @@
 
 <body>
     <h1>Final Project Level 1</h1>
-    <br><br><br><br>
+
+    <img id="myImg01" style="width: 100px; height: 80px; top: 400px; left: 50px;" src="dog1.jpg">
+    <img id="myImg02" style="width: 100px; height: 80px; top: 400px; left: 250px;" src="dog2.jpg">
 
     <script>
         const myImg01 = document.getElementById('myImg01');
@@ -57,43 +61,73 @@
             );
         }
 
-        // Update positions of images
         function updatePositions() {
             const rect01 = myImg01.getBoundingClientRect();
             const rect02 = myImg02.getBoundingClientRect();
 
             // Update myImg01 position
             velocity01.y += gravity; // Apply gravity
-            const newTop01 = rect01.top + velocity01.y;
+            let newTop01 = rect01.top + velocity01.y;
 
             // Prevent falling through the bottom
             if (newTop01 >= window.innerHeight - rect01.height) {
                 velocity01.y = 0;
                 isJumping01 = false; // Reset jumping state
-            } else {
-                myImg01.style.top = newTop01 + 'px';
+                newTop01 = window.innerHeight - rect01.height;
             }
+
+            myImg01.style.top = newTop01 + 'px';
             myImg01.style.left = rect01.left + velocity01.x + 'px';
 
             // Update myImg02 position
             velocity02.y += gravity; // Apply gravity
-            const newTop02 = rect02.top + velocity02.y;
+            let newTop02 = rect02.top + velocity02.y;
 
             // Prevent falling through the bottom
             if (newTop02 >= window.innerHeight - rect02.height) {
                 velocity02.y = 0;
                 isJumping02 = false; // Reset jumping state
-            } else {
-                myImg02.style.top = newTop02 + 'px';
+                newTop02 = window.innerHeight - rect02.height;
             }
+
+            myImg02.style.top = newTop02 + 'px';
             myImg02.style.left = rect02.left + velocity02.x + 'px';
 
             // Check for collision
             if (checkCollision(rect01, rect02)) {
                 console.log('Collision detected!');
-                // Stop both images on collision
+
+                // Push objects apart to avoid overlap
+                const overlapX = Math.min(
+                    rect01.right - rect02.left,
+                    rect02.right - rect01.left
+                );
+                const overlapY = Math.min(
+                    rect01.bottom - rect02.top,
+                    rect02.bottom - rect01.top
+                );
+
+                if (overlapX < overlapY) {
+                    // Push horizontally
+                    if (rect01.left < rect02.left) {
+                        myImg01.style.left = rect01.left - overlapX + 'px';
+                    } else {
+                        myImg02.style.left = rect02.left - overlapX + 'px';
+                    }
+                } else {
+                    // Push vertically
+                    if (rect01.top < rect02.top) {
+                        myImg01.style.top = rect01.top - overlapY + 'px';
+                    } else {
+                        myImg02.style.top = rect02.top - overlapY + 'px';
+                    }
+                }
+
+                // Stop their velocities
                 velocity01.x = 0;
+                velocity01.y = 0;
                 velocity02.x = 0;
+                velocity02.y = 0;
             }
         }
 
@@ -163,9 +197,6 @@
             }
         });
     </script>
-
-    <img id="myImg01" style="position: absolute; width: 100px; height: 80px; top: 400px; left: 50px;" src="dog1.jpg">
-    <img id="myImg02" style="position: absolute; width: 100px; height: 80px; top: 400px; left: 250px;" src="dog2.jpg">
 </body>
 
 </html>
