@@ -154,33 +154,49 @@
             }
         }
 
+        // Acceleration and max speed constants
+        const acceleration = 0.5; // How quickly speed increases
+        const maxSpeed = 7; // Maximum speed
+        const deceleration = 0.3; // How quickly speed decreases when keys are released
+
         function animate() {
             requestAnimationFrame(animate);
 
-            // Reset velocities
-            velocity01.x = 0;
-            velocity02.x = 0;
+            // Gradual deceleration for myImg01
+            if (!keys.a.pressed && !keys.d.pressed) {
+                velocity01.x = Math.abs(velocity01.x) < deceleration
+                    ? 0
+                    : velocity01.x - Math.sign(velocity01.x) * deceleration;
+            }
+            // Gradual deceleration for myImg02
+            if (!keys.ArrowLeft.pressed && !keys.ArrowRight.pressed) {
+                velocity02.x = Math.abs(velocity02.x) < deceleration
+                    ? 0
+                    : velocity02.x - Math.sign(velocity02.x) * deceleration;
+            }
 
             // Movement for myImg01
             if (keys.a.pressed) {
-                velocity01.x = -speed;
+                velocity01.x = Math.max(velocity01.x - ((maxSpeed - Math.abs(velocity01.x)) / 10), -maxSpeed);
                 myImg01.style.transform = 'scaleX(1)'; // Flip when moving left
             } else if (keys.d.pressed) {
-                velocity01.x = speed;
+                velocity01.x = Math.min(velocity01.x + ((maxSpeed - Math.abs(velocity01.x)) / 10), maxSpeed);
                 myImg01.style.transform = 'scaleX(-1)'; // Remove flip when moving right
             }
 
+
             // Movement for myImg02
             if (keys.ArrowLeft.pressed) {
-                velocity02.x = -speed;
+                velocity02.x = Math.max(velocity02.x - acceleration, -maxSpeed);
                 myImg02.style.transform = 'scaleX(1)'; // Flip when moving left
             } else if (keys.ArrowRight.pressed) {
-                velocity02.x = speed;
+                velocity02.x = Math.min(velocity02.x + acceleration, maxSpeed);
                 myImg02.style.transform = 'scaleX(-1)'; // Remove flip when moving right
             }
 
             updatePositions();
         }
+
 
         animate();
 
