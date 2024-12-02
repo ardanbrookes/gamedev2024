@@ -60,61 +60,38 @@
         let jumpCount02 = 0; // Counts the number of jumps for myImg02
         let jumpCooldown02 = false; // Cooldown state for myImg02
 
-
         // Function to handle jumping logic
-        function handleJump(player, velocity, jumpCount, cooldownFlag) {
-            if (jumpCount < 2 && !cooldownFlag) { // Allow up to 2 jumps if not in cooldown
+        function handleJump(player, velocity, jumpCount) {
+            console.log(`Jump count before jump attempt: ${jumpCount}`);
+            if (jumpCount < 2) { // Allow up to 2 jumps
                 velocity.y = -15; // Jump velocity
                 jumpCount++;
+                console.log(`Jump performed. Jump count is now: ${jumpCount}`);
+            } else {
+                console.log("Jump not allowed (max jumps reached).");
             }
             return jumpCount;
-        }
-
-        // Function to reset jump states on landing
-        function resetJump(player, jumpCount, cooldownFlag) {
-            if (!cooldownFlag && jumpCount > 1) { // If double jump was used, apply cooldown
-                cooldownFlag = true;
-                setTimeout(() => {
-                    cooldownFlag = false; // Reset cooldown after 0.5 seconds
-                }, 500);
-            }
-            return [0, cooldownFlag]; // Reset jump count
         }
 
         function checkCollision(el1, el2) {
             const rect1 = el1.getBoundingClientRect();
             const rect2 = el2.getBoundingClientRect();
 
-            return (
+            // Check for horizontal collision (left/right overlap)
+            const horizontalCollision =
                 rect1.left < rect2.left + rect2.width &&
                 rect1.left + rect1.width > rect2.left &&
                 rect1.top < rect2.top + rect2.height &&
-                rect1.top + rect1.height > rect2.top
-            );
-        }
+                rect1.top + rect1.height > rect2.top;
 
-        function checkCollisionDirection(el1, el2) {
-            const rect1 = el1.getBoundingClientRect();
-            const rect2 = el2.getBoundingClientRect();
+            // Check for vertical collision (top/bottom overlap)
+            const verticalCollision =
+                rect1.top < rect2.top + rect2.height &&
+                rect1.top + rect1.height > rect2.top &&
+                rect1.left < rect2.left + rect2.width &&
+                rect1.left + rect1.width > rect2.left;
 
-            const dx = (rect1.left + rect1.width / 2) - (rect2.left + rect2.width / 2);
-            const dy = (rect1.top + rect1.height / 2) - (rect2.top + rect2.height / 2);
-
-            const combinedHalfWidths = rect1.width / 2 + rect2.width / 2;
-            const combinedHalfHeights = rect1.height / 2 + rect2.height / 2;
-
-            if (Math.abs(dx) < combinedHalfWidths && Math.abs(dy) < combinedHalfHeights) {
-                const overlapX = combinedHalfWidths - Math.abs(dx);
-                const overlapY = combinedHalfHeights - Math.abs(dy);
-
-                if (overlapX < overlapY) {
-                    return dx > 0 ? "left" : "right"; // Collided from left or right
-                } else {
-                    return dy > 0 ? "top" : "bottom"; // Collided from top or bottom
-                }
-            }
-
-            return null; // No collision
+            return { horizontalCollision, verticalCollision };
         }
 
         function updatePositions() {
@@ -140,7 +117,7 @@
             if (newTop01 >= window.innerHeight - rect01.height) {
                 velocity01.y = 0;
                 isJumping01 = false;
-                [jumpCount01, jumpCooldown01] = resetJump(myImg01, jumpCount01, jumpCooldown01);
+                jumpCount01 = 0; // Reset jump count
                 newTop01 = window.innerHeight - rect01.height;
             }
 
@@ -151,7 +128,7 @@
             if (newTop02 >= window.innerHeight - rect02.height) {
                 velocity02.y = 0;
                 isJumping02 = false;
-                [jumpCount02, jumpCooldown02] = resetJump(myImg02, jumpCount02, jumpCooldown02);
+                jumpCount02 = 0; // Reset jump count
                 newTop02 = window.innerHeight - rect02.height;
             }
 
@@ -165,23 +142,41 @@
             myImg02.style.left = newLeft02 + 'px';
 
             // Collision detection
-            const collisionDirection = checkCollisionDirection(myImg01, myImg02);
-            if (collisionDirection) {
-                console.log('Collision from:', collisionDirection);
+            const collision = checkCollision(myImg01, myImg02);
 
-                // Collision response based on direction
-                if (collisionDirection === "top") {
-                    velocity01.y = 0; // Stop y movement for myImg01
-                    velocity02.y = 0; // Stop y movement for myImg02
-                } else if (collisionDirection === "bottom") {
-                    velocity01.y = 0; // Stop downward movement
-                    velocity02.y = 0; // Stop downward movement
-                } else if (collisionDirection === "left" || collisionDirection === "right") {
-                    velocity01.x = 0; // Stop x movement for myImg01
-                    velocity02.x = 0; // Stop x movement for myImg02
-                }
+            if (collision.horizontalCollision) {
+                console.log('Horizontal collision detected!');
+                // Handle horizontal collision: Reverse x velocity
+                velocity01.x *= -1; // Bounce back with reduced speed
+                velocity02.x *= -1; // Bounce back with reduced speed
             }
+
+            if (collision.verticalCollision) {
+                console.log('Vertical collision detected!');
+                // Handle vertical collision: Set y velocity to 0
+                velocity01.y = -1; // Stop vertical movement
+                velocity02.y = -1; // Stop vertical movement
+            }
+
         }
+
+        function handleJump(player, velocity, jumpCount) {
+            console.log(`Jump count before jump attempt: ${jumpCount}`);
+            if (jumpCount < 2) { // Allow up to 2 jumps
+                velocity.y = -15; // Jump velocity
+                jumpCount++;
+                console.log(`Jump performed. Jump count is now: ${jumpCount}`);
+            } else {
+                console.log("Jump not allowed (max jumps reached).");
+            }
+            return jumpCount;
+        }
+
+
+        // Acceleration and max speed constants
+        const acceleration = 1; // How quickly speed increases
+        const maxSpeed = 7; // Maximum speed
+        const deceleration = 0.5; // How quickly speed decreases when keys are released
 
         function animate() {
             requestAnimationFrame(animate);
@@ -227,6 +222,7 @@
 
             updatePositions();
         }
+
 
         animate();
 
