@@ -5,5 +5,3 @@
 
 https://chatgpt.com/ chatgpt<br>
 https://rapidapi.com/collections useful apis
-
-![image](https://github.com/user-attachments/assets/782fd579-4fcc-4602-9509-848f7a7c3f61)
