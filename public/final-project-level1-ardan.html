@@ -73,25 +73,15 @@
             return jumpCount;
         }
 
-        function checkCollision(el1, el2) {
-            const rect1 = el1.getBoundingClientRect();
-            const rect2 = el2.getBoundingClientRect();
-
-            // Check for horizontal collision (left/right overlap)
-            const horizontalCollision =
+        // Function to detect collision between two rectangles
+        function checkCollision(rect1, rect2) {
+            return (
                 rect1.left < rect2.left + rect2.width &&
                 rect1.left + rect1.width > rect2.left &&
                 rect1.top < rect2.top + rect2.height &&
-                rect1.top + rect1.height > rect2.top;
-
-            // Check for vertical collision (top/bottom overlap)
-            const verticalCollision =
-                rect1.top < rect2.top + rect2.height &&
-                rect1.top + rect1.height > rect2.top &&
-                rect1.left < rect2.left + rect2.width &&
-                rect1.left + rect1.width > rect2.left;
-
-            return { horizontalCollision, verticalCollision };
+                rect1.top + rect1.height > rect2.top
+            );
+            // what to do with collision is handled in on line 134
         }
 
         function updatePositions() {
@@ -141,23 +131,46 @@
             myImg02.style.top = newTop02 + 'px';
             myImg02.style.left = newLeft02 + 'px';
 
-            // Collision detection
-            const collision = checkCollision(myImg01, myImg02);
+            // Check for collision
+            if (checkCollision(rect01, rect02)) {
+                console.log('Collision detected!');
 
-            if (collision.horizontalCollision) {
-                console.log('Horizontal collision detected!');
-                // Handle horizontal collision: Reverse x velocity
-                velocity01.x *= -1; // Bounce back with reduced speed
-                velocity02.x *= -1; // Bounce back with reduced speed
+                // Push objects apart to avoid overlap
+                const overlapX = Math.min(
+                    rect01.right - rect02.left,
+                    rect02.right - rect01.left
+                );
+                const overlapY = Math.min(
+                    rect01.bottom - rect02.top,
+                    rect02.bottom - rect01.top
+                );
+
+                if (overlapX < overlapY) {
+                    // Push horizontally
+                    if (rect01.left < rect02.left) {
+                        myImg01.style.left = rect01.left - overlapX / 2 + 'px';
+                        myImg02.style.left = rect02.left + overlapX / 2 + 'px';
+                    } else {
+                        myImg02.style.left = rect02.left - overlapX / 2 + 'px';
+                        myImg01.style.left = rect01.left + overlapX / 2 + 'px';
+                    }
+                } else {
+                    // Push vertically
+                    if (rect01.top < rect02.top) {
+                        myImg01.style.top = rect01.top - overlapY + 'px';
+                        jumpCount01 = 0;
+                    } else {
+                        myImg02.style.top = rect02.top - overlapY + 'px';
+                        jumpCount02 = 0;
+                    }
+                }
+
+                // Stop their velocities
+                velocity01.x = 0;
+                velocity01.y = -0.5;
+                velocity02.x = 0;
+                velocity02.y = -0.5;
             }
-
-            if (collision.verticalCollision) {
-                console.log('Vertical collision detected!');
-                // Handle vertical collision: Set y velocity to 0
-                velocity01.y = -1; // Stop vertical movement
-                velocity02.y = -1; // Stop vertical movement
-            }
-
         }
 
         function handleJump(player, velocity, jumpCount) {
