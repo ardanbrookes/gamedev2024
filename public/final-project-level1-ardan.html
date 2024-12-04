@@ -159,10 +159,15 @@
                     if (rect01.top < rect02.top) {
                         myImg01.style.top = rect01.top - overlapY + 'px';
                         jumpCount01 = 0;
+                        alert("Player 1 Wins (great dane)");
+                        location.reload();
                     } else {
                         myImg02.style.top = rect02.top - overlapY + 'px';
                         jumpCount02 = 0;
+                        alert("Player 2 Wins (borzoi)");
+                        location.reload();
                     }
+
                 }
 
                 // Stop their velocities
@@ -187,9 +192,9 @@
 
 
         // Acceleration and max speed constants
-        const acceleration = 1; // How quickly speed increases
-        const maxSpeed = 7; // Maximum speed
-        const deceleration = 0.5; // How quickly speed decreases when keys are released
+        const acceleration = 1.5; // How quickly speed increases
+        const maxSpeed = 8; // Maximum speed
+        const deceleration = 0.8; // How quickly speed decreases when keys are released
 
         function animate() {
             requestAnimationFrame(animate);
