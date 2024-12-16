@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Final Project Level 1</title>
+    <style>
+        body {
+            background-image: url('background1.jpg');
+            background-repeat: repeat;
+            background-size: 80%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        canvas {
+            display: block;
+            margin: auto;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Final Project Level 1</h1>
+    <canvas id="gameCanvas" width="1200" height="800"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Load images
+        const img01 = new Image();
+        const img02 = new Image();
+        img01.src = 'dog1.jpg';
+        img02.src = 'dog2.jpg';
+
+        // Player properties
+        const player1 = {
+            x: 50,
+            y: canvas.height - 80,
+            width: 100,
+            height: 80,
+            velocity: { x: 0, y: 0 },
+            isJumping: false,
+            jumpCount: 0,
+            image: img01,
+            flipped: false
+        };
+
+        const player2 = {
+            x: 1050,
+            y: canvas.height - 80,
+            width: 100,
+            height: 80,
+            velocity: { x: 0, y: 0 },
+            isJumping: false,
+            jumpCount: 0,
+            image: img02,
+            flipped: false
+        };
+
+        const keys = {
+            w: false, a: false, s: false, d: false,
+            ArrowUp: false, ArrowLeft: false, ArrowDown: false, ArrowRight: false
+        };
+
+        const gravity = 0.7;
+        const jumpStrength = -15;
+        const acceleration = 1.5;
+        const maxSpeed = 8;
+        const deceleration = 0.8;
+
+        function drawPlayer(player) {
+            if (player.flipped) {
+                ctx.save();
+                ctx.scale(-1, 1);
+                ctx.drawImage(player.image, -player.x - player.width, player.y, player.width, player.height);
+                ctx.restore();
+            } else {
+                ctx.drawImage(player.image, player.x, player.y, player.width, player.height);
+            }
+        }
+
+        function handleJump(player) {
+            if (player.jumpCount < 2) { // Allow up to 2 jumps
+                player.velocity.y = jumpStrength;
+                player.jumpCount++;
+            }
+        }
+
+        function checkCollision(p1, p2) {
+            return (
+                p1.x < p2.x + p2.width &&
+                p1.x + p1.width > p2.x &&
+                p1.y < p2.y + p2.height &&
+                p1.y + p1.height > p2.y
+            );
+        }
+
+        function updatePlayer(player, keysLeft, keysRight) {
+            // Apply gravity
+            player.velocity.y += gravity;
+
+            // Horizontal movement
+            if (keys[keysLeft]) {
+                player.velocity.x = Math.max(player.velocity.x - acceleration, -maxSpeed);
+                player.flipped = true;
+            } else if (keys[keysRight]) {
+                player.velocity.x = Math.min(player.velocity.x + acceleration, maxSpeed);
+                player.flipped = false;
+            } else {
+                // Deceleration
+                player.velocity.x = Math.abs(player.velocity.x) < deceleration
+                    ? 0
+                    : player.velocity.x - Math.sign(player.velocity.x) * deceleration;
+            }
+
+            // Update positions
+            player.x += player.velocity.x;
+            player.y += player.velocity.y;
+
+            // Prevent falling off canvas
+            if (player.y > canvas.height - player.height) {
+                player.y = canvas.height - player.height;
+                player.velocity.y = 0;
+                player.jumpCount = 0;
+            }
+
+            // Prevent moving out of bounds
+            player.x = Math.max(0, Math.min(player.x, canvas.width - player.width));
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            updatePlayer(player1, 'a', 'd');
+            updatePlayer(player2, 'ArrowLeft', 'ArrowRight');
+
+            // Check collision
+            if (checkCollision(player1, player2)) {
+                player1.x = 
+                alert(player1.y < player2.y ? "Player 1 Wins (great dane)" : "Player 2 Wins (borzoi)");
+                location.reload();
+            }
+
+            // Draw players
+            drawPlayer(player1);
+            drawPlayer(player2);
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('keydown', (event) => {
+            keys[event.key] = true;
+            if (event.key === 'w') handleJump(player1);
+            if (event.key === 'ArrowUp') handleJump(player2);
+        });
+
+        window.addEventListener('keyup', (event) => {
+            keys[event.key] = false;
+        });
+
+        animate();
+    </script>
+</body>
+
+</html>
