@@ -48,7 +48,7 @@
             ArrowRight: { pressed: false },
         };
 
-        const defaultGravity = 0.8;
+        const defaultGravity = 0.7;
         const lessGravity = 0.5;
         const moreGravity = 1.5;
 
@@ -90,13 +90,9 @@
 
             // Gravity for myImg01
             let gravity01 = defaultGravity;
-            if (keys.w.pressed && !keys.s.pressed) gravity01 = lessGravity;
-            else if (keys.s.pressed && !keys.w.pressed) gravity01 = moreGravity;
 
             // Gravity for myImg02
             let gravity02 = defaultGravity;
-            if (keys.ArrowUp.pressed && !keys.ArrowDown.pressed) gravity02 = lessGravity;
-            else if (keys.ArrowDown.pressed && !keys.ArrowUp.pressed) gravity02 = moreGravity;
 
             // Update positions with gravity
             velocity01.y += gravity01;

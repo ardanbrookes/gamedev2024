@@ -25,7 +25,7 @@
 </head>
 
 <body>
-    <h1>Final Project Level 1</h1>
+    <h1>Final Project Level 2</h1>
     <canvas id="gameCanvas" width="1200" height="800"></canvas>
 
     <script>
@@ -42,25 +42,29 @@
         const player1 = {
             x: 50,
             y: canvas.height - 80,
-            width: 100,
+            width: 80,
             height: 80,
             velocity: { x: 0, y: 0 },
             isJumping: false,
             jumpCount: 0,
             image: img01,
-            flipped: false
+            flipped: false,
+            isAttacking: false,
+            canAttack: true
         };
 
         const player2 = {
             x: 1050,
             y: canvas.height - 80,
-            width: 100,
+            width: 80,
             height: 80,
             velocity: { x: 0, y: 0 },
             isJumping: false,
             jumpCount: 0,
             image: img02,
-            flipped: false
+            flipped: false,
+            isAttacking: false,
+            canAttack: true
         };
 
         const keys = {
@@ -85,6 +89,20 @@
             }
         }
 
+        function drawAttack(player, attack) {
+            const attackWidth = 70;
+            const attackHeight = 40;
+
+            // Determine attack hitbox position
+            const attackX = !player.flipped ? player.x - attackWidth : player.x + player.width;
+            const attackY = player.y + (player.height - attackHeight) / 2;
+
+            ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+            ctx.fillRect(attackX, attackY, attackWidth, attackHeight);
+
+            return { x: attackX, y: attackY, width: attackWidth, height: attackHeight };
+        }
+
         function handleJump(player) {
             if (player.jumpCount < 2) { // Allow up to 2 jumps
                 player.velocity.y = jumpStrength;
@@ -92,12 +110,12 @@
             }
         }
 
-        function checkCollision(p1, p2) {
+        function checkAttackCollision(attack, target) {
             return (
-                p1.x < p2.x + p2.width &&
-                p1.x + p1.width > p2.x &&
-                p1.y < p2.y + p2.height &&
-                p1.y + p1.height > p2.y
+                attack.x < target.x + target.width &&
+                attack.x + attack.width > target.x &&
+                attack.y < target.y + target.height &&
+                attack.y + attack.height > target.y
             );
         }
 
@@ -108,10 +126,10 @@
             // Horizontal movement
             if (keys[keysLeft]) {
                 player.velocity.x = Math.max(player.velocity.x - acceleration, -maxSpeed);
-                player.flipped = true;
+                player.flipped = false;
             } else if (keys[keysRight]) {
                 player.velocity.x = Math.min(player.velocity.x + acceleration, maxSpeed);
-                player.flipped = false;
+                player.flipped = true;
             } else {
                 // Deceleration
                 player.velocity.x = Math.abs(player.velocity.x) < deceleration
@@ -134,16 +152,46 @@
             player.x = Math.max(0, Math.min(player.x, canvas.width - player.width));
         }
 
+        function performAttack(player) {
+            if (!player.canAttack) return;
+
+            player.canAttack = false; // Start cooldown
+            setTimeout(() => {
+                player.isAttacking = true; // Attack appears after 0.1s delay
+                setTimeout(() => {
+                    player.isAttacking = false; // Attack lasts for 0.3s
+                    setTimeout(() => {
+                        player.canAttack = true; // Cooldown of 0.3s
+                    }, 300);
+                }, 500);
+            }, 0o0);
+        }
+
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             updatePlayer(player1, 'a', 'd');
             updatePlayer(player2, 'ArrowLeft', 'ArrowRight');
 
-            // Check collision
-            if (checkCollision(player1, player2)) {
-                player1.x = 
-                alert(player1.y < player2.y ? "Player 1 Wins (great dane)" : "Player 2 Wins (borzoi)");
+            // Player 1 Attack
+            let attack1Hitbox = null;
+            if (player1.isAttacking) {
+                attack1Hitbox = drawAttack(player1);
+            }
+
+            // Player 2 Attack
+            let attack2Hitbox = null;
+            if (player2.isAttacking) {
+                attack2Hitbox = drawAttack(player2);
+            }
+
+            // Check Attack Collision
+            if (attack1Hitbox && checkAttackCollision(attack1Hitbox, player2)) {
+                alert("Player 1 Wins (Attack)!");
+                location.reload();
+            }
+            if (attack2Hitbox && checkAttackCollision(attack2Hitbox, player1)) {
+                alert("Player 2 Wins (Attack)!");
                 location.reload();
             }
 
@@ -158,10 +206,18 @@
             keys[event.key] = true;
             if (event.key === 'w') handleJump(player1);
             if (event.key === 'ArrowUp') handleJump(player2);
+
+            // Player 1 attack (Space)
+            if (event.key === ' ') performAttack(player1);
         });
 
         window.addEventListener('keyup', (event) => {
             keys[event.key] = false;
+        });
+
+        // Player 2 attack (Mouse Click)
+        window.addEventListener('mousedown', () => {
+            performAttack(player2);
         });
 
         animate();
