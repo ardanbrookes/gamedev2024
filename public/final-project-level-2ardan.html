@@ -50,7 +50,8 @@
             image: img01,
             flipped: false,
             isAttacking: false,
-            canAttack: true
+            canAttack: true,
+            isFrozen: false // New property
         };
 
         const player2 = {
@@ -64,20 +65,24 @@
             image: img02,
             flipped: false,
             isAttacking: false,
-            canAttack: true
+            canAttack: true,
+            isFrozen: false // New property
         };
 
+        // key states
         const keys = {
             w: false, a: false, s: false, d: false,
             ArrowUp: false, ArrowLeft: false, ArrowDown: false, ArrowRight: false
         };
 
+        // movement variables
         const gravity = 0.7;
         const jumpStrength = -15;
         const acceleration = 1.5;
         const maxSpeed = 8;
         const deceleration = 0.8;
 
+        // draws player on canvas where they are and facing right direction (called at the end of animate)
         function drawPlayer(player) {
             if (player.flipped) {
                 ctx.save();
@@ -89,6 +94,7 @@
             }
         }
 
+        // draws the attack on the canvas (called at the start of animate)
         function drawAttack(player, attack) {
             const attackWidth = 70;
             const attackHeight = 40;
@@ -103,6 +109,29 @@
             return { x: attackX, y: attackY, width: attackWidth, height: attackHeight };
         }
 
+        // handles functionality of attack. freezes player and handles timeout (called by performAttack)
+        function attackAnimate(player) {
+            player.isFrozen = true; // Freeze the attacking player
+
+            setTimeout(() => {
+                player.isAttacking = true; // Start attack animation
+                setTimeout(() => {
+                    player.isAttacking = false; // End attack animation
+                    player.isFrozen = false; // Unfreeze the player
+                }, 300); // Attack duration
+            }, 0); // Delay before attack starts
+        }
+
+        // freezes player and sets timer to unfreeze player (called from animate when player is hit)
+        function stunAnimate(player) {
+            player.isFrozen = true; // Freeze the stunned player
+
+            setTimeout(() => {
+                player.isFrozen = false; // Unfreeze the player
+            }, 1000); // Stun duration
+        }
+
+        // checks if player is able to jump then sets y velocity (triggered when event listener for up goes off)
         function handleJump(player) {
             if (player.jumpCount < 2) { // Allow up to 2 jumps
                 player.velocity.y = jumpStrength;
@@ -110,6 +139,7 @@
             }
         }
 
+        // ellis code to check collision (called by animate)
         function checkAttackCollision(attack, target) {
             return (
                 attack.x < target.x + target.width &&
@@ -119,7 +149,10 @@
             );
         }
 
+        
         function updatePlayer(player, keysLeft, keysRight) {
+            if (player.isFrozen) return; // Skip updates if the player is frozen
+
             // Apply gravity
             player.velocity.y += gravity;
 
@@ -152,26 +185,24 @@
             player.x = Math.max(0, Math.min(player.x, canvas.width - player.width));
         }
 
+        // first thing thats runs when you attack. starts the attackanimate and cooldown
         function performAttack(player) {
-            if (!player.canAttack) return;
+            if (!player.canAttack || player.isFrozen) return;
 
             player.canAttack = false; // Start cooldown
+            attackAnimate(player); // Trigger attack animation
+
             setTimeout(() => {
-                player.isAttacking = true; // Attack appears after 0.1s delay
-                setTimeout(() => {
-                    player.isAttacking = false; // Attack lasts for 0.3s
-                    setTimeout(() => {
-                        player.canAttack = true; // Cooldown of 0.3s
-                    }, 300);
-                }, 500);
-            }, 0o0);
+                player.canAttack = true; // Cooldown complete
+            }, 600); // Total cooldown duration
         }
 
+        // idk does like everything runs every frame
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            updatePlayer(player1, 'a', 'd');
-            updatePlayer(player2, 'ArrowLeft', 'ArrowRight');
+            if (!player1.isFrozen) updatePlayer(player1, 'a', 'd');
+            if (!player2.isFrozen) updatePlayer(player2, 'ArrowLeft', 'ArrowRight');
 
             // Player 1 Attack
             let attack1Hitbox = null;
@@ -187,12 +218,10 @@
 
             // Check Attack Collision
             if (attack1Hitbox && checkAttackCollision(attack1Hitbox, player2)) {
-                alert("Player 1 Wins (Attack)!");
-                location.reload();
+                stunAnimate(player2); // Stun player 2
             }
             if (attack2Hitbox && checkAttackCollision(attack2Hitbox, player1)) {
-                alert("Player 2 Wins (Attack)!");
-                location.reload();
+                stunAnimate(player1); // Stun player 1
             }
 
             // Draw players
@@ -202,6 +231,7 @@
             requestAnimationFrame(animate);
         }
 
+        // Event listeners for jump and attacks
         window.addEventListener('keydown', (event) => {
             keys[event.key] = true;
             if (event.key === 'w') handleJump(player1);
@@ -211,13 +241,12 @@
             if (event.key === ' ') performAttack(player1);
         });
 
-        window.addEventListener('keyup', (event) => {
-            keys[event.key] = false;
-        });
-
-        // Player 2 attack (Mouse Click)
         window.addEventListener('mousedown', () => {
             performAttack(player2);
+        });
+
+        window.addEventListener('keyup', (event) => {
+            keys[event.key] = false;
         });
 
         animate();

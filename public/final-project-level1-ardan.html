@@ -48,11 +48,13 @@
             ArrowRight: { pressed: false },
         };
 
+        // Speed and gravity values
         const defaultGravity = 0.7;
         const lessGravity = 0.5;
         const moreGravity = 1.5;
-
-        const speed = 7;
+        const acceleration = 1.5; // How quickly speed increases
+        const maxSpeed = 8; // Maximum speed
+        const deceleration = 0.8; // How quickly speed decreases when keys are released
 
         // Track jump states and cooldown timers
         let jumpCount01 = 0; // Counts the number of jumps for myImg01
@@ -187,10 +189,7 @@
         }
 
 
-        // Acceleration and max speed constants
-        const acceleration = 1.5; // How quickly speed increases
-        const maxSpeed = 8; // Maximum speed
-        const deceleration = 0.8; // How quickly speed decreases when keys are released
+
 
         function animate() {
             requestAnimationFrame(animate);
