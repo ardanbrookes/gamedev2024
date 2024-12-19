@@ -38,6 +38,13 @@
         img01.src = 'dog1.jpg';
         img02.src = 'dog2.jpg';
 
+        // movement variables
+        const gravity = 0.7;
+        const jumpStrength = -15;
+        const acceleration = 1.5;
+        const maxSpeed = 8;
+        const deceleration = 0.8;
+
         // Player properties
         const player1 = {
             x: 50,
@@ -53,7 +60,6 @@
             canAttack: true,
             isFrozen: false // New property
         };
-
         const player2 = {
             x: 1050,
             y: canvas.height - 80,
@@ -74,13 +80,6 @@
             w: false, a: false, s: false, d: false,
             ArrowUp: false, ArrowLeft: false, ArrowDown: false, ArrowRight: false
         };
-
-        // movement variables
-        const gravity = 0.7;
-        const jumpStrength = -15;
-        const acceleration = 1.5;
-        const maxSpeed = 8;
-        const deceleration = 0.8;
 
         // draws player on canvas where they are and facing right direction (called at the end of animate)
         function drawPlayer(player) {
@@ -123,11 +122,14 @@
         }
 
         // freezes player and sets timer to unfreeze player (called from animate when player is hit)
-        function stunAnimate(player) {
-            player.isFrozen = true; // Freeze the stunned player
+        function stunAnimate(player, attacker) {
+            player.isFrozen = true; // Disable movement keys
+
+            // Set velocity to 15 in the direction of the attack
+            player.velocity.x = attacker.x < player.x ? 15 : -15;
 
             setTimeout(() => {
-                player.isFrozen = false; // Unfreeze the player
+                player.isFrozen = false; // Re-enable movement keys
             }, 1000); // Stun duration
         }
 
@@ -139,7 +141,7 @@
             }
         }
 
-        // ellis code to check collision (called by animate)
+        // ellis code to check collision between attack and player (called by animate)
         function checkAttackCollision(attack, target) {
             return (
                 attack.x < target.x + target.width &&
@@ -149,26 +151,27 @@
             );
         }
 
-        
+        // tells animate players values to 
         function updatePlayer(player, keysLeft, keysRight) {
-            if (player.isFrozen) return; // Skip updates if the player is frozen
-
             // Apply gravity
             player.velocity.y += gravity;
 
-            // Horizontal movement
-            if (keys[keysLeft]) {
-                player.velocity.x = Math.max(player.velocity.x - acceleration, -maxSpeed);
-                player.flipped = false;
-            } else if (keys[keysRight]) {
-                player.velocity.x = Math.min(player.velocity.x + acceleration, maxSpeed);
-                player.flipped = true;
-            } else {
-                // Deceleration
-                player.velocity.x = Math.abs(player.velocity.x) < deceleration
-                    ? 0
-                    : player.velocity.x - Math.sign(player.velocity.x) * deceleration;
+            // Horizontal movement (only if not frozen)
+            if (!player.isFrozen) {
+                if (keys[keysLeft]) {
+                    player.velocity.x = Math.max(player.velocity.x - acceleration, -maxSpeed);
+                    player.flipped = false;
+                } else if (keys[keysRight]) {
+                    player.velocity.x = Math.min(player.velocity.x + acceleration, maxSpeed);
+                    player.flipped = true;
+                }
             }
+
+            // Deceleration (always runs, slower when frozen)
+            const decelerationFactor = player.isFrozen ? deceleration * 0.5 : deceleration;
+            player.velocity.x = Math.abs(player.velocity.x) < decelerationFactor
+                ? 0
+                : player.velocity.x - Math.sign(player.velocity.x) * decelerationFactor;
 
             // Update positions
             player.x += player.velocity.x;
@@ -184,6 +187,7 @@
             // Prevent moving out of bounds
             player.x = Math.max(0, Math.min(player.x, canvas.width - player.width));
         }
+
 
         // first thing thats runs when you attack. starts the attackanimate and cooldown
         function performAttack(player) {
@@ -201,8 +205,14 @@
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            if (!player1.isFrozen) updatePlayer(player1, 'a', 'd');
-            if (!player2.isFrozen) updatePlayer(player2, 'ArrowLeft', 'ArrowRight');
+            // if (!player1.isFrozen) 
+            updatePlayer(player1, 'a', 'd');
+            // if (!player2.isFrozen) 
+            updatePlayer(player2, 'ArrowLeft', 'ArrowRight');
+
+            // Draw players
+            drawPlayer(player1);
+            drawPlayer(player2);
 
             // Player 1 Attack
             let attack1Hitbox = null;
@@ -218,20 +228,17 @@
 
             // Check Attack Collision
             if (attack1Hitbox && checkAttackCollision(attack1Hitbox, player2)) {
-                stunAnimate(player2); // Stun player 2
+                stunAnimate(player2, player1); // Stun player 2, with player 1 as the attacker
             }
             if (attack2Hitbox && checkAttackCollision(attack2Hitbox, player1)) {
-                stunAnimate(player1); // Stun player 1
+                stunAnimate(player1, player2); // Stun player 1, with player 2 as the attacker
             }
 
-            // Draw players
-            drawPlayer(player1);
-            drawPlayer(player2);
 
             requestAnimationFrame(animate);
         }
 
-        // Event listeners for jump and attacks
+        // Event listeners for jump attacks and keys
         window.addEventListener('keydown', (event) => {
             keys[event.key] = true;
             if (event.key === 'w') handleJump(player1);
@@ -240,11 +247,9 @@
             // Player 1 attack (Space)
             if (event.key === ' ') performAttack(player1);
         });
-
         window.addEventListener('mousedown', () => {
             performAttack(player2);
         });
-
         window.addEventListener('keyup', (event) => {
             keys[event.key] = false;
         });
