@@ -26,7 +26,7 @@
 
 <body>
     <h1>Final Project Level 2</h1>
-    <canvas id="gameCanvas" width="1200" height="800"></canvas>
+    <canvas id="gameCanvas" width="1200" height="800" style="background-color: white;"></canvas>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -38,107 +38,136 @@
         img01.src = 'dog1.jpg';
         img02.src = 'dog2.jpg';
 
-        // Player properties
-        const player1 = createPlayer(50, 'dog1.jpg');
-        const player2 = createPlayer(1050, 'dog2.jpg');
-
-        function createPlayer(x, imgSrc) {
-            const image = new Image();
-            image.src = imgSrc;
-
-            return {
-                x,
-                y: canvas.height - 80,
-                width: 80,
-                height: 80,
-                velocity: { x: 0, y: 0 },
-                isJumping: false,
-                jumpCount: 0,
-                flipped: false,
-                image: image,
-                isAttacking: false,
-                canAttack: true,
-                isStunned: false,
-            };
-        }
-
-        const keys = { w: false, a: false, d: false, ArrowUp: false, ArrowLeft: false, ArrowRight: false };
-
+        // movement variables
         const gravity = 0.7;
         const jumpStrength = -15;
         const acceleration = 1.5;
         const maxSpeed = 8;
         const deceleration = 0.8;
 
+        // Player properties
+        const player1 = {
+            x: 50,
+            y: canvas.height - 80,
+            width: 80,
+            height: 80,
+            velocity: { x: 0, y: 0 },
+            isJumping: false,
+            jumpCount: 0,
+            image: img01,
+            flipped: false,
+            isAttacking: false,
+            canAttack: true,
+            isFrozen: false, // New property
+            health: 100,
+        };
+        const player2 = {
+            x: 1050,
+            y: canvas.height - 80,
+            width: 80,
+            height: 80,
+            velocity: { x: 0, y: 0 },
+            isJumping: false,
+            jumpCount: 0,
+            image: img02,
+            flipped: false,
+            isAttacking: false,
+            canAttack: true,
+            isFrozen: false, // New property
+            health: 100,
+        };
+
+        // key states
+        const keys = {
+            w: false, a: false, s: false, d: false,
+            ArrowUp: false, ArrowLeft: false, ArrowDown: false, ArrowRight: false
+        };
+
+        // draws player on canvas where they are and facing right direction (called at the end of animate)
         function drawPlayer(player) {
-            ctx.save();
             if (player.flipped) {
+                ctx.save();
                 ctx.scale(-1, 1);
                 ctx.drawImage(player.image, -player.x - player.width, player.y, player.width, player.height);
+                ctx.restore();
             } else {
                 ctx.drawImage(player.image, player.x, player.y, player.width, player.height);
             }
-            ctx.restore();
         }
 
-        function drawAttack(player) {
-            const attackWidth = 50;
-            const attackHeight = 40;
-            const attackX = player.flipped ? player.x - attackWidth : player.x + player.width;
+        // draws the attack on the canvas (called at the start of animate)
+        function drawAttack(player, attack) {
+            const attackWidth = 70;
+            const attackHeight = 25;
+
+            // Determine attack hitbox position
+            const attackX = !player.flipped ? player.x - attackWidth : player.x + player.width;
             const attackY = player.y + (player.height - attackHeight) / 2;
 
-            ctx.fillStyle = 'rgba(255, 0, 0, 0.8)';
+            ctx.fillStyle = 'rgba(255, 0, 0, 1)';
             ctx.fillRect(attackX, attackY, attackWidth, attackHeight);
 
             return { x: attackX, y: attackY, width: attackWidth, height: attackHeight };
         }
 
+        // handles functionality of attack. freezes player and handles timeout (called by performAttack)
+        function attackAnimate(player, attackWidth, attackHeight) {
+            player.isAttackFrozen = true; // Freeze the attacking player
+
+            setTimeout(() => {
+                player.isAttacking = true; // Start attack animation
+                player.attackWidth = attackWidth; // Set custom hitbox width
+                player.attackHeight = attackHeight; // Set custom hitbox height
+
+                setTimeout(() => {
+                    player.isAttacking = false; // End attack animation
+                    player.attackWidth = null; // Reset hitbox width
+                    player.attackHeight = null; // Reset hitbox height
+                    setTimeout(() => {
+                        player.isAttackFrozen = false; // Unfreeze the player
+                    }, 200); // Cooldown before player can move again
+                }, 125); // Attack duration
+            }, 75); // Delay before attack starts
+        }
+
+
+        // freezes player and sets timer to unfreeze player (called from animate when player is hit)
+        function stunAnimate(player, attacker) {
+            if (player.recentlyHit) return; // Skip if the player was recently hit
+
+            player.recentlyHit = true; // Mark as recently hit
+            player.isStunned = true; // Disable movement keys
+
+            // Reduce health
+            player.health -= 10; // Fixed damage per hit
+
+            // Cancel attack if the player is currently attacking or attack-frozen
+            if (player.isAttackFrozen) {
+                player.isAttacking = false;    // Stop the attack animation
+                player.isAttackFrozen = false; // Prevent the attack from starting
+                player.canAttack = true;      // Reset the attack cooldown
+            }
+
+            // Set velocity to simulate knockback in the direction of the attack
+            player.velocity.x = attacker.x < player.x ? 15 : -15;
+
+            // Timeout to reset recentlyHit and stun state
+            setTimeout(() => {
+                player.recentlyHit = false; // Allow damage again
+                player.isStunned = false;  // Re-enable movement keys
+            }, 1000); // Stun duration
+        }
+
+
+        // checks if player is able to jump then sets y velocity (triggered when event listener for up goes off)
         function handleJump(player) {
-            if (player.jumpCount < 2) {
+            if (player.jumpCount < 2) { // Allow up to 2 jumps
                 player.velocity.y = jumpStrength;
                 player.jumpCount++;
             }
         }
 
-        function performAttack(player) {
-            if (!player.canAttack || player.isStunned) return;
-
-            player.isAttacking = true;
-            player.canAttack = false;
-
-            setTimeout(() => {
-                player.isAttacking = false;
-                setTimeout(() => (player.canAttack = true), 300); // Cooldown of 0.3s
-            }, 300); // Attack lasts 0.3s
-
-            attackAnimate(player);
-        }
-
-        function updatePlayer(player, keysLeft, keysRight) {
-            if (player.isAttacking || player.isStunned) return;
-
-            player.velocity.y += gravity;
-
-            if (keys[keysLeft]) {
-                player.velocity.x = Math.max(player.velocity.x - acceleration, -maxSpeed);
-                player.flipped = true;
-            } else if (keys[keysRight]) {
-                player.velocity.x = Math.min(player.velocity.x + acceleration, maxSpeed);
-                player.flipped = false;
-            } else {
-                player.velocity.x = Math.abs(player.velocity.x) < deceleration ? 0 : player.velocity.x * 0.8;
-            }
-
-            player.x += player.velocity.x;
-            player.y += player.velocity.y;
-
-            if (player.y > canvas.height - player.height) {
-                player.y = canvas.height - player.height;
-                player.velocity.y = 0;
-                player.jumpCount = 0;
-            }
-        }
-
+        // ellis code to check collision between attack and player (called by animate)
         function checkAttackCollision(attack, target) {
             return (
                 attack.x < target.x + target.width &&
@@ -148,52 +177,153 @@
             );
         }
 
-        function attackAnimate(player) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawPlayer(player);
-            const attackHitbox = drawAttack(player);
+        // tells animate players values to 
+        function updatePlayer(player, keysLeft, keysRight) {
+            // Apply gravity
+            player.velocity.y += gravity;
 
-            const target = player === player1 ? player2 : player1;
-            if (checkAttackCollision(attackHitbox, target)) {
-                target.isStunned = true;
-                setTimeout(() => (target.isStunned = false), 1000); // Stun lasts 1s
-                stunAnimate(target);
+            // Horizontal movement (only if not frozen)
+            if (!player.isStunned && !player.isAttackFrozen) {
+                if (keys[keysLeft]) {
+                    player.velocity.x = Math.max(player.velocity.x - acceleration, -maxSpeed);
+                    player.flipped = false;
+                } else if (keys[keysRight]) {
+                    player.velocity.x = Math.min(player.velocity.x + acceleration, maxSpeed);
+                    player.flipped = true;
+                }
+            }
+
+            // Deceleration (always runs, slower when frozen)
+            const decelerationFactor = player.isStunned ? deceleration * 0.5 : deceleration;
+            player.velocity.x = Math.abs(player.velocity.x) < decelerationFactor
+                ? 0
+                : player.velocity.x - Math.sign(player.velocity.x) * decelerationFactor;
+
+            // Update positions
+            player.x += player.velocity.x;
+            player.y += player.velocity.y;
+
+            // Prevent falling off canvas
+            if (player.y > canvas.height - player.height) {
+                player.y = canvas.height - player.height;
+                player.velocity.y = 0;
+                player.jumpCount = 0;
+            }
+
+            // Prevent moving out of bounds
+            player.x = Math.max(0, Math.min(player.x, canvas.width - player.width));
+        }
+
+
+        // first thing thats runs when you attack. starts the attackanimate and cooldown
+        function performAttack(player, isPowerAttack) {
+            if (!player.canAttack || player.isFrozen) return;
+
+            player.canAttack = false; // Start cooldown
+
+            if (isPowerAttack) {
+                // Power Attack (bigger and more delay)
+                setTimeout(() => {
+                    attackAnimate(player, 150, 40); // Larger hitbox
+                    player.attackDamage = 25; // Increased damage for power attack
+                }, 400); // Longer delay before power attack activates
+
+                setTimeout(() => {
+                    player.canAttack = true; // Cooldown complete
+                }, 1000); // Longer cooldown for power attack
             } else {
-                requestAnimationFrame(() => attackAnimate(player));
+                // Default Attack
+                attackAnimate(player, 70, 25); // Normal hitbox
+                player.attackDamage = 10; // Default damage
+
+                setTimeout(() => {
+                    player.canAttack = true; // Cooldown complete
+                }, 600); // Default cooldown
             }
         }
 
-        function stunAnimate(player) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawPlayer(player);
-            ctx.fillStyle = 'blue';
-            ctx.font = '20px Arial';
-            ctx.fillText('Stunned!', player.x, player.y - 10);
 
-            if (player.isStunned) requestAnimationFrame(() => stunAnimate(player));
-        }
-
+        // calls like everything runs every frame
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            if (!player1.isAttacking && !player1.isStunned) updatePlayer(player1, 'a', 'd');
-            if (!player2.isAttacking && !player2.isStunned) updatePlayer(player2, 'ArrowLeft', 'ArrowRight');
+            if (!player1.isAttackFrozen)
+                updatePlayer(player1, 'a', 'd');
+            if (!player2.isAttackFrozen)
+                updatePlayer(player2, 'ArrowLeft', 'ArrowRight');
 
+            // Draw players
             drawPlayer(player1);
             drawPlayer(player2);
 
+            // Player 1 Attack
+            let attack1Hitbox = null;
+            if (player1.isAttacking && player1.isAttackFrozen) {
+                attack1Hitbox = drawAttack(player1, player1.attackWidth || 70, player1.attackHeight || 25);
+            }
+
+            // Player 2 Attack
+            let attack2Hitbox = null;
+            if (player2.isAttacking && player2.isAttackFrozen) {
+                attack2Hitbox = drawAttack(player2, player2.attackWidth || 70, player2.attackHeight || 25);
+            }
+
+
+            // Check Attack Collision
+            const player1HitPlayer2 = attack1Hitbox && checkAttackCollision(attack1Hitbox, player2);
+            const player2HitPlayer1 = attack2Hitbox && checkAttackCollision(attack2Hitbox, player1);
+
+            // Handle simultaneous stun prevention
+            if (player1HitPlayer2 && player2HitPlayer1) {
+                // Do nothing if both would be stunned
+            } else {
+                if (player1HitPlayer2) {
+                    stunAnimate(player2, player1); // Stun player 2, with player 1 as the attacker
+                }
+                if (player2HitPlayer1) {
+                    stunAnimate(player1, player2); // Stun player 1, with player 2 as the attacker
+                }
+            }
+
             requestAnimationFrame(animate);
+            // Draw health bars
+            drawHealthBar(player1, 20, 20, 200, 20); // Player 1's health bar
+            drawHealthBar(player2, canvas.width - 220, 20, 200, 20); // Player 2's health bar
+
+
         }
 
+        function drawHealthBar(player, x, y, width, height) {
+            const healthPercentage = Math.max(player.health / 100, 0); // Calculate health percentage
+            ctx.fillStyle = 'red'; // Background color for health bar
+            ctx.fillRect(x, y, width, height);
+            ctx.fillStyle = 'green'; // Foreground color for current health
+            ctx.fillRect(x, y, width * healthPercentage, height);
+            ctx.strokeStyle = 'black'; // Outline color
+            ctx.strokeRect(x, y, width, height);
+        }
+
+
+        // Event listeners for jump attacks and keys
         window.addEventListener('keydown', (event) => {
             keys[event.key] = true;
+
             if (event.key === 'w') handleJump(player1);
             if (event.key === 'ArrowUp') handleJump(player2);
-            if (event.key === ' ') performAttack(player1);
+
+            // Player 1 attack
+            if (event.key === ' ') {
+                const isPowerAttack = keys['s']; // Check if 's' is pressed
+                performAttack(player1, isPowerAttack);
+            }
+
+            // Player 2 attack
+            if (event.key === 'ArrowDown') {
+                const isPowerAttack = keys['ArrowDown']; // Check if 'ArrowDown' is pressed
+                performAttack(player2, isPowerAttack);
+            }
         });
 
-        window.addEventListener('keyup', (event) => (keys[event.key] = false));
-        window.addEventListener('mousedown', () => performAttack(player2));
 
         animate();
     </script>
