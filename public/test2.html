@@ -111,25 +111,19 @@
         }
 
         // handles functionality of attack. freezes player and handles timeout (called by performAttack)
-        function attackAnimate(player, attackWidth, attackHeight) {
+        function attackAnimate(player) {
             player.isAttackFrozen = true; // Freeze the attacking player
 
             setTimeout(() => {
                 player.isAttacking = true; // Start attack animation
-                player.attackWidth = attackWidth; // Set custom hitbox width
-                player.attackHeight = attackHeight; // Set custom hitbox height
-
                 setTimeout(() => {
                     player.isAttacking = false; // End attack animation
-                    player.attackWidth = null; // Reset hitbox width
-                    player.attackHeight = null; // Reset hitbox height
                     setTimeout(() => {
                         player.isAttackFrozen = false; // Unfreeze the player
-                    }, 200); // Cooldown before player can move again
+                    }, 200) //cooldown
                 }, 125); // Attack duration
             }, 75); // Delay before attack starts
         }
-
 
         // freezes player and sets timer to unfreeze player (called from animate when player is hit)
         function stunAnimate(player, attacker) {
@@ -216,32 +210,16 @@
 
 
         // first thing thats runs when you attack. starts the attackanimate and cooldown
-        function performAttack(player, isPowerAttack) {
+        function performAttack(player) {
             if (!player.canAttack || player.isFrozen) return;
 
             player.canAttack = false; // Start cooldown
+            attackAnimate(player); // Trigger attack animation
 
-            if (isPowerAttack) {
-                // Power Attack (bigger and more delay)
-                setTimeout(() => {
-                    attackAnimate(player, 150, 40); // Larger hitbox
-                    player.attackDamage = 25; // Increased damage for power attack
-                }, 400); // Longer delay before power attack activates
-
-                setTimeout(() => {
-                    player.canAttack = true; // Cooldown complete
-                }, 1000); // Longer cooldown for power attack
-            } else {
-                // Default Attack
-                attackAnimate(player, 70, 25); // Normal hitbox
-                player.attackDamage = 10; // Default damage
-
-                setTimeout(() => {
-                    player.canAttack = true; // Cooldown complete
-                }, 600); // Default cooldown
-            }
+            setTimeout(() => {
+                player.canAttack = true; // Cooldown complete
+            }, 600); // Total cooldown duration
         }
-
 
         // calls like everything runs every frame
         function animate() {
@@ -259,15 +237,14 @@
             // Player 1 Attack
             let attack1Hitbox = null;
             if (player1.isAttacking && player1.isAttackFrozen) {
-                attack1Hitbox = drawAttack(player1, player1.attackWidth || 70, player1.attackHeight || 25);
+                attack1Hitbox = drawAttack(player1);
             }
 
             // Player 2 Attack
             let attack2Hitbox = null;
             if (player2.isAttacking && player2.isAttackFrozen) {
-                attack2Hitbox = drawAttack(player2, player2.attackWidth || 70, player2.attackHeight || 25);
+                attack2Hitbox = drawAttack(player2);
             }
-
 
             // Check Attack Collision
             const player1HitPlayer2 = attack1Hitbox && checkAttackCollision(attack1Hitbox, player2);
@@ -290,7 +267,6 @@
             drawHealthBar(player1, 20, 20, 200, 20); // Player 1's health bar
             drawHealthBar(player2, canvas.width - 220, 20, 200, 20); // Player 2's health bar
 
-
         }
 
         function drawHealthBar(player, x, y, width, height) {
@@ -307,23 +283,19 @@
         // Event listeners for jump attacks and keys
         window.addEventListener('keydown', (event) => {
             keys[event.key] = true;
-
             if (event.key === 'w') handleJump(player1);
             if (event.key === 'ArrowUp') handleJump(player2);
 
-            // Player 1 attack
-            if (event.key === ' ') {
-                const isPowerAttack = keys['s']; // Check if 's' is pressed
-                performAttack(player1, isPowerAttack);
-            }
-
-            // Player 2 attack
-            if (event.key === 'ArrowDown') {
-                const isPowerAttack = keys['ArrowDown']; // Check if 'ArrowDown' is pressed
-                performAttack(player2, isPowerAttack);
-            }
+            // Player 1 attack (Space)
+            if (event.key === ' ') performAttack(player1);
         });
-
+        window.addEventListener('mousedown', (event) => {
+            event.preventDefault();
+            performAttack(player2);
+        });
+        window.addEventListener('keyup', (event) => {
+            keys[event.key] = false;
+        });
 
         animate();
     </script>
