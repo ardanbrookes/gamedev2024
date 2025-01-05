@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Final Project Level 1</title>
+    <title>Final Project Level 2</title>
     <style>
         body {
             background-image: url('background1.jpg');
@@ -54,15 +54,16 @@
             width: 80,
             height: 80,
             velocity: { x: 0, y: 0 },
-            isJumping: false,
+            isJumping: false, //if in the air
             jumpCount: 0,
             image: img01,
             flipped: false,
-            isAttacking: false,
+            isAttacking: false, //is player is
             canAttack: true,
             isFrozen: false, // New property
             health: 100,
             currentAttackType: 'default',
+            hasHit: false,
         };
         const player2 = {
             x: 1050,
@@ -79,13 +80,15 @@
             isFrozen: false, // New property
             health: 100,
             currentAttackType: 'default',
+            hasHit: false,
         };
 
         // Attack types
         const attackConfigs = {
-            default: { width: 70, height: 25, knockback: 15, damage: 10, startup: 75, duration: 125, cooldown: 200 },
-            heavy: { width: 100, height: 40, knockback: 25, damage: 20, startup: 150, duration: 200, cooldown: 500 },
+            default: { width: 70, height: 25, knockback: 13, knockbackY: 3, damage: 10, startup: 100, duration: 125, cooldown: 150, stunTime: 500, instantknockbackX: 10, instantknockbackY: 3 },
+            heavy: { width: 100, height: 40, knockback: 25, knockbackY: 5, damage: 20, startup: 250, duration: 250, cooldown: 600, stunTime: 400, instantknockbackX: 0, instantknockbackY: 4 },
         };
+
 
         // Event listeners for jump attacks and keys
         window.addEventListener('keydown', (event) => {
@@ -132,43 +135,47 @@
 
             player.currentAttackType = attackType; // Set the current attack type
             player.canAttack = false;
-            attackAnimate(player, attackConfig.timeout);
+
+            attackAnimate(player, attackConfig);
 
             setTimeout(() => {
                 player.canAttack = true;
-            }, attackConfig.timeout);
+            }, attackConfig.cooldown + attackConfig.startup + attackConfig.duration);
         }
 
-        // handles functionality of attack. freezes player and handles timeout (called by performAttack)
-        function attackAnimate(player, timeout) {
-            player.isAttackFrozen = true; // Freeze the attacking player
 
-            // Create a temporary reference to the attack hitbox (used only during the attack)
+        // handles functionality of attack. freezes player and handles timeout (called by performAttack)
+
+        function attackAnimate(player, attackConfig, target) {
+            player.isAttackFrozen = true; // Freeze the attacking player
             let currentHitbox = null;
 
             setTimeout(() => {
                 player.isAttacking = true; // Start attack animation
-                currentHitbox = player === player1 ? attack1Hitbox : attack2Hitbox; // Assign current hitbox
+                currentHitbox = player === player1 ? attack1Hitbox : attack2Hitbox;
                 setTimeout(() => {
                     player.isAttacking = false; // End attack animation
+                    // Now set the hasHit flag of the *target* player (the player being attacked)
+                    if (player === player1) {
+                        player2.hasHit = false; // Reset hasHit flag for player2 (target)
+                    } else {
+                        player1.hasHit = false; // Reset hasHit flag for player1 (target)
+                    }
                     currentHitbox = null; // Clear the hitbox after attack
                     setTimeout(() => {
                         player.isAttackFrozen = false; // Unfreeze the player
-                    }, 200); // Cooldown
-                }, 125); // Attack duration
-            }, 75); // Delay before attack starts
+                    }, attackConfig.cooldown); // Cooldown
+                }, attackConfig.duration); // Attack duration
+            }, attackConfig.startup); // Delay before attack starts
         }
 
 
+
         // freezes player and sets timer to unfreeze player (called from animate when player is hit)
-        function stunAnimate(player, attacker) {
-            if (player.recentlyHit) return; // Skip if the player was recently hit
-
-            player.recentlyHit = true; // Mark as recently hit
-            player.isStunned = true; // Disable movement keys
-
-            // Reduce health
-            player.health -= 10; // Fixed damage per hit
+        function stunAnimate(player, attacker, attackConfig) {
+            // Reduce health based on attack damage
+            player.health -= attackConfig.damage;
+            player.hasHit = true; // Mark player as hit
 
             // Cancel attack if the player is currently attacking or attack-frozen
             if (player.isAttackFrozen) {
@@ -177,15 +184,34 @@
                 player.canAttack = true;      // Reset the attack cooldown
             }
 
-            // Set velocity to simulate knockback in the direction of the attack
-            player.velocity.x = attacker.x < player.x ? 15 : -15;
+            // Apply knockback immediately
+            player.velocity.x = attacker.x < player.x ? attackConfig.knockback : -attackConfig.knockback;
+            player.velocity.y = -attackConfig.knockbackY;
 
-            // Timeout to reset recentlyHit and stun state
-            setTimeout(() => {
-                player.recentlyHit = false; // Allow damage again
-                player.isStunned = false;  // Re-enable movement keys
-            }, 1000); // Stun duration
+            player.x += attacker.x < player.x ? attackConfig.instantknockbackX : -attackConfig.instantknockbackX;;
+            player.y += -attackConfig.instantknockbackY;
+
+            // Prevent falling off canvas
+            if (player.y > canvas.height - player.height) {
+                player.y = canvas.height - player.height;
+                player.velocity.y = 0;
+                player.jumpCount = 0;
+            }
+
+            // If already stunned, clear previous timers and reset
+            if (player.stunTimeout) {
+                clearTimeout(player.stunTimeout);
+            }
+
+            // Freeze the player
+            player.isFrozen = true;
+
+            // Set a new stun duration
+            player.stunTimeout = setTimeout(() => {
+                player.isFrozen = false; // Unfreeze the player
+            }, attackConfig.stunTime);
         }
+
 
         // ellis code to check collision between attack and player (called by animate)
         function checkAttackCollision(attack, target) {
@@ -199,11 +225,13 @@
 
         // calculates players speed and other values called by animate
         function updatePlayer(player, keysLeft, keysRight) {
+            if (player.isFrozen) return; // Skip updates if the player is frozen
+
             // Apply gravity
             player.velocity.y += gravity;
 
-            // Horizontal movement (only if not frozen)
-            if (!player.isStunned && !player.isAttackFrozen) {
+            // Horizontal movement
+            if (!player.isStunned) {
                 if (keys[keysLeft]) {
                     player.velocity.x = Math.max(player.velocity.x - acceleration, -maxSpeed);
                     player.flipped = false;
@@ -213,11 +241,10 @@
                 }
             }
 
-            // Deceleration (always runs, slower when frozen)
-            const decelerationFactor = player.isStunned ? deceleration * 0.5 : deceleration;
-            player.velocity.x = Math.abs(player.velocity.x) < decelerationFactor
+            // Deceleration
+            player.velocity.x = Math.abs(player.velocity.x) < deceleration
                 ? 0
-                : player.velocity.x - Math.sign(player.velocity.x) * decelerationFactor;
+                : player.velocity.x - Math.sign(player.velocity.x) * deceleration;
 
             // Update positions
             player.x += player.velocity.x;
@@ -234,11 +261,11 @@
             player.x = Math.max(0, Math.min(player.x, canvas.width - player.width));
         }
 
-        // calls like everything runs every frame
+
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // give inputs to updateplayer
+            // Update player positions
             if (!player1.isAttackFrozen)
                 updatePlayer(player1, 'a', 'd');
             if (!player2.isAttackFrozen)
@@ -248,31 +275,34 @@
             drawPlayer(player1);
             drawPlayer(player2);
 
-            // draw attacks
+            // Draw attacks
             if (player1.isAttacking && player1.isAttackFrozen) {
                 attack1Hitbox = drawAttack(player1, attackConfigs[player1.currentAttackType]);
             } else {
-                attack1Hitbox = null;
+                attack1Hitbox = null; // Clear hitbox if not attacking
             }
+
             if (player2.isAttacking && player2.isAttackFrozen) {
                 attack2Hitbox = drawAttack(player2, attackConfigs[player2.currentAttackType]);
             } else {
-                attack2Hitbox = null;
+                attack2Hitbox = null; // Clear hitbox if not attacking
             }
 
-            // Check Attack Collision
+            // Check for attack collisions
             const player1HitPlayer2 = attack1Hitbox && checkAttackCollision(attack1Hitbox, player2);
             const player2HitPlayer1 = attack2Hitbox && checkAttackCollision(attack2Hitbox, player1);
 
-            // handles hits if players got hit
+            // Handle hits and clear attacks after successful hit
             if (player1HitPlayer2 && player2HitPlayer1) {
-                // Do nothing if both would be stunned
+                // Do nothing if both players would be stunned
+                attack1Hitbox = null;
+                attack2Hitbox = null;
             } else {
-                if (player1HitPlayer2) {
-                    stunAnimate(player2, player1); // Stun player 2, with player 1 as the attacker
+                if (player1HitPlayer2 && !player2.hasHit) {
+                    stunAnimate(player2, player1, attackConfigs[player1.currentAttackType]);
                 }
-                if (player2HitPlayer1) {
-                    stunAnimate(player1, player2); // Stun player 1, with player 2 as the attacker
+                if (player2HitPlayer1 && !player1.hasHit) {
+                    stunAnimate(player1, player2, attackConfigs[player2.currentAttackType]);
                 }
             }
 
