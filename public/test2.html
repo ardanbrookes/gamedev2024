@@ -181,13 +181,6 @@
             player.x += attacker.x < player.x ? attackConfig.instantknockbackX : -attackConfig.instantknockbackX;;
             player.y += -attackConfig.instantknockbackY;
 
-            // Prevent falling off canvas
-            if (player.y > canvas.height - player.height) {
-                player.y = canvas.height - player.height;
-                player.velocity.y = 0;
-                player.jumpCount = 0;
-            }
-
             // If already stunned, clear previous timers and reset
             if (player.stunTimeout) {
                 clearTimeout(player.stunTimeout);
