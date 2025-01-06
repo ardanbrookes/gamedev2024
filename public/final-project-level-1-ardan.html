@@ -157,11 +157,15 @@
                     if (rect01.top < rect02.top) {
                         myImg01.style.top = rect01.top - overlapY + 'px';
                         jumpCount01 = 0;
+                        myImg01.style.left = 50 + 'px'
+                        myImg01.style.top = 400 + 'px';
                         alert("Player 1 Wins (great dane)");
                         location.reload();
                     } else {
                         myImg02.style.top = rect02.top - overlapY + 'px';
                         jumpCount02 = 0;
+                        myImg02.style.left = 250 + 'px'
+                        myImg02.style.top = 400 + 'px';
                         alert("Player 2 Wins (borzoi)");
                         location.reload();
                     }
