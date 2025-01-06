@@ -21,11 +21,28 @@
             margin: auto;
             border: 1px solid black;
         }
+        div#gameOverDiv {
+            width: 800px;
+            height: 500px;
+            border: 10px solid black;
+            border-radius: 50px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+            /* display: none; */
+            background-color: rgb(144, 238, 167);
+        }
     </style>
 </head>
 
 <body>
     <h1>Final Project Level 2</h1>
+    <div id="gameOverDiv">
+        <h1>Player2 (borzoi) Wins</h1>
+    </div>
     <canvas id="gameCanvas" width="1200" height="800" style="background-color: white;"></canvas>
 
     <script>
@@ -85,8 +102,8 @@
 
         // Attack types
         const attackConfigs = {
-            default: { width: 70, height: 25, knockback: 13, knockbackY: 3, damage: 10, startup: 100, duration: 125, cooldown: 150, stunTime: 500, instantknockbackX: 10, instantknockbackY: 3 },
-            heavy: { width: 100, height: 40, knockback: 25, knockbackY: 5, damage: 20, startup: 250, duration: 250, cooldown: 600, stunTime: 400, instantknockbackX: 0, instantknockbackY: 4 },
+            default: { width: 70, height: 25,  knockback: 13, knockbackY: 3, damage: 10, startup: 100, duration: 90, cooldown: 150, stunTime: 500, instantknockbackX: 10, instantknockbackY: 55 },
+            heavy: { width: 100, height: 40, knockback: 25, knockbackY: 5, damage: 20, startup: 250, duration: 250, cooldown: 600, stunTime: 400, instantknockbackX: 0, instantknockbackY: 0 },
         };
 
 
@@ -349,6 +366,18 @@
             ctx.fillRect(x, y, width * healthPercentage, height);
             ctx.strokeStyle = 'black'; // Outline color
             ctx.strokeRect(x, y, width, height);
+            if (healthPercentage <= 0) {
+                gameOver(player)
+            }
+        }
+
+        function gameOver(loser) {
+            if (loser === player1) {
+                player2 = winner;
+            } else {
+                player1 = winner;
+            }
+            document.getElementById
         }
 
         animate();
