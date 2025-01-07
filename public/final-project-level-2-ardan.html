@@ -367,7 +367,7 @@
 
         // draws the attack on the canvas (called at the start of animate)
         function drawAttack(player, attackConfig) {
-            const { width: attackWidth, height: attackHeight } = attackConfig;
+            const { width: attackWidth, height: attackHeight, offsetX: offsetX, offsetX: offsetX } = attackConfig;
 
             // Determine attack hitbox position
             const attackX = !player.flipped ? player.x - attackWidth - offsetX : player.x + player.width + offsetX;
