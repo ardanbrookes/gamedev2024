@@ -21,6 +21,7 @@
             margin: auto;
             border: 1px solid black;
         }
+
         div#gameOverDiv {
             width: 800px;
             height: 500px;
@@ -32,8 +33,21 @@
             bottom: 0;
             right: 0;
             margin: auto;
-            /* display: none; */
+            display: none;
             background-color: rgb(144, 238, 167);
+        }
+
+        input#playAgain {
+            width: fit-content;
+            height: fit-content;
+            font-size: xx-large;
+            border: 5px solid black;
+            border-radius: 15px;
+            position: absolute;
+            margin: auto;
+            left: 0;
+            right: 0;
+            background-color: rgb(238, 150, 144);
         }
     </style>
 </head>
@@ -41,7 +55,8 @@
 <body>
     <h1>Final Project Level 2</h1>
     <div id="gameOverDiv">
-        <h1>Player2 (borzoi) Wins</h1>
+        <h1 id="winnerText" style="font-size: 50px;">Playe1 (great dane) Wins</h1>
+        <input type="button" onclick="location.reload()" value="Play Again" id="playAgain">
     </div>
     <canvas id="gameCanvas" width="1200" height="800" style="background-color: white;"></canvas>
 
@@ -81,6 +96,7 @@
             health: 100,
             currentAttackType: 'default',
             hasHit: false,
+            lastAttackTime: {},
         };
         const player2 = {
             x: 1050,
@@ -98,12 +114,13 @@
             health: 100,
             currentAttackType: 'default',
             hasHit: false,
+            lastAttackTime: {},
         };
 
         // Attack types
         const attackConfigs = {
-            default: { width: 70, height: 25,  knockback: 13, knockbackY: 3, damage: 10, startup: 100, duration: 90, cooldown: 150, stunTime: 500, instantknockbackX: 10, instantknockbackY: 55 },
-            heavy: { width: 100, height: 40, knockback: 25, knockbackY: 5, damage: 20, startup: 250, duration: 250, cooldown: 600, stunTime: 400, instantknockbackX: 0, instantknockbackY: 0 },
+            default: { width: 70, height: 25, knockback: 13, knockbackY: 3, damage: 10, startup: 100, duration: 90, cooldown: 150, stunTime: 500, instantknockbackX: 15, instantknockbackY: 25, offsetX: , offsetY: , },
+            heavy: { width: 100, height: 40, knockback: 25, knockbackY: 5, damage: 20, startup: 250, duration: 250, cooldown: 600, stunTime: 400, instantknockbackX: 0, instantknockbackY: 0, offsetX: , offsetY: , },
         };
 
 
@@ -149,6 +166,23 @@
 
             const attackConfig = attackConfigs[attackType];
             if (!attackConfig) return;
+
+            // Ensure lastAttackTime exists for this attack type
+            if (!player.lastAttackTime[attackType]) {
+                player.lastAttackTime[attackType] = 0;
+            }
+
+            const currentTime = Date.now();
+            const timeSinceLastAttack = currentTime - player.lastAttackTime[attackType];
+
+            // Prevent attack if less than 1 second has passed since last use of this attack type
+            if (timeSinceLastAttack < 1000) {
+                console.log(`Attack ${attackType} on cooldown for player.`);
+                return;
+            }
+
+            // Update lastAttackTime for the attack type
+            player.lastAttackTime[attackType] = currentTime;
 
             player.currentAttackType = attackType; // Set the current attack type
             player.canAttack = false;
@@ -336,7 +370,7 @@
             const { width: attackWidth, height: attackHeight } = attackConfig;
 
             // Determine attack hitbox position
-            const attackX = !player.flipped ? player.x - attackWidth : player.x + player.width;
+            const attackX = !player.flipped ? player.x - attackWidth - offsetX : player.x + player.width + offsetX;
             const attackY = player.y + (player.height - attackHeight) / 2;
 
             ctx.fillStyle = 'rgba(255, 0, 0, 1)';
@@ -373,11 +407,12 @@
 
         function gameOver(loser) {
             if (loser === player1) {
-                player2 = winner;
+                winner = 'Player2 (borzoi)';
             } else {
-                player1 = winner;
+                winner = 'Player1 (great dane)';
             }
-            document.getElementById
+            document.getElementById('gameOverDiv').style.display = 'block';
+            document.getElementById('winnerText').innerHTML = `${winner} Wins`;
         }
 
         animate();
