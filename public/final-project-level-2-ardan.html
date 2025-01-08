@@ -87,16 +87,18 @@
             height: 80,
             velocity: { x: 0, y: 0 },
             isJumping: false, //if in the air
-            jumpCount: 0,
-            image: img01,
-            flipped: false,
-            isAttacking: false, //is player is
-            canAttack: true,
-            isFrozen: false, // New property
+            jumpCount: 0, //
+            image: img01, //image source for player
+            flipped: false, //so drawplayer knows what direction to face the player and what direction attacks come from
+            isAttacking: false, //if the attack is actively coming out of the player
+            isAttackFrozen: false, //freezes player the instant they attack lasts till the end of the attack cooldown
+            canAttack: true, //if the player can attack
+            isFrozen: false, //freezes movement when player is attacked
             health: 100,
-            currentAttackType: 'default',
-            hasHit: false,
+            currentAttackType: 'default', //what attack type player is using only checked attack is triggered
+            hasHit: false, //triggered when player gets hit ended when attack ends to make the same attack not hit every frame
             lastAttackTime: {},
+            isStunned: false, //triggered in stunAnimate to prevent player from moving during knockback checked by undatePlayer
         };
         const player2 = {
             x: 1050,
@@ -109,18 +111,20 @@
             image: img02,
             flipped: false,
             isAttacking: false,
+            isAttackFrozen: false,
             canAttack: true,
             isFrozen: false, // New property
             health: 100,
             currentAttackType: 'default',
             hasHit: false,
             lastAttackTime: {},
+            isStunned: false,
         };
 
         // Attack types
         const attackConfigs = {
-            default: { width: 70, height: 25, knockback: 13, knockbackY: 3, damage: 10, startup: 100, duration: 90, cooldown: 150, stunTime: 500, instantknockbackX: 25, instantknockbackY: 10, offsetX: 0, offsetY: 0, },
-            heavy: { width: 100, height: 40, knockback: 25, knockbackY: 5, damage: 20, startup: 250, duration: 250, cooldown: 600, stunTime: 400, instantknockbackX: 0, instantknockbackY: 0, offsetX: 0, offsetY: 0, },
+            default: { width: 70, height: 25, knockback: 12, knockbackY: 3, damage: 10, startup: 100, duration: 90, cooldown: 150, freezeTime: 500, instantknockbackX: 25, instantknockbackY: 10, offsetX: 0, offsetY: 0, knockbackDuration: 1000, },
+            heavy: { width: 100, height: 40, knockback: 25, knockbackY: 5, damage: 20, startup: 250, duration: 250, cooldown: 600, freezeTime: 400, instantknockbackX: 0, instantknockbackY: 0, offsetX: 0, offsetY: 0, knockbackDuration: 1000, },
         };
 
 
@@ -249,18 +253,25 @@
                 player.jumpCount = 0;
             }
 
+
+
+
             // If already stunned, clear previous timers and reset
-            if (player.stunTimeout) {
-                clearTimeout(player.stunTimeout);
+            if (player.freezeTimeout) {
+                clearTimeout(player.freezeTimeout);
             }
 
-            // Freeze the player
+            const knockbackDuration = attackConfig.knockbackDuration;
             player.isFrozen = true;
-
-            // Set a new stun duration
-            player.stunTimeout = setTimeout(() => {
+            player.freezeTimeout = setTimeout(() => {
                 player.isFrozen = false; // Unfreeze the player
+                player.isStunned = true;
+                setTimeout(() => {
+                    player.isStunned = false; // Re-enable movement
+                }, knockbackDuration);
             }, attackConfig.stunTime);
+
+            player.x = Math.max(0, Math.min(player.x, canvas.width - player.width));
         }
 
 
