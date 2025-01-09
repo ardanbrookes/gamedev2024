@@ -65,10 +65,11 @@
         const ctx = canvas.getContext('2d');
 
         // Load images
-        const img01 = new Image();
-        const img02 = new Image();
-        img01.src = 'dog1.jpg';
-        img02.src = 'dog2.jpg';
+        const player1Default = new Image();
+        player1Default.src = 'finalProjectImages/dog1.jpg';
+
+        const player2Default = new Image();
+        player2Default.src = 'finalProjectImages/dog2.jpg';
 
         // movement variables
         const gravity = 0.7;
@@ -85,46 +86,46 @@
             y: canvas.height - 80,
             width: 80,
             height: 80,
+            image: player1Default, //image source for player
             velocity: { x: 0, y: 0 },
-            isJumping: false, //if in the air
-            jumpCount: 0, //
-            image: img01, //image source for player
+            health: 100,
+            jumpCount: 0,
+            lastAttackTime: {},
+            isAirborne: false, //if in the air
             flipped: false, //so drawplayer knows what direction to face the player and what direction attacks come from
             isAttacking: false, //if the attack is actively coming out of the player
             isAttackFrozen: false, //freezes player the instant they attack lasts till the end of the attack cooldown
-            canAttack: true, //if the player can attack
             isFrozen: false, //freezes movement when player is attacked
-            health: 100,
-            currentAttackType: 'default', //what attack type player is using only checked attack is triggered
             hasHit: false, //triggered when player gets hit ended when attack ends to make the same attack not hit every frame
-            lastAttackTime: {},
             isStunned: false, //triggered in stunAnimate to prevent player from moving during knockback checked by undatePlayer
+            isWindup: false, //not functional just for animations to telegraph an attack is coming
+            currentAttackType: 'default', //what attack type player is using only checked attack is triggered
         };
         const player2 = {
-            x: 1050,
+            x: 1070,
             y: canvas.height - 80,
             width: 80,
             height: 80,
+            image: player2Default, //image source for player
             velocity: { x: 0, y: 0 },
-            isJumping: false,
-            jumpCount: 0,
-            image: img02,
-            flipped: false,
-            isAttacking: false,
-            isAttackFrozen: false,
-            canAttack: true,
-            isFrozen: false, // New property
             health: 100,
-            currentAttackType: 'default',
-            hasHit: false,
+            jumpCount: 0,
             lastAttackTime: {},
-            isStunned: false,
+            isAirborne: false, //if in the air
+            flipped: false, //so drawplayer knows what direction to face the player and what direction attacks come from
+            isAttacking: false, //if the attack is actively coming out of the player
+            isAttackFrozen: false, //freezes player the instant they attack lasts till the end of the attack cooldown
+            isFrozen: false, //freezes movement when player is attacked
+            hasHit: false, //triggered when player gets hit ended when attack ends to make the same attack not hit every frame
+            isStunned: false, //triggered in stunAnimate to prevent player from moving during knockback checked by undatePlayer
+            isWindup: false, //not functional just for animations to telegraph an attack is coming
+            currentAttackType: 'default', //what attack type player is using only checked attack is triggered
         };
 
         // Attack types
         const attackConfigs = {
-            default: { width: 70, height: 25, knockback: 12, knockbackY: 3, damage: 10, startup: 100, duration: 90, cooldown: 150, freezeTime: 500, instantknockbackX: 25, instantknockbackY: 10, offsetX: 0, offsetY: 0, knockbackDuration: 1000, },
-            heavy: { width: 100, height: 40, knockback: 25, knockbackY: 5, damage: 20, startup: 250, duration: 250, cooldown: 600, freezeTime: 400, instantknockbackX: 0, instantknockbackY: 0, offsetX: 0, offsetY: 0, knockbackDuration: 1000, },
+            default: { width: 70, height: 25, knockback: 15, knockbackY: 4, damage: 10, startup: 100, duration: 100, cooldown: 150, freezeTime: 500, instantknockbackX: 25, instantknockbackY: 15, offsetX: 0, offsetY: 0, knockbackDuration: 10, },
+            heavy: { width: 100, height: 40, knockback: 25, knockbackY: 5, damage: 20, startup: 250, duration: 250, cooldown: 600, freezeTime: 400, instantknockbackX: 0, instantknockbackY: 0, offsetX: 0, offsetY: 0, knockbackDuration: 220, },
         };
 
 
@@ -158,6 +159,8 @@
 
         // checks if player is able to jump then sets y velocity (triggered when event listener for up goes off)
         function handleJump(player) {
+            if (player.isFrozen || player.isStunned) return;
+
             if (player.jumpCount < 2) { // Allow up to 2 jumps
                 player.velocity.y = jumpStrength;
                 player.jumpCount++;
@@ -166,7 +169,7 @@
 
         // first thing thats runs when you attack. starts the attackanimate and cooldown
         function performAttack(player, attackType = 'default') {
-            if (!player.canAttack || player.isFrozen) return;
+            if (player.isAttackFrozen || player.isFrozen) return;
 
             const attackConfig = attackConfigs[attackType];
             if (!attackConfig) return;
@@ -189,24 +192,20 @@
             player.lastAttackTime[attackType] = currentTime;
 
             player.currentAttackType = attackType; // Set the current attack type
-            player.canAttack = false;
 
             attackAnimate(player, attackConfig);
-
-            setTimeout(() => {
-                player.canAttack = true;
-            }, attackConfig.cooldown + attackConfig.startup + attackConfig.duration);
         }
 
 
-        // handles functionality of attack. freezes player and handles timeout (called by performAttack)
-
+        // handles functionality of attack. changes states for each part of attacj (called by performAttack)
         function attackAnimate(player, attackConfig, target) {
             player.isAttackFrozen = true; // Freeze the attacking player
             let currentHitbox = null;
+            player.isWindup = true;
 
             setTimeout(() => {
                 player.isAttacking = true; // Start attack animation
+                player.isWindup = false;
                 currentHitbox = player === player1 ? attack1Hitbox : attack2Hitbox;
                 setTimeout(() => {
                     player.isAttacking = false; // End attack animation
@@ -223,7 +222,6 @@
                 }, attackConfig.duration); // Attack duration
             }, attackConfig.startup); // Delay before attack starts
         }
-
 
 
         // freezes player and sets timer to unfreeze player (called from animate when player is hit)
@@ -253,23 +251,19 @@
                 player.jumpCount = 0;
             }
 
-
-
-
             // If already stunned, clear previous timers and reset
             if (player.freezeTimeout) {
                 clearTimeout(player.freezeTimeout);
             }
 
-            const knockbackDuration = attackConfig.knockbackDuration;
             player.isFrozen = true;
             player.freezeTimeout = setTimeout(() => {
                 player.isFrozen = false; // Unfreeze the player
                 player.isStunned = true;
                 setTimeout(() => {
                     player.isStunned = false; // Re-enable movement
-                }, knockbackDuration);
-            }, attackConfig.stunTime);
+                }, attackConfig.knockbackDuration);
+            }, attackConfig.freezeTime);
 
             player.x = Math.max(0, Math.min(player.x, canvas.width - player.width));
         }
@@ -284,6 +278,7 @@
                 attack.y + attack.height > target.y
             );
         }
+
 
         // calculates players speed and other values called by animate
         function updatePlayer(player, keysLeft, keysRight) {
@@ -317,6 +312,10 @@
                 player.y = canvas.height - player.height;
                 player.velocity.y = 0;
                 player.jumpCount = 0;
+                player.isAirborne = false;
+            }
+            else {
+                player.isAirborne = true;
             }
 
             // Prevent moving out of bounds
@@ -324,8 +323,35 @@
         }
 
 
+        function updateImage(player, attack) {
+            if (player.isFrozen) {
+                player.image = `${player}Frozen`;
+            }
+            else if (player.isStunned) {
+                player.image = `${player}Stunned`;
+            }
+            else if (player.isAttacking) {
+                player.image = `${player}${attack}Attacking`;
+            }
+            else if (player.isWindup) {
+                player.image = `${player}${attack}Windup`;
+            }
+            else if (player.isAttackFrozen) {
+                player.image = `${player}AttackFrozen`;
+            }
+            else if (player.isJumping) {
+                player.image = `${player}Airborne`;
+            }
+            else {
+                player.image = `${player}Default`;
+            }
+        }
+
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            updateImage(player1, attackConfigs[player1.currentAttackType])
+            updateImage(player2, attackConfigs[player2.currentAttackType])
 
             // Update player positions
             if (!player1.isAttackFrozen)
@@ -373,6 +399,8 @@
             drawHealthBar(player2, canvas.width - 220, 20, 200, 20); // Player 2's health bar
 
             requestAnimationFrame(animate);
+            console.log("player1 image: " + player1.image)
+            console.log("player2 image: " + player2.image)
         }
 
 
