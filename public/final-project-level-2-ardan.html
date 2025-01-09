@@ -64,12 +64,18 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
+
         // Load images
         const player1Default = new Image();
-        player1Default.src = 'finalProjectImages/dog1.jpg';
-
+        player1Default.src = 'dog1.jpg';
+        console.log(player1Default)
         const player2Default = new Image();
-        player2Default.src = 'finalProjectImages/dog2.jpg';
+        player2Default.src = 'dog2.jpg';
+
+        const imgObj = {
+            player1Default: player1Default,
+            player2Default: player2Default,
+        }
 
         // movement variables
         const gravity = 0.7;
@@ -121,7 +127,7 @@
             isWindup: false, //not functional just for animations to telegraph an attack is coming
             currentAttackType: 'default', //what attack type player is using only checked attack is triggered
         };
-
+        console.log('player', player1)
         // Attack types
         const attackConfigs = {
             default: { width: 70, height: 25, knockback: 15, knockbackY: 4, damage: 10, startup: 100, duration: 100, cooldown: 150, freezeTime: 500, instantknockbackX: 25, instantknockbackY: 15, offsetX: 0, offsetY: 0, knockbackDuration: 10, },
@@ -324,6 +330,7 @@
 
 
         function updateImage(player, attack) {
+            console.log('player', player)
             if (player.isFrozen) {
                 player.image = `${player}Frozen`;
             }
@@ -343,8 +350,9 @@
                 player.image = `${player}Airborne`;
             }
             else {
-                player.image = `${player}Default`;
+                player.image = imgObj['player1Default'];
             }
+            
         }
 
         function animate() {
