@@ -65,17 +65,50 @@
         const ctx = canvas.getContext('2d');
 
 
-        // Load images
+        // Load images for player 1
         const player1Default = new Image();
-        player1Default.src = 'dog1.jpg';
-        console.log(player1Default)
-        const player2Default = new Image();
-        player2Default.src = 'dog2.jpg';
+        player1Default.src = 'finalProjectImages/dog1.jpg';
 
-        const imgObj = {
-            player1Default: player1Default,
-            player2Default: player2Default,
-        }
+        const player1Frozen = new Image();
+        player1Frozen.src = 'finalProjectImages/dog1Frozen.jpg';
+
+        const player1Stunned = new Image();
+        player1Stunned.src = 'finalProjectImages/dog1Stunned.jpg';
+
+        const player1Attacking = new Image();
+        player1Attacking.src = 'finalProjectImages/dog1Attacking.jpg';
+
+        const player1Windup = new Image();
+        player1Windup.src = 'finalProjectImages/dog1Windup.jpg';
+
+        const player1AttackFrozen = new Image();
+        player1AttackFrozen.src = 'finalProjectImages/dog1AttackFrozen.jpg';
+
+        const player1Airborne = new Image();
+        player1Airborne.src = 'finalProjectImages/dog1Airborne.jpg';
+
+        // Load images for player 2
+        const player2Default = new Image();
+        player2Default.src = 'finalProjectImages/dog2.jpg';
+
+        const player2Frozen = new Image();
+        player2Frozen.src = 'finalProjectImages/dog2Frozen.jpg';
+
+        const player2Stunned = new Image();
+        player2Stunned.src = 'finalProjectImages/dog2Stunned.jpg';
+
+        const player2Attacking = new Image();
+        player2Attacking.src = 'finalProjectImages/dog2Attacking.jpg';
+
+        const player2Windup = new Image();
+        player2Windup.src = 'finalProjectImages/dog2Windup.jpg';
+
+        const player2AttackFrozen = new Image();
+        player2AttackFrozen.src = 'finalProjectImages/dog2AttackFrozen.jpg';
+
+        const player2Airborne = new Image();
+        player2Airborne.src = 'finalProjectImages/dog2Airborne.jpg';
+
 
         // movement variables
         const gravity = 0.7;
@@ -127,7 +160,6 @@
             isWindup: false, //not functional just for animations to telegraph an attack is coming
             currentAttackType: 'default', //what attack type player is using only checked attack is triggered
         };
-        console.log('player', player1)
         // Attack types
         const attackConfigs = {
             default: { width: 70, height: 25, knockback: 15, knockbackY: 4, damage: 10, startup: 100, duration: 100, cooldown: 150, freezeTime: 500, instantknockbackX: 25, instantknockbackY: 15, offsetX: 0, offsetY: 0, knockbackDuration: 10, },
@@ -330,29 +362,53 @@
 
 
         function updateImage(player, attack) {
-            console.log('player', player)
-            if (player.isFrozen) {
-                player.image = `${player}Frozen`;
+            if (player = player1) {
+                if (player.isFrozen) {
+                    player.image = player1Frozen;
+                }
+                else if (player.isStunned) {
+                    player.image = player1Stunned;
+                }
+                else if (player.isAttacking) {
+                    player.image = player1Attacking;
+                }
+                else if (player.isWindup) {
+                    player.image = player1Windup;
+                }
+                else if (player.isAttackFrozen) {
+                    player.image = player1AttackFrozen;
+                }
+                else if (player.isJumping) {
+                    player.image = player1Airborne;
+                }
+                else {
+                    player.image = player1Default;
+                }
             }
-            else if (player.isStunned) {
-                player.image = `${player}Stunned`;
+            if (player = player2) {
+                if (player.isFrozen) {
+                    player.image = player2Frozen;
+                }
+                else if (player.isStunned) {
+                    player.image = player2Stunned;
+                }
+                else if (player.isAttacking) {
+                    player.image = player2Attacking;
+                }
+                else if (player.isWindup) {
+                    player.image = player2Windup;
+                }
+                else if (player.isAttackFrozen) {
+                    player.image = player2AttackFrozen;
+                }
+                else if (player.isJumping) {
+                    player.image = player2Airborne;
+                }
+                else {
+                    player.image = player2Default;
+                }
             }
-            else if (player.isAttacking) {
-                player.image = `${player}${attack}Attacking`;
-            }
-            else if (player.isWindup) {
-                player.image = `${player}${attack}Windup`;
-            }
-            else if (player.isAttackFrozen) {
-                player.image = `${player}AttackFrozen`;
-            }
-            else if (player.isJumping) {
-                player.image = `${player}Airborne`;
-            }
-            else {
-                player.image = imgObj['player1Default'];
-            }
-            
+
         }
 
         function animate() {
@@ -407,8 +463,6 @@
             drawHealthBar(player2, canvas.width - 220, 20, 200, 20); // Player 2's health bar
 
             requestAnimationFrame(animate);
-            console.log("player1 image: " + player1.image)
-            console.log("player2 image: " + player2.image)
         }
 
 
