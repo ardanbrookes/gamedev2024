@@ -112,7 +112,7 @@
 
         // movement variables
         const gravity = 0.7;
-        const jumpStrength = -15;
+        const jumpStrength = -17;
         const acceleration = 1.5;
         const maxSpeed = 8;
         const deceleration = 0.8;
@@ -162,8 +162,9 @@
         };
         // Attack types
         const attackConfigs = {
-            default: { width: 70, height: 25, knockback: 15, knockbackY: 4, damage: 10, startup: 100, duration: 100, cooldown: 150, freezeTime: 500, instantknockbackX: 25, instantknockbackY: 15, offsetX: 0, offsetY: 0, knockbackDuration: 10, },
+            jab: { width: 70, height: 25, knockback: 15, knockbackY: 4, damage: 10, startup: 100, duration: 100, cooldown: 150, freezeTime: 500, instantknockbackX: 25, instantknockbackY: 15, offsetX: 0, offsetY: 0, knockbackDuration: 10, },
             heavy: { width: 100, height: 40, knockback: 25, knockbackY: 5, damage: 20, startup: 250, duration: 250, cooldown: 600, freezeTime: 400, instantknockbackX: 0, instantknockbackY: 0, offsetX: 0, offsetY: 0, knockbackDuration: 220, },
+            up: { width: 70, height: 50, knockback: 5, knockbackY: 15, damage: 20, startup: 300, duration: 60, cooldown: 500, freezeTime: 400, instantknockbackX: 5, instantknockbackY: 10, offsetX: -40, offsetY: 95, knockbackDuration: 0, },
         };
 
 
@@ -176,15 +177,36 @@
 
             // Player 1 attacks
             if (event.key === ' ') {
-                const attackType = keys['s'] ? 'heavy' : 'default';
+                let attackType;
+
+                if (keys['s']) {
+                    attackType = 'heavy';
+                } else if (keys['a'] || keys['d']) { // No directional keys pressed
+                    attackType = 'jab';
+                } else {
+                    attackType = 'up';
+                }
+
                 performAttack(player1, attackType);
             }
         });
+
         window.addEventListener('mousedown', (event) => {
             event.preventDefault();
-            const attackType = keys['ArrowDown'] ? 'heavy' : 'default';
+
+            let attackType;
+
+            if (keys['ArrowDown']) {
+                attackType = 'heavy';
+            } else if (keys['ArrowLeft'] || keys['ArrowRight']) { // No directional keys pressed
+                attackType = 'jab';
+            } else {
+                attackType = 'up';
+            }
+
             performAttack(player2, attackType);
         });
+
         window.addEventListener('keyup', (event) => {
             keys[event.key] = false;
         });
@@ -414,8 +436,8 @@
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            updateImage(player1, attackConfigs[player1.currentAttackType])
-            updateImage(player2, attackConfigs[player2.currentAttackType])
+            //updateImage(player1, attackConfigs[player1.currentAttackType])
+            //updateImage(player2, attackConfigs[player2.currentAttackType])
 
             // Update player positions
             if (!player1.isAttackFrozen)
@@ -472,7 +494,7 @@
 
             // Determine attack hitbox position
             const attackX = !player.flipped ? player.x - attackWidth - offsetX : player.x + player.width + offsetX;
-            const attackY = player.y + (player.height - attackHeight) / 2;
+            const attackY = player.y + (player.height - attackHeight) / 2 - offsetY;
 
             ctx.fillStyle = 'rgba(255, 0, 0, 1)';
             ctx.fillRect(attackX, attackY, attackWidth, attackHeight);
