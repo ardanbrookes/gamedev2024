@@ -163,8 +163,9 @@
         // Attack types
         const attackConfigs = {
             jab: { width: 70, height: 25, knockback: 15, knockbackY: 4, damage: 10, startup: 100, duration: 100, cooldown: 150, freezeTime: 500, instantknockbackX: 25, instantknockbackY: 15, offsetX: 0, offsetY: 0, knockbackDuration: 10, },
-            heavy: { width: 100, height: 40, knockback: 25, knockbackY: 5, damage: 20, startup: 250, duration: 250, cooldown: 600, freezeTime: 400, instantknockbackX: 0, instantknockbackY: 0, offsetX: 0, offsetY: 0, knockbackDuration: 220, },
-            up: { width: 70, height: 50, knockback: 5, knockbackY: 15, damage: 20, startup: 300, duration: 60, cooldown: 500, freezeTime: 400, instantknockbackX: 5, instantknockbackY: 10, offsetX: -40, offsetY: 95, knockbackDuration: 0, },
+            heavy: { width: 100, height: 40, knockback: 25, knockbackY: 5, damage: 20, startup: 250, duration: 250, cooldown: 450, freezeTime: 400, instantknockbackX: 0, instantknockbackY: 0, offsetX: 0, offsetY: 0, knockbackDuration: 250, },
+            up: { width: 70, height: 50, knockback: 5, knockbackY: 20, damage: 20, startup: 280, duration: 80, cooldown: 450, freezeTime: 350, instantknockbackX: 5, instantknockbackY: 10, offsetX: -40, offsetY: 95, knockbackDurationad: 0, },
+            smash: { width: 130, height: 110, knockback: 16, knockbackY: 17, damage: 30, startup: 300, duration: 200, cooldown: 400, freezeTime: 500, instantknockbackX: 10, instantknockbackY: 10, offsetX: -105, offsetY: 15, knockbackDuration: 300, },
         };
 
 
@@ -178,10 +179,11 @@
             // Player 1 attacks
             if (event.key === ' ') {
                 let attackType;
-
-                if (keys['s']) {
-                    attackType = 'heavy';
-                } else if (keys['a'] || keys['d']) { // No directional keys pressed
+                if ((keys['a'] || keys['d']) && keys['s']) { // No directional keys pressed
+                    attackType = 'heavy'; 
+                } else if (keys['s']) {
+                    attackType = 'smash';
+                } else if (keys['a'] || keys['d']) {
                     attackType = 'jab';
                 } else {
                     attackType = 'up';
@@ -193,11 +195,11 @@
 
         window.addEventListener('mousedown', (event) => {
             event.preventDefault();
-
             let attackType;
-
-            if (keys['ArrowDown']) {
+            if ((keys['ArrowLeft'] || keys['ArrowRight']) && keys['ArrowDown']) {
                 attackType = 'heavy';
+            } else if (keys['ArrowDown']) {
+                attackType = 'smash';
             } else if (keys['ArrowLeft'] || keys['ArrowRight']) { // No directional keys pressed
                 attackType = 'jab';
             } else {
