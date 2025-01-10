@@ -162,10 +162,14 @@
         };
         // Attack types
         const attackConfigs = {
-            jab: { width: 70, height: 25, knockback: 15, knockbackY: 4, damage: 10, startup: 100, duration: 100, cooldown: 150, freezeTime: 500, instantknockbackX: 25, instantknockbackY: 15, offsetX: 0, offsetY: 0, knockbackDuration: 10, },
-            heavy: { width: 100, height: 40, knockback: 25, knockbackY: 5, damage: 20, startup: 250, duration: 250, cooldown: 450, freezeTime: 400, instantknockbackX: 0, instantknockbackY: 0, offsetX: 0, offsetY: 0, knockbackDuration: 250, },
-            up: { width: 70, height: 50, knockback: 5, knockbackY: 20, damage: 20, startup: 280, duration: 80, cooldown: 450, freezeTime: 350, instantknockbackX: 5, instantknockbackY: 10, offsetX: -40, offsetY: 95, knockbackDurationad: 0, },
-            smash: { width: 130, height: 110, knockback: 16, knockbackY: 17, damage: 30, startup: 300, duration: 200, cooldown: 400, freezeTime: 500, instantknockbackX: 10, instantknockbackY: 10, offsetX: -105, offsetY: 15, knockbackDuration: 300, },
+            groundLight: { width: 70,  height: 25,  knockback: 15, knockbackY: 4,  damage: 5,  startup: 100, duration: 100, cooldown: 150, freezeTime: 500, instantknockbackX: 20, instantknockbackY: 15, offsetX: 0,    offsetY: 40,  knockbackDuration: 10, },
+            groundHeavy: { width: 100, height: 40,  knockback: 25, knockbackY: 5,  damage: 20, startup: 250, duration: 250, cooldown: 450, freezeTime: 400, instantknockbackX: 0,  instantknockbackY: 0,  offsetX: 0,    offsetY: 25,  knockbackDuration: 250, },
+            groundUp:    { width: 70,  height: 70,  knockback: 5,  knockbackY: 20, damage: 15, startup: 275, duration: 100, cooldown: 450, freezeTime: 350, instantknockbackX: 5,  instantknockbackY: 15, offsetX: -40,  offsetY: 110, knockbackDurationad: 0, },
+            groundSmash: { width: 140, height: 110, knockback: 16, knockbackY: 17, damage: 25, startup: 300, duration: 200, cooldown: 400, freezeTime: 500, instantknockbackX: 10, instantknockbackY: 10, offsetX: -110, offsetY: 0,   knockbackDuration: 300, },
+            airLight:    { width: 80,  height: 40,  knockback: 15, knockbackY: 5,  damage: 10, startup: 125, duration: 150, cooldown: 225, freezeTime: 500, instantknockbackX: 15, instantknockbackY: 15, offsetX: 0,    offsetY: 50,  knockbackDuration: 10, },
+            airHeavy:    { width: 100, height: 60,  knockback: 21, knockbackY: -2, damage: 20, startup: 250, duration: 250, cooldown: 450, freezeTime: 400, instantknockbackX: 25, instantknockbackY: 0,  offsetX: 0,    offsetY: -25, knockbackDuration: 250, },
+            airUp:       { width: 50,  height: 60,  knockback: 5,  knockbackY: 16, damage: 10, startup: 125, duration: 75,  cooldown: 200, freezeTime: 350, instantknockbackX: 0,  instantknockbackY: 15, offsetX: -25,  offsetY: 95,  knockbackDurationad: 0, },
+            airSmash:    { width: 35,  height: 45,  knockback: 10, knockbackY: 2,  damage: 15, startup: 150, duration: 150, cooldown: 250, freezeTime: 500, instantknockbackX: 0,  instantknockbackY: 0,  offsetX: -25,  offsetY: -65, knockbackDuration: , },
         };
 
 
@@ -179,16 +183,27 @@
             // Player 1 attacks
             if (event.key === ' ') {
                 let attackType;
-                if ((keys['a'] || keys['d']) && keys['s']) { // No directional keys pressed
-                    attackType = 'heavy'; 
-                } else if (keys['s']) {
-                    attackType = 'smash';
-                } else if (keys['a'] || keys['d']) {
-                    attackType = 'jab';
+                if (player1.isAirborne == true) {
+                    if ((keys['a'] || keys['d']) && keys['s']) { // No directional keys pressed
+                        attackType = 'airHeavy';
+                    } else if (keys['s']) {
+                        attackType = 'airSmash';
+                    } else if (keys['a'] || keys['d']) {
+                        attackType = 'airLight';
+                    } else {
+                        attackType = 'airUp';
+                    }
                 } else {
-                    attackType = 'up';
+                    if ((keys['a'] || keys['d']) && keys['s']) { // No directional keys pressed
+                        attackType = 'groundHeavy';
+                    } else if (keys['s']) {
+                        attackType = 'groundSmash';
+                    } else if (keys['a'] || keys['d']) {
+                        attackType = 'groundLight';
+                    } else {
+                        attackType = 'groundUp';
+                    }
                 }
-
                 performAttack(player1, attackType);
             }
         });
@@ -196,14 +211,26 @@
         window.addEventListener('mousedown', (event) => {
             event.preventDefault();
             let attackType;
-            if ((keys['ArrowLeft'] || keys['ArrowRight']) && keys['ArrowDown']) {
-                attackType = 'heavy';
-            } else if (keys['ArrowDown']) {
-                attackType = 'smash';
-            } else if (keys['ArrowLeft'] || keys['ArrowRight']) { // No directional keys pressed
-                attackType = 'jab';
+            if (player2.isAirborne == true) {
+                if ((keys['ArrowLeft'] || keys['ArrowRight']) && keys['ArrowDown']) {
+                    attackType = 'airHeavy';
+                } else if (keys['ArrowDown']) {
+                    attackType = 'airSmash';
+                } else if (keys['ArrowLeft'] || keys['ArrowRight']) { // No directional keys pressed
+                    attackType = 'airLight';
+                } else {
+                    attackType = 'airUp';
+                }
             } else {
-                attackType = 'up';
+                if ((keys['ArrowLeft'] || keys['ArrowRight']) && keys['ArrowDown']) {
+                    attackType = 'groundHeavy';
+                } else if (keys['ArrowDown']) {
+                    attackType = 'groundSmash';
+                } else if (keys['ArrowLeft'] || keys['ArrowRight']) { // No directional keys pressed
+                    attackType = 'groundLight';
+                } else {
+                    attackType = 'groundUp';
+                }
             }
 
             performAttack(player2, attackType);
@@ -496,7 +523,7 @@
 
             // Determine attack hitbox position
             const attackX = !player.flipped ? player.x - attackWidth - offsetX : player.x + player.width + offsetX;
-            const attackY = player.y + (player.height - attackHeight) / 2 - offsetY;
+            const attackY = player.y + player.height - attackHeight - offsetY;
 
             ctx.fillStyle = 'rgba(255, 0, 0, 1)';
             ctx.fillRect(attackX, attackY, attackWidth, attackHeight);
