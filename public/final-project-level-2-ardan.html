@@ -115,7 +115,7 @@
         const jumpStrength = -17;
         const acceleration = 1.5;
         const maxSpeed = 8;
-        const deceleration = 0.8;
+        const deceleration = 0.6;
         let attack1Hitbox = null;
         let attack2Hitbox = null;
 
@@ -162,14 +162,14 @@
         };
         // Attack types
         const attackConfigs = {
-            groundLight: { width: 70,  height: 25,  knockback: 15, knockbackY: 4,  damage: 5,  startup: 100, duration: 100, cooldown: 150, freezeTime: 500, instantknockbackX: 20, instantknockbackY: 15, offsetX: 0,    offsetY: 40,  knockbackDuration: 10, },
+            groundLight: { width: 70,  height: 25,  knockback: 15, knockbackY: 4,  damage: 5,  startup: 100, duration: 100, cooldown: 150, freezeTime: 500, instantknockbackX: 20, instantknockbackY: 15, offsetX: 0,    offsetY: 40,  knockbackDuration: 0, },
             groundHeavy: { width: 100, height: 40,  knockback: 25, knockbackY: 5,  damage: 20, startup: 250, duration: 250, cooldown: 450, freezeTime: 400, instantknockbackX: 0,  instantknockbackY: 0,  offsetX: 0,    offsetY: 25,  knockbackDuration: 250, },
-            groundUp:    { width: 70,  height: 70,  knockback: 5,  knockbackY: 20, damage: 15, startup: 275, duration: 100, cooldown: 450, freezeTime: 350, instantknockbackX: 5,  instantknockbackY: 15, offsetX: -40,  offsetY: 110, knockbackDurationad: 0, },
+            groundUp:    { width: 70,  height: 70,  knockback: 5,  knockbackY: 20, damage: 15, startup: 275, duration: 100, cooldown: 450, freezeTime: 350, instantknockbackX: 5,  instantknockbackY: 15, offsetX: -40,  offsetY: 110, knockbackDurationad: 25, },
             groundSmash: { width: 140, height: 110, knockback: 16, knockbackY: 17, damage: 25, startup: 300, duration: 200, cooldown: 400, freezeTime: 500, instantknockbackX: 10, instantknockbackY: 10, offsetX: -110, offsetY: 0,   knockbackDuration: 300, },
-            airLight:    { width: 80,  height: 40,  knockback: 15, knockbackY: 5,  damage: 10, startup: 125, duration: 150, cooldown: 225, freezeTime: 500, instantknockbackX: 15, instantknockbackY: 15, offsetX: 0,    offsetY: 50,  knockbackDuration: 10, },
+            airLight:    { width: 80,  height: 40,  knockback: 15, knockbackY: 5,  damage: 10, startup: 125, duration: 150, cooldown: 225, freezeTime: 500, instantknockbackX: 15, instantknockbackY: 15, offsetX: 0,    offsetY: 50,  knockbackDuration: 100, },
             airHeavy:    { width: 100, height: 60,  knockback: 21, knockbackY: -2, damage: 20, startup: 250, duration: 250, cooldown: 450, freezeTime: 400, instantknockbackX: 25, instantknockbackY: 0,  offsetX: 0,    offsetY: -25, knockbackDuration: 250, },
-            airUp:       { width: 50,  height: 60,  knockback: 5,  knockbackY: 16, damage: 10, startup: 125, duration: 75,  cooldown: 200, freezeTime: 350, instantknockbackX: 0,  instantknockbackY: 15, offsetX: -25,  offsetY: 95,  knockbackDurationad: 0, },
-            airSmash:    { width: 35,  height: 45,  knockback: 10, knockbackY: 2,  damage: 15, startup: 150, duration: 150, cooldown: 250, freezeTime: 500, instantknockbackX: 0,  instantknockbackY: 0,  offsetX: -25,  offsetY: -65, knockbackDuration: , },
+            airUp:       { width: 50,  height: 60,  knockback: 5,  knockbackY: 16, damage: 10, startup: 125, duration: 75,  cooldown: 200, freezeTime: 350, instantknockbackX: 0,  instantknockbackY: 15, offsetX: -25,  offsetY: 95,  knockbackDurationad: 10, },
+            airSmash:    { width: 35,  height: 45,  knockback: 10, knockbackY: 2,  damage: 15, startup: 150, duration: 150, cooldown: 250, freezeTime: 500, instantknockbackX: 0,  instantknockbackY: 0,  offsetX: -25,  offsetY: -65, knockbackDuration: 60, },
         };
 
 
