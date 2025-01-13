@@ -162,14 +162,14 @@
         };
         // Attack types
         const attackConfigs = {
-            groundLight: { width: 70,  height: 25,  knockback: 15, knockbackY: 4,  damage: 5,  startup: 100, duration: 100, cooldown: 150, freezeTime: 500, instantknockbackX: 20, instantknockbackY: 15, offsetX: 0,    offsetY: 40,  knockbackDuration: 0, },
-            groundHeavy: { width: 100, height: 40,  knockback: 25, knockbackY: 5,  damage: 20, startup: 250, duration: 250, cooldown: 450, freezeTime: 400, instantknockbackX: 0,  instantknockbackY: 0,  offsetX: 0,    offsetY: 25,  knockbackDuration: 250, },
-            groundUp:    { width: 70,  height: 70,  knockback: 5,  knockbackY: 20, damage: 15, startup: 275, duration: 100, cooldown: 450, freezeTime: 350, instantknockbackX: 5,  instantknockbackY: 15, offsetX: -40,  offsetY: 110, knockbackDurationad: 25, },
-            groundSmash: { width: 140, height: 110, knockback: 16, knockbackY: 17, damage: 25, startup: 300, duration: 200, cooldown: 400, freezeTime: 500, instantknockbackX: 10, instantknockbackY: 10, offsetX: -110, offsetY: 0,   knockbackDuration: 300, },
-            airLight:    { width: 80,  height: 40,  knockback: 15, knockbackY: 5,  damage: 10, startup: 125, duration: 150, cooldown: 225, freezeTime: 500, instantknockbackX: 15, instantknockbackY: 15, offsetX: 0,    offsetY: 50,  knockbackDuration: 100, },
-            airHeavy:    { width: 100, height: 60,  knockback: 21, knockbackY: -2, damage: 20, startup: 250, duration: 250, cooldown: 450, freezeTime: 400, instantknockbackX: 25, instantknockbackY: 0,  offsetX: 0,    offsetY: -25, knockbackDuration: 250, },
-            airUp:       { width: 50,  height: 60,  knockback: 5,  knockbackY: 16, damage: 10, startup: 125, duration: 75,  cooldown: 200, freezeTime: 350, instantknockbackX: 0,  instantknockbackY: 15, offsetX: -25,  offsetY: 95,  knockbackDurationad: 10, },
-            airSmash:    { width: 35,  height: 45,  knockback: 10, knockbackY: 2,  damage: 15, startup: 150, duration: 150, cooldown: 250, freezeTime: 500, instantknockbackX: 0,  instantknockbackY: 0,  offsetX: -25,  offsetY: -65, knockbackDuration: 60, },
+            groundLight: { width: 70, height: 25, knockback: 15, knockbackY: 4, damage: 5, startup: 100, duration: 100, cooldown: 150, freezeTime: 500, instantknockbackX: 20, instantknockbackY: 15, offsetX: 0, offsetY: 40, knockbackDuration: 0, },
+            groundHeavy: { width: 100, height: 40, knockback: 25, knockbackY: 5, damage: 20, startup: 250, duration: 250, cooldown: 450, freezeTime: 400, instantknockbackX: 0, instantknockbackY: 0, offsetX: 0, offsetY: 25, knockbackDuration: 250, },
+            groundUp: { width: 70, height: 70, knockback: 5, knockbackY: 20, damage: 15, startup: 275, duration: 100, cooldown: 450, freezeTime: 350, instantknockbackX: 5, instantknockbackY: 15, offsetX: -40, offsetY: 110, knockbackDurationad: 25, },
+            groundSmash: { width: 120, height: 110, knockback: 16, knockbackY: 17, damage: 25, startup: 300, duration: 200, cooldown: 400, freezeTime: 500, instantknockbackX: 10, instantknockbackY: 10, offsetX: -80, offsetY: 0, knockbackDuration: 300, },
+            airLight: { width: 80, height: 40, knockback: 15, knockbackY: 5, damage: 10, startup: 125, duration: 150, cooldown: 225, freezeTime: 500, instantknockbackX: 15, instantknockbackY: 15, offsetX: 0, offsetY: 50, knockbackDuration: 100, },
+            airHeavy: { width: 100, height: 60, knockback: 21, knockbackY: -2, damage: 20, startup: 250, duration: 250, cooldown: 450, freezeTime: 400, instantknockbackX: 25, instantknockbackY: 0, offsetX: 0, offsetY: -25, knockbackDuration: 250, },
+            airUp: { width: 50, height: 60, knockback: 5, knockbackY: 16, damage: 10, startup: 125, duration: 75, cooldown: 200, freezeTime: 350, instantknockbackX: 0, instantknockbackY: 15, offsetX: -25, offsetY: 95, knockbackDurationad: 10, },
+            airSmash: { width: 40, height: 55, knockback: 10, knockbackY: 2, damage: 10, startup: 125, duration: 150, cooldown: 250, freezeTime: 500, instantknockbackX: 0, instantknockbackY: 0, offsetX: -25, offsetY: -65, knockbackDuration: 60, },
         };
 
 
@@ -421,10 +421,56 @@
                     player.image = player1Stunned;
                 }
                 else if (player.isAttacking) {
-                    player.image = player1Attacking;
+                    if (attack = groundLight) {
+                        player.image = player1groundLightAttacking;
+                    }
+                    else if (attack = groundHeavy) {
+                        player.image = player1groundHeavyAttacking;
+                    }
+                    else if (attack = groundUp) {
+                        player.image = player1groundUpAttacking;
+                    }
+                    else if (attack = groundSmash) {
+                        player.image = player1groundSmashAttacking;
+                    }
+                    else if (attack = airLight) {
+                        player.image = player1airLightAttacking;
+                    }
+                    else if (attack = airHeavy) {
+                        player.image = player1airHeavyAttacking;
+                    }
+                    else if (attack = airUp) {
+                        player.image = player1airUpAttacking;
+                    }
+                    else if (attack = airSmash) {
+                        player.image = player1airSmashAttacking;
+                    }
                 }
                 else if (player.isWindup) {
-                    player.image = player1Windup;
+                    if (attack = groundLight) {
+                        player.image = player1groundLightWindup;
+                    }
+                    else if (attack = groundHeavy) {
+                        player.image = player1groundHeavyWindup;
+                    }
+                    else if (attack = groundUp) {
+                        player.image = player1groundUpWindup;
+                    }
+                    else if (attack = groundSmash) {
+                        player.image = player1groundSmashWindup;
+                    }
+                    else if (attack = airLight) {
+                        player.image = player1airLightWindup;
+                    }
+                    else if (attack = airHeavy) {
+                        player.image = player1airHeavyWindup;
+                    }
+                    else if (attack = airUp) {
+                        player.image = player1airUpWindup;
+                    }
+                    else if (attack = airSmash) {
+                        player.image = player1airSmashWindup;
+                    }
                 }
                 else if (player.isAttackFrozen) {
                     player.image = player1AttackFrozen;
@@ -444,11 +490,58 @@
                     player.image = player2Stunned;
                 }
                 else if (player.isAttacking) {
-                    player.image = player2Attacking;
+                    if (attack = groundLight) {
+                        player.image = player2groundLightAttacking;
+                    }
+                    else if (attack = groundHeavy) {
+                        player.image = player2groundHeavyAttacking;
+                    }
+                    else if (attack = groundUp) {
+                        player.image = player2groundUpAttacking;
+                    }
+                    else if (attack = groundSmash) {
+                        player.image = player2groundSmashAttacking;
+                    }
+                    else if (attack = airLight) {
+                        player.image = player2airLightAttacking;
+                    }
+                    else if (attack = airHeavy) {
+                        player.image = player2airHeavyAttacking;
+                    }
+                    else if (attack = airUp) {
+                        player.image = player2airUpAttacking;
+                    }
+                    else if (attack = airSmash) {
+                        player.image = player2airSmashAttacking;
+                    }
                 }
                 else if (player.isWindup) {
-                    player.image = player2Windup;
+                    if (attack = groundLight) {
+                        player.image = player2groundLightWindup;
+                    }
+                    else if (attack = groundHeavy) {
+                        player.image = player2groundHeavyWindup;
+                    }
+                    else if (attack = groundUp) {
+                        player.image = player2groundUpWindup;
+                    }
+                    else if (attack = groundSmash) {
+                        player.image = player2groundSmashWindup;
+                    }
+                    else if (attack = airLight) {
+                        player.image = player2airLightWindup;
+                    }
+                    else if (attack = airHeavy) {
+                        player.image = player2airHeavyWindup;
+                    }
+                    else if (attack = airUp) {
+                        player.image = player2airUpWindup;
+                    }
+                    else if (attack = airSmash) {
+                        player.image = player2airSmashWindup;
+                    }
                 }
+
                 else if (player.isAttackFrozen) {
                     player.image = player2AttackFrozen;
                 }
