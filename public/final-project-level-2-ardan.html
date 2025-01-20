@@ -55,7 +55,7 @@
 <body>
     <h1>Final Project Level 2</h1>
     <div id="gameOverDiv">
-        <h1 id="winnerText" style="font-size: 50px;">Playe1 (great dane) Wins</h1>
+        <h1 id="winnerText" style="font-size: 50px;">Player1 (red) Wins</h1>
         <input type="button" onclick="location.reload()" value="Play Again" id="playAgain">
     </div>
     <canvas id="gameCanvas" width="1200" height="800" style="background-color: white;"></canvas>
@@ -248,12 +248,12 @@
         const attackConfigs = {
             groundLight: { width: 70, height: 25, knockback: 15, knockbackY: 4, damage: 5, startup: 100, duration: 100, cooldown: 150, freezeTime: 500, instantknockbackX: 20, instantknockbackY: 15, offsetX: 0, offsetY: 40, knockbackDuration: 0, },
             groundHeavy: { width: 100, height: 40, knockback: 25, knockbackY: 5, damage: 20, startup: 250, duration: 250, cooldown: 450, freezeTime: 400, instantknockbackX: 0, instantknockbackY: 0, offsetX: 0, offsetY: 25, knockbackDuration: 250, },
-            groundUp: { width: 70, height: 70, knockback: 5, knockbackY: 20, damage: 15, startup: 275, duration: 100, cooldown: 450, freezeTime: 350, instantknockbackX: 5, instantknockbackY: 15, offsetX: -40, offsetY: 110, knockbackDurationad: 25, },
+            groundUp: { width: 90, height: 80, knockback: 5, knockbackY: 20, damage: 15, startup: 200, duration: 150, cooldown: 450, freezeTime: 350, instantknockbackX: 5, instantknockbackY: 15, offsetX: -50, offsetY: 100, knockbackDurationad: 25, },
             groundSmash: { width: 120, height: 110, knockback: 16, knockbackY: 17, damage: 25, startup: 300, duration: 200, cooldown: 400, freezeTime: 500, instantknockbackX: 10, instantknockbackY: 10, offsetX: -80, offsetY: 0, knockbackDuration: 300, },
             airLight: { width: 80, height: 40, knockback: 15, knockbackY: 5, damage: 10, startup: 125, duration: 150, cooldown: 225, freezeTime: 500, instantknockbackX: 15, instantknockbackY: 15, offsetX: 0, offsetY: 50, knockbackDuration: 100, },
-            airHeavy: { width: 100, height: 60, knockback: 21, knockbackY: -2, damage: 20, startup: 250, duration: 250, cooldown: 450, freezeTime: 400, instantknockbackX: 25, instantknockbackY: 0, offsetX: 0, offsetY: -25, knockbackDuration: 250, },
-            airUp: { width: 50, height: 60, knockback: 5, knockbackY: 16, damage: 10, startup: 125, duration: 75, cooldown: 200, freezeTime: 350, instantknockbackX: 0, instantknockbackY: 15, offsetX: -25, offsetY: 95, knockbackDurationad: 10, },
-            airSmash: { width: 40, height: 55, knockback: 10, knockbackY: 2, damage: 10, startup: 125, duration: 150, cooldown: 250, freezeTime: 500, instantknockbackX: 0, instantknockbackY: 0, offsetX: -25, offsetY: -65, knockbackDuration: 60, },
+            airHeavy: { width: 100, height: 60, knockback: 21, knockbackY: -2, damage: 20, startup: 250, duration: 250, cooldown: 450, freezeTime: 400, instantknockbackX: 25, instantknockbackY: 0, offsetX: 0, offsetY: -25, knockbackDuration: 300, },
+            airUp: { width: 65, height: 70, knockback: 0, knockbackY: 17, damage: 10, startup: 100, duration: 125, cooldown: 150, freezeTime: 350, instantknockbackX: 0, instantknockbackY: 15, offsetX: -35, offsetY: 95, knockbackDurationad: 10, },
+            airSmash: { width: 60, height: 75, knockback: 10, knockbackY: 2, damage: 10, startup: 100, duration: 75, cooldown: 275, freezeTime: 500, instantknockbackX: 0, instantknockbackY: 0, offsetX: -35, offsetY: -75, knockbackDuration: 60, },
         };
 
 
@@ -701,9 +701,11 @@
 
         function gameOver(loser) {
             if (loser === player1) {
-                winner = 'Player2 (borzoi)';
+                winner = 'Player2 (blue)';
+                document.getElementById('winnerText').style.color = 'blue';
             } else {
-                winner = 'Player1 (great dane)';
+                winner = 'Player1 (red)';
+                document.getElementById('winnerText').style.color = 'red';
             }
             document.getElementById('gameOverDiv').style.display = 'block';
             document.getElementById('winnerText').innerHTML = `${winner} Wins`;
